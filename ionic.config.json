@@ -1,0 +1,7 @@
+{
+  "name": "thrifshop",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
