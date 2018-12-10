@@ -37,6 +37,7 @@ export class MapsPage implements OnInit {
   ];
   public items: Array<{ title: string; note: string; icon: string }> = [];
   loadMap() {
+
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
