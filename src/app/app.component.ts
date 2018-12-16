@@ -55,7 +55,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       Environment.setEnv({
         // api key for server
-        'API_KEY_FOR_BROWSER_RELEASE': '(YOUR_API_KEY_IS_HERE)',
+        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyC3qWP8UR4km33e7L7Pj3cUut5kRCWfevU',
 
         // api key for local development
         'API_KEY_FOR_BROWSER_DEBUG': ''
