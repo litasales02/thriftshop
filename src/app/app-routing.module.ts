@@ -20,6 +20,10 @@ const routes: Routes = [
     loadChildren: './list/list.module#ListPageModule'
   },
   {
+    path: 'list/storedetails',
+    loadChildren: './storedetails/storedetails.module#StoreDetailsPageModule'
+  },
+  {
     path: 'messages',
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
@@ -30,6 +34,10 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: './login/login.module#LoginPageModule'
+  },
+  {
+    path: 'accountsetting',
+    loadChildren: './accountsetting/accountsetting.module#AccountSettingPageModule'
   }
 ];
 
