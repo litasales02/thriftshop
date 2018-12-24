@@ -24,6 +24,7 @@ or open cmd then e change ang directory "c:\ionic\thriftshop" kong asa ka nag cr
 
 
 if ma human na ang git npm install sa wait hantud ma human
-if ma human na execute dayun ang ionic cordova run browser
+if ma human na execute dayun ang 
+# ionic cordova run browser
 
 call me
