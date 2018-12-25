@@ -48,8 +48,7 @@ describe('AppComponent', () => {
     const fixture = await TestBed.createComponent(AppComponent);
     await fixture.detectChanges();
     const app = fixture.nativeElement;
-    const menuItems = app.querySelectorAll('ion-label');
-    console.log(menuItems.length);
+    const menuItems = app.querySelectorAll('ion-label'); 
     expect(menuItems.length).toEqual(6);
     expect(menuItems[0].textContent).toContain('Home');
     expect(menuItems[1].textContent).toContain('Maps');

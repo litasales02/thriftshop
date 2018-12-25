@@ -29,7 +29,7 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: './register/register.module#RegisterPageModule'
+    loadChildren: './register_buyer/register.module#RegisterPageModule'
   },
   {
     path: 'login',

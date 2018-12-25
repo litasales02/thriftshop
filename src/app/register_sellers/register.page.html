@@ -4,16 +4,19 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
-        Details
+      Registration
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-item style="text-align: center"> 
-        <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
-            <img src="/assets/store.png" class="center_image avatar_logo" >
+    <ion-item class="center_font"> 
+        <ion-avatar style="text-align: center">
+            <img src="img/avatar-cher.png" class="center_image avatar_logo" height="500" width="500">
         </ion-avatar>
+    </ion-item> 
+    <ion-item> 
+        <ion-input required type="file" value="Open File"></ion-input>
     </ion-item> 
     <ion-item> 
         <ion-input required type="text" placeholder="Store Name"></ion-input>
@@ -33,5 +36,5 @@
     <ion-item> 
         <ion-input required type="text" placeholder="Middle Name"></ion-input>
     </ion-item> 
-    <ion-button >Back</ion-button>
+    <ion-button >Submit</ion-button>
 </ion-content>
