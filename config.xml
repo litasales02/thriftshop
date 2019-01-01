@@ -96,4 +96,4 @@
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDRSpyMmjQ-yekHr9VxMXMZctA4N-shR0U" />
     </plugin>
     <engine name="browser" spec="5.0.4" />
-</widget>   
+</widget>
