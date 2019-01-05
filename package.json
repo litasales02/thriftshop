@@ -28,6 +28,7 @@
     "@ionic/pro": "2.0.3",
     "cordova-browser": "5.0.4",
     "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-firebase-messaging": "1.2.1",
     "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
     "cordova-plugin-ionic-webview": "^2.3.1",
@@ -36,6 +37,7 @@
     "cordova-plugin-whitelist": "^1.3.3",
     "core-js": "^2.6.1",
     "rxjs": "~6.3.3",
+    "webpack-dev-server": "^3.1.14",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
@@ -78,7 +80,8 @@
       "cordova-plugin-device": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-ionic-webview": {},
-      "cordova-plugin-ionic-keyboard": {}
+      "cordova-plugin-ionic-keyboard": {},
+      "cordova-plugin-firebase-messaging": {}
     },
     "platforms": [
       "browser"

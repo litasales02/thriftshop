@@ -95,5 +95,6 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyC3qWP8UR4km33e7L7Pj3cUut5kRCWfevU" />
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDRSpyMmjQ-yekHr9VxMXMZctA4N-shR0U" />
     </plugin>
+    <plugin name="cordova-plugin-firebase-messaging" spec="1.2.1" />
     <engine name="browser" spec="5.0.4" />
 </widget>
