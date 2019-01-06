@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { RegisterPage } from './register.page';
+import { Registration_SelectPage } from './registration_select.page';
 
 @NgModule({
   imports: [
@@ -14,10 +14,10 @@ import { RegisterPage } from './register.page';
     RouterModule.forChild([
       {
         path: '',
-        component: RegisterPage
+        component: Registration_SelectPage
       }
     ])
   ],
-  declarations: [RegisterPage]
+  declarations: [Registration_SelectPage]
 })
-export class RegisterPageModule {}
+export class Registration_SelectPageModule {}

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-// import { ViewController } from 'ionic-angular';
 
 @Component({
   selector: 'app-list',
-  templateUrl: 'login.page.html',
-  styleUrls: ['login.page.scss']
+  templateUrl: 'registerbuyer.page.html',
+  styleUrls: ['registerbuyer.page.scss']
 })
-export class LoginPage implements OnInit {
+export class RegisterBuyerPage implements OnInit {
   private selectedItem: any;
   private icons = [
     'flask',
@@ -37,7 +36,4 @@ export class LoginPage implements OnInit {
   // navigate(item) {
   //   this.router.navigate(['/list', JSON.stringify(item)]);
   // }
-  dismiss(){
-    // this.viewCtrl.dismiss();
-  }
 }

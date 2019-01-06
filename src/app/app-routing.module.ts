@@ -29,7 +29,15 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: './register_buyer/register.module#RegisterPageModule'
+    loadChildren: './registration_select/registration_select.module#Registration_SelectPageModule'
+  },
+  {
+    path: 'register/buyer',
+    loadChildren: './registerbuyer/registerbuyer.module#RegisterBuyerPageModule'
+  },
+  {
+    path: 'register/seller',
+    loadChildren: './registersellers/registersellers.module#RegisterSellersPageModule'
   },
   {
     path: 'login',
