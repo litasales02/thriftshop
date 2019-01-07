@@ -12,18 +12,12 @@
   <ion-content>
       <ion-item style="text-align: center"> 
           <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
-              <img src="/assets/store.png" class="center_image avatar_logo" >
+              <img src="/assets/store.png" class="center_image avatar_logo" />
           </ion-avatar>
-      </ion-item> 
+      </ion-item>  
       <ion-item> 
-          <ion-input required type="text" placeholder="Store Name"></ion-input>
-      </ion-item> 
-      <ion-item> 
-          <ion-input required type="text" placeholder="Address 1"></ion-input>
-      </ion-item> 
-      <ion-item> 
-          <ion-input required type="text" placeholder="Address 2"></ion-input>
-      </ion-item> 
+          <ion-input required type="text" placeholder="Address"></ion-input>
+      </ion-item>   
       <ion-item> 
           <ion-input required type="text" placeholder="First Name"></ion-input>
       </ion-item>
@@ -33,6 +27,17 @@
       <ion-item> 
           <ion-input required type="text" placeholder="Middle Name"></ion-input>
       </ion-item> 
-      <ion-button >Back</ion-button>
+      <hr />      
+      <ion-item> 
+            <ion-input required type="text" placeholder="Username"></ion-input>
+        </ion-item>
+        <ion-item> 
+            <ion-input required type="password" placeholder="Password"></ion-input>
+        </ion-item>
+        <ion-item> 
+            <ion-input required type="password" placeholder="Re-type Password"></ion-input>
+        </ion-item> 
+      <ion-button class="button button-block button-positive button-large" >Submit</ion-button> 
+      <ion-button class="button button-block button-positive button-large" routerLink="register" >Back</ion-button> 
   </ion-content>
   
