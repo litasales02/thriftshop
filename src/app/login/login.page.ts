@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-// import { ViewController } from 'ionic-angular';
+import { AlertController } from '@ionic/angular';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 @Component({
   selector: 'app-list',
@@ -21,7 +22,8 @@ export class LoginPage implements OnInit {
     'build'
   ];
   public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
+  constructor(private firebase: Firebase) {
+
     for (let i = 1; i < 11; i++) {
       this.items.push({
         title: 'Item ' + i,
@@ -29,6 +31,20 @@ export class LoginPage implements OnInit {
         icon: this.icons[Math.floor(Math.random() * this.icons.length)]
       });
     }
+
+    async function presentAlert() {
+      const alertController = document.querySelector('ion-alert-controller');
+      await alertController.componentOnReady();
+    
+      const alert = await alertController.create({
+        header: 'Alert',
+        subHeader: 'Subtitle',
+        message: 'This is an alert message.',
+        buttons: ['OK']
+      });
+      return await alert.present();
+    }
+
   }
 
   ngOnInit() {
@@ -40,4 +56,5 @@ export class LoginPage implements OnInit {
   dismiss(){
     // this.viewCtrl.dismiss();
   }
+
 }
