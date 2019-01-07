@@ -5,7 +5,10 @@ import { Firebase } from '@ionic-native/firebase/ngx';
 @Component({
   selector: 'app-list',
   templateUrl: 'login.page.html',
-  styleUrls: ['login.page.scss']
+  styleUrls: ['login.page.scss'],
+  providers: [
+    Firebase
+  ]
 })
 export class LoginPage implements OnInit {
   private selectedItem: any;

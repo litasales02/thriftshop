@@ -23,6 +23,7 @@ describe('AppComponent', () => {
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: StatusBar, useValue: statusBarSpy },
+        { provide: SplashScreen, useValue: splashScreenSpy },
         { provide: Platform, useValue: platformSpy },
       ],
       imports: [ RouterTestingModule.withRoutes([])],

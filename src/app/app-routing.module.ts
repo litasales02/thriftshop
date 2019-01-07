@@ -46,6 +46,14 @@ const routes: Routes = [
   {
     path: 'accountsetting',
     loadChildren: './accountsetting/accountsetting.module#AccountSettingPageModule'
+  },
+  {
+    path: 'createproduct',
+    loadChildren: './createproduct/createproduct.module#CreateProductPageModule'
+  },
+  {
+    path: 'list/product',
+    loadChildren: './listproduct/listproduct.module#ListProductPageModule'
   }
 ];
 
