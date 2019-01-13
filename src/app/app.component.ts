@@ -5,7 +5,15 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController } from '@ionic/angular';
-
+import * as firebase from 'firebase';
+const configfirebase = {
+  apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
+  authDomain: 'thriffshop.firebaseapp.com',
+  databaseURL: 'https://thriffshop.firebaseio.com',
+  projectId: 'thriffshop',
+  storageBucket: 'thriffshop.appspot.com'
+};
+firebase.initializeApp(configfirebase);
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
@@ -43,25 +51,31 @@ export class AppComponent {
       icon: 'log-in'
     }
   ];
-
+  // infos = [];
+  // ref = firebase.database().ref('thriffshop/');
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public alertCtrl: AlertController
   ) {
-    this.initializeApp();
-    
- 
+    this.initializeApp(); 
   }
-   async alerts(title,header,buttons) { 
-      const alert = await this.alertCtrl.create({
-        header: title,
-        subHeader: header,
-        buttons: buttons
-      });
-      await alert.present();
-    }
+  async login(userame,password){
+    
+  }
+  async alerts(title,header,buttons) { 
+    const alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await alert.present();
+  }
+  async newdata(value){
+    let newInfo = firebase.database().ref('/').push();
+    await newInfo.set(value);
+  }
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
@@ -70,6 +84,7 @@ export class AppComponent {
       });
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-    });
+    });    
+    // firebase.initializeApp(configfirebase);
   }
 }

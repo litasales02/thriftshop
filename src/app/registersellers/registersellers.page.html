@@ -16,35 +16,34 @@
           </ion-avatar>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" placeholder="Store Name"></ion-input>
+          <ion-input required type="text" [(ngModel)]="sellerstorename" placeholder="Store Name"></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" placeholder="Address 1"></ion-input>
+          <ion-input required type="text" [(ngModel)]="selleraddress1" placeholder="Address 1"></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" placeholder="Address 2"></ion-input>
+          <ion-input required type="text" [(ngModel)]="selleraddress2" placeholder="Address 2"></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" placeholder="First Name"></ion-input>
+          <ion-input required type="text" [(ngModel)]="sellerfirstname" placeholder="First Name"></ion-input>
       </ion-item>
       <ion-item> 
-          <ion-input required type="text" placeholder=" Last Name"></ion-input>
+          <ion-input required type="text" [(ngModel)]="sellerlastname" placeholder=" Last Name"></ion-input>
       </ion-item>
       <ion-item> 
-          <ion-input required type="text" placeholder="Middle Name"></ion-input>
+          <ion-input required type="text" [(ngModel)]="sellermiddlename" placeholder="Middle Name"></ion-input>
       </ion-item> 
-      <hr />
-      
+      <hr />      
       <ion-item> 
-            <ion-input required type="text" placeholder="Username"></ion-input>
+            <ion-input required type="text" [(ngModel)]="sellerusername" placeholder="Username"></ion-input>
         </ion-item>
         <ion-item> 
-            <ion-input required type="password" placeholder="Password"></ion-input>
+            <ion-input required type="password" [(ngModel)]="sellerpassword" placeholder="Password"></ion-input>
         </ion-item>
         <ion-item> 
-            <ion-input required type="password" placeholder="Re-type Password"></ion-input>
+            <ion-input required type="password" [(ngModel)]="sellerrepassword" placeholder="Re-type Password"></ion-input>
         </ion-item> 
-      <ion-button class="button button-block button-positive button-large" >Submit</ion-button> 
+      <ion-button class="button button-block button-positive button-large" (click)="submitdata();" >Submit</ion-button> 
       <ion-button class="button button-block button-positive button-large" routerLink="register" >Back</ion-button> 
   </ion-content>
   
