@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-root',
@@ -46,11 +47,21 @@ export class AppComponent {
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    public alertCtrl: AlertController
   ) {
     this.initializeApp();
+    
+ 
   }
-
+   async alerts(title,header,buttons) { 
+      const alert = await this.alertCtrl.create({
+        header: title,
+        subHeader: header,
+        buttons: buttons
+      });
+      await alert.present();
+    }
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
