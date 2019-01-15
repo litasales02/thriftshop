@@ -7,8 +7,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController  } from '@ionic/angular';
 import * as firebase from 'firebase';
-import { request } from 'https';
-import { resolve, reject } from 'q';
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -23,7 +21,8 @@ firebase.initializeApp(configfirebase);
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  loginStatus: false;
+  drawerTitle: string = "Hi Guest!";
+  loginStatus: boolean = false;
   username: '';
   fullname: '';
   public appPages = [
