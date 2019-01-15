@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
 
+import { Router, ActivatedRoute } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController  } from '@ionic/angular';
 import * as firebase from 'firebase';
+import { request } from 'https';
+import { resolve, reject } from 'q';
+
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
   authDomain: 'thriffshop.firebaseapp.com',
@@ -13,12 +17,15 @@ const configfirebase = {
   projectId: 'thriffshop',
   storageBucket: 'thriffshop.appspot.com'
 };
-firebase.initializeApp(configfirebase);
+firebase.initializeApp(configfirebase); 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
+  loginStatus: false;
+  username: '';
+  fullname: '';
   public appPages = [
     {
       title: 'Home',
@@ -51,18 +58,41 @@ export class AppComponent {
       icon: 'log-in'
     }
   ];
-  // infos = [];
-  // ref = firebase.database().ref('thriffshop/');
+ 
   constructor(
+    public router: Router,
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
+    public toastController: ToastController
   ) {
     this.initializeApp(); 
   }
-  async login(userame,password){
-    
+  async login(username,password ,callback){
+    return await this.authen(username,password,function(obj){
+      callback(obj);
+    });
+  }
+  async authen(username,password,callback){
+    let getlogin = firebase.database().ref('maindata').orderByChild('username').equalTo(username);
+    getlogin.once('value',function(childs){
+      let data = childs.val();
+      if (data) {
+        childs.forEach(function(data){
+          if ( data.val().password === password ){
+            this.loginStatus = true;
+            callback(true);
+          } else {
+            callback(false);
+            this.loginStatus = false;
+          }
+        });
+      } else {
+        this.loginStatus = false;
+        callback(false);
+      }
+    }); 
   }
   async alerts(title,header,buttons) { 
     const alert = await this.alertCtrl.create({
@@ -72,8 +102,18 @@ export class AppComponent {
     });
     await alert.present();
   }
+  async ShowToast(message,timeout = 2000) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: timeout
+    });
+    toast.present();
+  }
+  async menuRouting(link){
+    this.router.navigate(['/home']);
+  }
   async newdata(value){
-    let newInfo = firebase.database().ref('/').push();
+    let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
   }
   initializeApp() {
