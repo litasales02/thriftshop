@@ -25,6 +25,7 @@ export class AppComponent {
   loginStatus: boolean = false;
   username: '';
   fullname: '';
+  public appPage =[];
   public appPages = [
     {
       title: 'Home',
@@ -55,6 +56,11 @@ export class AppComponent {
       title: 'Login',
       url: '/login',
       icon: 'log-in'
+    },
+    {
+      title: 'Logout',
+      url: '/login',
+      icon: 'log-out'
     }
   ];
  
@@ -66,6 +72,7 @@ export class AppComponent {
     public alertCtrl: AlertController,
     public toastController: ToastController
   ) {
+    console.log('call app.componen.ts');
     this.initializeApp(); 
   }
   async login(username,password ,callback){
@@ -74,21 +81,23 @@ export class AppComponent {
     });
   }
   async authen(username,password,callback){
+    var self = this;
     let getlogin = firebase.database().ref('maindata').orderByChild('username').equalTo(username);
     getlogin.once('value',function(childs){
       let data = childs.val();
       if (data) {
         childs.forEach(function(data){
           if ( data.val().password === password ){
-            this.loginStatus = true;
+            self.drawerTitle = 'Hi ' + data.val().firstname;
+            self.loginStatus = true;
             callback(true);
           } else {
             callback(false);
-            this.loginStatus = false;
+            self.loginStatus = false;
           }
         });
       } else {
-        this.loginStatus = false;
+        self.loginStatus = false;
         callback(false);
       }
     }); 
