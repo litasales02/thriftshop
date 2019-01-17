@@ -24,8 +24,7 @@ export class AppComponent {
   drawerTitle: string = "Hi Guest!";
   loginStatus: boolean = false;
   username: '';
-  fullname: '';
-  public appPage =[];
+  fullname: ''; 
   public appPages = [
     {
       title: 'Home',
@@ -71,8 +70,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
     public toastController: ToastController
-  ) {
-    console.log('call app.componen.ts');
+  ) { 
     this.initializeApp(); 
   }
   async login(username,password ,callback){
