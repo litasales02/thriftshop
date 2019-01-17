@@ -10,46 +10,46 @@
         <ion-list>
           <ion-menu-toggle auto-hide="false">
               <ion-item [routerDirection]="'root'"  [routerLink]="'/home'">
-                <ion-icon slot="start" [name]="home"></ion-icon>
+                <ion-icon slot="start" [name]="'home'"></ion-icon>
                 <ion-label>
                   Home
                 </ion-label>
               </ion-item>
               <ion-item [routerDirection]="'root'"  [routerLink]="'/maps'">
-                <ion-icon slot="start" [name]="map"></ion-icon>
+                <ion-icon slot="start" [name]="'map'"></ion-icon>
                 <ion-label>
                   Maps
                 </ion-label>
               </ion-item>
               <ion-item [routerDirection]="'root'"  [routerLink]="'/list'">
-                <ion-icon slot="start" [name]="list"></ion-icon>
+                <ion-icon slot="start" [name]="'list'"></ion-icon>
                 <ion-label>
                   Shop List
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/messages'">
-                <ion-icon slot="start" [name]="chatboxes"></ion-icon>
-                <ion-label>
-                  Messages
-                </ion-label>
-              </ion-item>
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/register'">
-                <ion-icon slot="start" [name]="'person-add'"></ion-icon>
-                <ion-label>
-                  Register
-                </ion-label>
-              </ion-item>
               <div [ngSwitch]="loginStatus">
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/login'">
-                  <ion-icon slot="start" [name]="log-in"></ion-icon>
+                <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/messages'">
+                  <ion-icon slot="start" [name]="'chatboxes'"></ion-icon>
                   <ion-label>
-                    Login
+                    Messages
                   </ion-label>
                 </ion-item>
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="false" [routerLink]="'/logout'">
-                  <ion-icon slot="start" [name]="log-out"></ion-icon>
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"  [routerLink]="'/register'">
+                  <ion-icon slot="start" [name]="'person-add'"></ion-icon>
+                  <ion-label>
+                    Register
+                  </ion-label>
+                </ion-item>
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true" [routerLink]="'/logout'">
+                  <ion-icon slot="start" [name]="'log-out'"></ion-icon>
                   <ion-label>
                     Logout
+                  </ion-label>
+                </ion-item>
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/login'">
+                  <ion-icon slot="start" [name]="'log-in'"></ion-icon>
+                  <ion-label>
+                    Login
                   </ion-label>
                 </ion-item>
               </div>
