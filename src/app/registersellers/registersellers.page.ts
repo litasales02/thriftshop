@@ -20,11 +20,14 @@ export class RegisterSellersPage implements OnInit {
   sellerusername: "";
   sellerpassword: "";
   sellerrepassword: "";
+  
+  cellnumber: "";
+  telnumber: "";
+  emails: "";
 
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
-  submitdata(){
-    console.log('submit');
+  submitdata(){ s
     if (typeof(this.sellerstorename) != 'undefined' && 
     typeof(this.selleraddress1) != 'undefined' && 
     typeof(this.selleraddress2) != 'undefined' && 
@@ -35,14 +38,21 @@ export class RegisterSellersPage implements OnInit {
     typeof(this.sellerpassword) != 'undefined' ){
       if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) != 'undefined' && this.sellerrepassword == this.sellerpassword){
         this.util.newdata({
+          'userdetails': { 
+            'address1': this.selleraddress1, 
+            'address2': this.selleraddress2, 
+            'firstname': this.sellerfirstname, 
+            'lastname': this.sellerlastname, 
+            'middlename': this.sellermiddlename,
+            'cellnumber': this.cellnumber,
+            'telnumber': this.telnumber,
+            'email': this.emails,
+          },
           'usertype': 'seller',
-          'address1': this.selleraddress1, 
-          'address2': this.selleraddress2, 
-          'firstname': this.sellerfirstname, 
-          'lastname': this.sellerlastname, 
-          'middlename': this.sellermiddlename, 
           'username': this.sellerusername, 
-          'password': this.sellerpassword });
+          'password': this.sellerpassword,
+          'storename': this.sellerstorename
+        });
         this.navigate();
       } else if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) && (this.sellerrepassword.length < 6 || this.sellerpassword.length < 6 )) {
         this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);

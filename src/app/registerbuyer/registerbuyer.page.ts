@@ -17,12 +17,27 @@ export class RegisterBuyerPage implements OnInit {
   buyerusername: "";
   buyerpassword: "";
   buyerrepass: "";
+
+  cellnumber: "";  
+  emails: "";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
     if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  && typeof(this.buyerusername) != 'undefined'  && typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' ){
       if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
-        this.util.newdata({'usertype': 'buyer','address': this.buyeraddress, 'firstname': this.buyerfirstname, 'lastname': this.buyerlastname, 'middlename': this.buyermiddlename, 'username': this.buyerusername, 'password': this.buyerpassword });
+        this.util.newdata({
+          'userdetails': {
+            'address': this.buyeraddress,
+            'firstname': this.buyerfirstname, 
+            'lastname': this.buyerlastname, 
+            'middlename': this.buyermiddlename,
+            'cellnumber': this.cellnumber, 
+            'email': this.emails,
+          },
+          'usertype': 'buyer',
+          'username': this.buyerusername, 
+          'password': this.buyerpassword,
+          'stores':[]});
         this.navigate();
       } else if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerusername) && (this.buyerpassword.length < 6 || this.buyerusername.length < 6 )) {
         this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);

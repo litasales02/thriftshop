@@ -23,8 +23,13 @@ firebase.initializeApp(configfirebase);
 export class AppComponent {
   drawerTitle: string = "Hi Guest!";
   loginStatus: boolean = false;
+  userid: string = '';
+  userType: string = '';
   username: '';
   fullname: ''; 
+  storedata = [];
+  productdata = [];
+  ref = firebase.database().ref('maindata').orderByChild('userdetails');
   public appPages = [
     {
       title: 'Home',
@@ -62,7 +67,6 @@ export class AppComponent {
       icon: 'log-out'
     }
   ];
- 
   constructor(
     public router: Router,
     private platform: Platform,
@@ -71,7 +75,20 @@ export class AppComponent {
     public alertCtrl: AlertController,
     public toastController: ToastController
   ) { 
+    this.ref.on('value',resp =>{
+      this.storedata = [];
+      this.storedata = snapshotToArray(resp);
+    });
     this.initializeApp(); 
+  }
+  logout(){
+    this.drawerTitle = 'Hi Guest!';
+    this.loginStatus = false;
+    this.username = '';
+    this.fullname = '';
+    this.userid = '';
+    this.router.navigate(['/home']);
+    this.ShowToast('Logging Out Good Bye!');
   }
   async login(username,password ,callback){
     return await this.authen(username,password,function(obj){
@@ -86,7 +103,8 @@ export class AppComponent {
       if (data) {
         childs.forEach(function(data){
           if ( data.val().password === password ){
-            self.drawerTitle = 'Hi ' + data.val().firstname;
+            self.userid = data.key;
+            self.drawerTitle = 'Hi ' + data.val().userdetails.firstname;
             self.loginStatus = true;
             callback(true);
           } else {
@@ -134,3 +152,13 @@ export class AppComponent {
     // firebase.initializeApp(configfirebase);
   }
 }
+export const snapshotToArray = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+      let item = childSnapshot.val();
+      item.key = childSnapshot.key;
+      console.log("data " , item);
+      returnArr.push(item);
+  });
+  return returnArr;
+};
