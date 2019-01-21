@@ -133,11 +133,14 @@ export class AppComponent {
     toast.present();
   }
   async menuRouting(link){
-    this.router.navigate(['/home']);
+    this.router.navigate([link]);
   }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
+  }
+  async updatedata(value){
+    await firebase.database().ref('maindata/'+this.userid).update(value);
   }
   initializeApp() {
     this.platform.ready().then(() => {

@@ -16,27 +16,28 @@
         </ion-avatar>
     </ion-item> 
     <ion-item> 
-        <ion-input required type="text" placeholder="Product Name"></ion-input>
-    </ion-item> 
-    <ion-item> 
-        <ion-label>Unit Type</ion-label>
-        <ion-select value="A" ok-text="Okay" cancel-text="Dismiss">
-            <ion-select-option value="A">Class A</ion-select-option>
-            <ion-select-option value="B">Class B</ion-select-option>
-            <ion-select-option value="black">Class S</ion-select-option> 
-        </ion-select>
-    </ion-item> 
-    <ion-item> 
-        <ion-input required type="text" placeholder="Price"></ion-input>
+        <ion-input required type="text" [(ngModel)]="productname" placeholder="Product Name"></ion-input>
     </ion-item> 
     <ion-item> 
         <ion-label>Product Type</ion-label>
-        <ion-select value="A" ok-text="Okay" cancel-text="Dismiss">
-            <ion-select-option value="A">Class A</ion-select-option>
-            <ion-select-option value="B">Class B</ion-select-option>
-            <ion-select-option value="black">Class S</ion-select-option> 
+        <ion-select value="b" [(ngModel)]="producttype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="tshirt">T-Shirt</ion-select-option>
+            <ion-select-option value="pants">Pants</ion-select-option>
+            <ion-select-option value="underwares">Underwares</ion-select-option> 
+            <ion-select-option value="bags">Bags</ion-select-option> 
         </ion-select>
     </ion-item>   
-    <ion-button class="button button-block button-positive button-large" >Submit</ion-button> 
+    <ion-item> 
+        <ion-label>Unit Type</ion-label>
+        <ion-select value="A" [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="Kilo">Kilo</ion-select-option>
+            <ion-select-option value="Item">Per/Kilo</ion-select-option>
+            <ion-select-option value="Bundle">Bundle</ion-select-option> 
+        </ion-select>
+    </ion-item> 
+    <ion-item> 
+        <ion-input required type="text" [(ngModel)]="price" placeholder="Price"></ion-input>
+    </ion-item> 
+    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
     
 </ion-content>

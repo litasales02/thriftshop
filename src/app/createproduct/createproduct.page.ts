@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from '../app.component'; 
 
 @Component({
   selector: 'app-list',
@@ -6,34 +9,39 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['createproduct.page.scss']
 })
 export class CreateProductPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
+  productname: "";
+  unittype: "";
+  price: "";
+  producttype: ""; 
+  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+    if (this.util.userid == ''){
+      this.util.menuRouting('/login');
     }
   }
-
   ngOnInit() {
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+  submit(){
+    if (typeof(this.productname) != 'undefined' &&
+        typeof(this.price) != 'undefined' &&
+        typeof(this.producttype) != 'undefined' &&
+        typeof(this.unittype) != 'undefined'){
+      if (this.productname != "" && this.price != ""){
+        this.util.updatedata({  
+          'product':[
+            {
+              'productname': this.productname,
+              'unittype': this.unittype,
+              'price': this.price,
+              'producttype': this.producttype
+            }
+          ]
+        });
+        this.util.alerts("New Product","Product Added",['Ok']);
+      } else {
+        this.util.alerts("Add New","Please fill required text1",['Ok']);
+      }
+    }else {
+      this.util.alerts("Add New","Please fill required text2",['Ok']);
+    }
+  }
 }
