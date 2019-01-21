@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from '../app.component'; 
+
 
 @Component({
   selector: 'app-list',
@@ -6,21 +10,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['listproduct.page.scss']
 })
 export class ListProductPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
+ 
+  constructor(
+    public activatedRoute: ActivatedRoute, 
+    public router: Router, 
+    public alertCtrl: AlertController,
+    private util: AppComponent) {
  
   }
 

@@ -12,7 +12,7 @@
 <ion-content scrollable="true" class="has-header">
   
   <ion-list *ngFor="let userlists of util.storedata">
-      <ion-item *ngIf="userlists.usertype=='seller'&&util.userid!=userlists.key" routerLink="/list/storedetails/{{userlists.key}}"> 
+      <ion-item *ngIf="userlists.usertype=='seller'&&util.userid!=userlists.key" routerLink="/list/storedetails/{{userlists.key}}/home"> 
         <ion-avatar slot="start">
           <img src="/assets/store.png" />
         </ion-avatar>

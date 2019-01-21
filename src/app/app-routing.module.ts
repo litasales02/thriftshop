@@ -20,7 +20,7 @@ const routes: Routes = [
     loadChildren: './list/list.module#ListPageModule'
   },
   {
-    path: 'list/storedetails/:id',
+    path: 'list/storedetails/:id/:child',
     loadChildren: './storedetails/storedetails.module#StoreDetailsPageModule'
   },
   {

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -157,7 +156,7 @@ export const snapshotToArray = snapshot => {
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
       item.key = childSnapshot.key;
-      console.log("data " , item);
+      // console.log("data " , item);
       returnArr.push(item);
   });
   return returnArr;

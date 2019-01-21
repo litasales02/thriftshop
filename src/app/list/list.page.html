@@ -12,7 +12,7 @@
 <ion-content>
     
   <ion-list *ngFor="let userlists of util.storedata">
-    <ion-item *ngIf="userlists.usertype=='seller'" routerLink="/list/storedetails"> 
+    <ion-item *ngIf="userlists.usertype=='seller'" routerLink="/list/storedetails/{{userlists.key}}/list"> 
       <ion-avatar slot="start">
         <img src="/assets/store.png" />
       </ion-avatar>

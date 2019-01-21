@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="home"></ion-back-button> 
+      <ion-back-button defaultHref="{{child}}"></ion-back-button> 
     </ion-buttons>
     <ion-title>
         Details
@@ -16,41 +16,40 @@
         </ion-avatar>
     </ion-item> 
     <ion-item >
-            <ion-label type="text" >Rate : </ion-label>
-            <img src="/assets/star.png" height="20" width="20" />
-            <img src="/assets/star.png" height="20" width="20" />
-            <img src="/assets/star.png" height="20" width="20" />
-            <img src="/assets/star.png" height="20" width="20" />
-            <img src="/assets/star.png" height="20" width="20" />   
+        <ion-label type="text" >Rate : </ion-label>
+        <img src="/assets/star.png" height="20" width="20" />
+        <img src="/assets/star.png" height="20" width="20" />
+        <img src="/assets/star.png" height="20" width="20" />
+        <img src="/assets/star.png" height="20" width="20" />
+        <img src="/assets/star.png" height="20" width="20" />   
     </ion-item>
     <ion-item> 
         <ion-label type="text" >Store Name</ion-label>
-        <ion-label type="text" [(ngModel)]="sellerstorename" >----------------</ion-label>
+        <ion-label >{{sellerstorename}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Address 1</ion-label>
-        <ion-label type="text" [(ngModel)]="selleraddress1" >----------------</ion-label>
+        <ion-label >{{selleraddress1}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Address 2</ion-label>
-        <ion-label type="text" [(ngModel)]="selleraddress2" >----------------</ion-label>
+        <ion-label >{{selleraddress2}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Cell Number</ion-label>
-        <ion-label type="text" [(ngModel)]="cellnumber" >----------------</ion-label>
+        <ion-label type="cell" >{{cellnumber}}</ion-label>
     </ion-item> 
     <ion-item> 
-        <ion-label type="text" >Tel. Number 2</ion-label>
-        <ion-label type="text" [(ngModel)]="telnumber" >----------------</ion-label>
+        <ion-label type="text" >Tel. Number</ion-label>
+        <ion-label type="tel" >{{telnumber}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Email</ion-label>
-        <ion-label type="text" [(ngModel)]="meails" >----------------</ion-label>
+        <ion-label type="email" >{{emails}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Ower's Name</ion-label>
-        <ion-label type="text" [(ngModel)]="ownername" >----------------</ion-label>
+        <ion-label >{{ownername}}</ion-label>
     </ion-item> 
     <ion-button class="button button-block button-positive button-large" routerLink="/product/list" >View Products</ion-button> 
-    
 </ion-content>

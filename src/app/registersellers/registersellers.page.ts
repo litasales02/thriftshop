@@ -27,7 +27,7 @@ export class RegisterSellersPage implements OnInit {
 
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
-  submitdata(){ s
+  submitdata(){
     if (typeof(this.sellerstorename) != 'undefined' && 
     typeof(this.selleraddress1) != 'undefined' && 
     typeof(this.selleraddress2) != 'undefined' && 
