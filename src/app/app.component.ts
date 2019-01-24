@@ -152,11 +152,18 @@ export class AppComponent {
     //     // });
     //   }
     // });
-    let newInfo = firebase.database().ref('maindata'+this.userid + '/product');
-    newInfo.on('value',data => {
-      console.log(data);
+    let newInfo = firebase.database().ref('maindata/'+this.userid).child('product');
+    newInfo.on('value',childSnapshot => {
+      // console.log(data);
       this.storedata = [];
-      this.storedata = snapshotToArrayproduct(data);
+      // this.storedata = snapshotToArrayproduct(data);
+      // let returnArr = [];
+      // snapshot.forEach(childSnapshot => {
+          let item = childSnapshot.val();
+          item.key = childSnapshot.key;
+          console.log("data " , item);
+          this.storedata.push(item);
+      // });
     });
   }
   async newdata(value){

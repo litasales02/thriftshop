@@ -31,7 +31,7 @@ export class ListProductPage implements OnInit {
 
       }
       this.util.getproducts(this.id);
-      console.log(this.util.productdata);
+      // console.log(this.util.productdata);
   }
 
   ngOnInit() {
