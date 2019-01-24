@@ -26,17 +26,14 @@ export class CreateProductPage implements OnInit {
         typeof(this.producttype) != 'undefined' &&
         typeof(this.unittype) != 'undefined'){
       if (this.productname != "" && this.price != ""){
-        this.util.updatedata({  
-          'product':[
-            {
-              'productname': this.productname,
-              'unittype': this.unittype,
-              'price': this.price,
-              'producttype': this.producttype
-            }
-          ]
+        this.util.updatenewproduct({
+          'productname': this.productname,
+          'unittype': this.unittype,
+          'price': this.price,
+          'producttype': this.producttype
         });
         this.util.alerts("New Product","Product Added",['Ok']);
+        this.util.menuRouting('/home');
       } else {
         this.util.alerts("Add New","Please fill required text1",['Ok']);
       }

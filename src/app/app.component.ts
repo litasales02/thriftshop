@@ -135,12 +135,40 @@ export class AppComponent {
   async menuRouting(link){
     this.router.navigate([link]);
   }
+  getproducts(key){
+    // this.storedata.forEach(element => {
+    //   if(element.key == key){
+    //     this.productdata = [];
+    //     this.productdata = element.product;
+    //     // element.product.on('value',data =>{
+    //     //   console.log("app ",data);
+    //     // })
+    //     // console.log("app 1",element.product);
+    //     for (var key in [element.product]) {
+    //       console.log("app ",element.product[key])
+    //     }
+    //     // [element.product].forEach(function(data) {
+    //     //   console.log("app ",data)
+    //     // });
+    //   }
+    // });
+    let newInfo = firebase.database().ref('maindata'+this.userid + '/product');
+    newInfo.on('value',data => {
+      console.log(data);
+      this.storedata = [];
+      this.storedata = snapshotToArrayproduct(data);
+    });
+  }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
   }
   async updatedata(value){
     await firebase.database().ref('maindata/'+this.userid).update(value);
+  }
+  async updatenewproduct(value){
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/product').push();
+    await newproduct.set(value);
   }
   initializeApp() {
     this.platform.ready().then(() => {
@@ -160,6 +188,16 @@ export const snapshotToArray = snapshot => {
       let item = childSnapshot.val();
       item.key = childSnapshot.key;
       // console.log("data " , item);
+      returnArr.push(item);
+  });
+  return returnArr;
+};
+export const snapshotToArrayproduct = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+      let item = childSnapshot.val();
+      item.key = childSnapshot.key;
+      console.log("data " , item);
       returnArr.push(item);
   });
   return returnArr;

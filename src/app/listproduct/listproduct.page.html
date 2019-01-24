@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-        <ion-back-button defaultHref="home"></ion-back-button> 
+        <ion-back-button defaultHref="{{default_redirect}}"></ion-back-button> 
     </ion-buttons>
     <ion-title>
       Product List
@@ -11,21 +11,19 @@
 
 <ion-content>
 
-  <ion-list *ngFor="let userlists of util.storedata">
+  <ion-list *ngFor="let datas of util.productdata">
     <ion-item routerLink="/list/storedetails" > 
       <ion-avatar slot="start">
         <img src="/assets/store.png" />
       </ion-avatar>
       <ion-label>
-        <h2>product 4</h2>
-        <h3>Agdao</h3>
-        <h3>Owners Name</h3>
-        <h3>Contact : 09107443354</h3>
-        <img src="/assets/star.png" height="20" width="20" />
-        <img src="/assets/star.png" height="20" width="20" />
-        <img src="/assets/star.png" height="20" width="20" />
-        <img src="/assets/star.png" height="20" width="20" />
-        <img src="/assets/star.png" height="20" width="20" />
+        <h2>{{datas}}</h2>
+        <!-- <h3>Type : {{userlists.producttype}}</h3>
+        <h3>unit : {{userlists.unittype}}</h3>
+        <h3>Price : {{userlists.price}}</h3> -->
+        <div ng-if="typeof(rate) != 'undefined'">
+          <img *ngFor="let userlists of [0,1,2,3,4]" src="/assets/star.png" height="20" width="20" />
+        </div>
         <p></p>
       </ion-label>
     </ion-item>

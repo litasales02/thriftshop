@@ -52,7 +52,7 @@ const routes: Routes = [
     loadChildren: './createproduct/createproduct.module#CreateProductPageModule'
   },
   {
-    path: 'product/list',
+    path: 'product/list/:id/:child',
     loadChildren: './listproduct/listproduct.module#ListProductPageModule'
   }
 ];
