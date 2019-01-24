@@ -136,34 +136,10 @@ export class AppComponent {
     this.router.navigate([link]);
   }
   getproducts(key){
-    // this.storedata.forEach(element => {
-    //   if(element.key == key){
-    //     this.productdata = [];
-    //     this.productdata = element.product;
-    //     // element.product.on('value',data =>{
-    //     //   console.log("app ",data);
-    //     // })
-    //     // console.log("app 1",element.product);
-    //     for (var key in [element.product]) {
-    //       console.log("app ",element.product[key])
-    //     }
-    //     // [element.product].forEach(function(data) {
-    //     //   console.log("app ",data)
-    //     // });
-    //   }
-    // });
-    let newInfo = firebase.database().ref('maindata/'+this.userid).child('product');
-    newInfo.on('value',childSnapshot => {
-      // console.log(data);
-      this.storedata = [];
-      // this.storedata = snapshotToArrayproduct(data);
-      // let returnArr = [];
-      // snapshot.forEach(childSnapshot => {
-          let item = childSnapshot.val();
-          item.key = childSnapshot.key;
-          console.log("data " , item);
-          this.storedata.push(item);
-      // });
+    let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
+    newInfo.on('value',childSnapshot => { 
+      this.productdata = [];
+      this.productdata = snapshotToArrayproduct(childSnapshot);
     });
   }
   async newdata(value){
