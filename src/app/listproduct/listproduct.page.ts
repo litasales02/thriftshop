@@ -42,7 +42,7 @@ export class ListProductPage implements OnInit {
         console.log('error  ' ,er);
       }
       
-      // console.log(this.util.productdata);
+      console.log(this.util.productdata);
   }
 
   ngOnInit() {

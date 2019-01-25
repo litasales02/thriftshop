@@ -142,22 +142,27 @@ export class AppComponent {
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
   }
-  getproductsall(){
-    console.log('call');
+  getproductsall(){ 
     this.productdata = [];
-    let newInfo = firebase.database().ref('maindata').orderByKey();
-    newInfo.on('value',childSnapshot => { 
-      // console.log(childSnapshot.val())
-      // if(childSnapshot.val())
-      childSnapshot.forEach(childs => {
+    let newInfo = firebase.database().ref('maindata').child('product').orderByKey();
+    newInfo.on('value',childSnapshot => {  
+      console.log(childSnapshot.child('product').val())
+      childSnapshot.child('product').forEach(childs => {
         var d = childs.val();
-        if( d.usertype == 'seller'){
-         childs.child('product').forEach(nestedchild => {
-           console.log(nestedchild);
-            // this.productdata.push(snapshotToArrayproduct(nestedchild));
-         });
-        }
-        // ;        
+        // console.log(childs.child('product').val())
+        // console.log(childs.child('product').key)
+      //   if( d.usertype == 'seller'){
+      //     console.log("id " , d.product);
+      //     childs.forEach(element => {
+      //       console.log("val" , element);
+      //     });
+
+      //     // console.log(childs.key);
+      //     // this.storedata.forEach(st => {
+      //     //   console.log(st)
+      //     // });
+ 
+      //   }        
       });
     });
     console.log(this.productdata);
@@ -204,12 +209,15 @@ export const snapshotToArrayproduct = snapshot => {
       returnArr.push(item);
   });
   return returnArr;
-};export const snapshotToArrayproductnested = snapshot => {
+};
+export const snapshotToArrayproductnested = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      console.log("data " , item);
+      // console.log("data " , childSnapshot);
+      console.log("data 1" , item);
+      console.log("data 2 " , childSnapshot.key);
+      // item.key = childSnapshot.key;
       returnArr.push(item);
   });
   return returnArr;
