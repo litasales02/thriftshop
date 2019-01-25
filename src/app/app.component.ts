@@ -142,6 +142,26 @@ export class AppComponent {
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
   }
+  getproductsall(){
+    console.log('call');
+    this.productdata = [];
+    let newInfo = firebase.database().ref('maindata').orderByKey();
+    newInfo.on('value',childSnapshot => { 
+      // console.log(childSnapshot.val())
+      // if(childSnapshot.val())
+      childSnapshot.forEach(childs => {
+        var d = childs.val();
+        if( d.usertype == 'seller'){
+         childs.child('product').forEach(nestedchild => {
+           console.log(nestedchild);
+            // this.productdata.push(snapshotToArrayproduct(nestedchild));
+         });
+        }
+        // ;        
+      });
+    });
+    console.log(this.productdata);
+  }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
@@ -176,6 +196,15 @@ export const snapshotToArray = snapshot => {
   return returnArr;
 };
 export const snapshotToArrayproduct = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+      let item = childSnapshot.val();
+      item.key = childSnapshot.key;
+      console.log("data " , item);
+      returnArr.push(item);
+  });
+  return returnArr;
+};export const snapshotToArrayproductnested = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
