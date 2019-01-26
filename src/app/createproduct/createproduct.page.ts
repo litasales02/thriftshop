@@ -13,6 +13,8 @@ export class CreateProductPage implements OnInit {
   unittype: "";
   price: "";
   producttype: ""; 
+  productimage = '/assets/store.png';
+  iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     if (this.util.userid == ''){
       this.util.menuRouting('/login');
@@ -30,7 +32,8 @@ export class CreateProductPage implements OnInit {
           'productname': this.productname,
           'unittype': this.unittype,
           'price': this.price,
-          'producttype': this.producttype
+          'producttype': this.producttype,
+          'itemimg':this.iamgefile
         });
         this.util.alerts("New Product","Product Added",['Ok']);
         this.util.menuRouting('/home');
@@ -40,5 +43,19 @@ export class CreateProductPage implements OnInit {
     }else {
       this.util.alerts("Add New","Please fill required text2",['Ok']);
     }
+  }
+  fileChange(event){ 
+    if(event.target.files && event.target.files[0]){
+      let reader = new FileReader();
+
+      reader.onload = (event:any) => {
+        this.productimage = event.target.result;        
+        this.iamgefile = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+      // let fileList: FileList = event.target.files;  
+      // let file: File = fileList[0];
+      // this.iamgefile = file;
   }
 }

@@ -162,7 +162,7 @@ export class AppComponent {
          }        
       });
     });
-    console.log(this.productdata);
+    // console.log(this.productdata);
   }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
@@ -202,7 +202,7 @@ export const snapshotToArrayproduct = snapshot => {
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
       item.key = childSnapshot.key;
-      console.log("data " , item);
+      // console.log("data " , item);
       returnArr.push(item);
   });
   return returnArr;
@@ -212,8 +212,8 @@ export const snapshotToArrayproductnested = snapshot => {
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
       // console.log("data " , childSnapshot);
-      console.log("data 1" , item);
-      console.log("data 2 " , childSnapshot.key);
+      // console.log("data 1" , item);
+      // console.log("data 2 " , childSnapshot.key);
       // item.key = childSnapshot.key;
       returnArr.push(item);
   });

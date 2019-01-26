@@ -12,11 +12,11 @@
 <ion-content>
     <ion-item style="text-align: center"> 
         <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
-            <img [src]="/assets/store.png" class="center_image avatar_logo" >
+            <img [src]="productimage" class="center_image avatar_logo" />
         </ion-avatar>
     </ion-item> 
     <ion-item> 
-        <ion-input required type="file" [(ngModel)]="productimage"></ion-input>
+        <input type="file" value="" (change)="fileChange($event)">
     </ion-item> 
     <ion-item> 
         <ion-input required type="text" [(ngModel)]="productname" placeholder="Product Name"></ion-input>

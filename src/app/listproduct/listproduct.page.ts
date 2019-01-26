@@ -36,28 +36,35 @@ export class ListProductPage implements OnInit {
           child = "home";
           this.util.getproductsall();
         }
-        console.log(child);
+        // console.log(child);
         this.default_redirect = child;
       }catch(er){
         this.default_redirect = "home";
-        console.log('error  ' ,er);
+        // console.log('error  ' ,er);
       }
       
-      console.log(this.util.productdata);
+      // console.log(this.util.productdata);
   }
 
   ngOnInit() {
   }
   // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+  navigate(item) {
+    this.router.navigate([item]);
+  }
   async presentActionSheet() {
     var self = this;
     const actionSheet = await this.actionSheetController.create({
       header: 'Options',
       buttons: [{
-        text: 'My Products', 
+        text: 'Create New', 
+        icon: 'add',
+        handler: () => { //createproduct
+          // self.util.getproducts(self.util.userid); 
+          this.navigate('/createproduct');
+        }
+      },{
+        text: 'My Products',  
         icon: 'paper',
         handler: () => {
           self.util.getproducts(self.util.userid); 
