@@ -27,18 +27,19 @@ export class ListProductPage implements OnInit {
         this.child = this.activatedRoute.snapshot.paramMap.get('child');
         var child = "";
         if ( this.child == "storedetailshome"){
-          child = "/list/storedetails/" + this.id + "/home";
+          child = "list/storedetails/" + this.id + "/home";
           this.util.getproducts(this.id);
         } else if ( this.child == "myproduct"){
-          child = "/list/storedetails/" + this.id + "/home";
+          child = "list/storedetails/" + this.id + "/home";
           this.util.getproducts(this.id);
         } else {
-          child = "/product/list/all/home";
+          child = "home";
           this.util.getproductsall();
-          console.log("else");
         }
+        console.log(child);
         this.default_redirect = child;
       }catch(er){
+        this.default_redirect = "home";
         console.log('error  ' ,er);
       }
       

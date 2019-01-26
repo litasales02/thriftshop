@@ -20,7 +20,7 @@
     </ion-item> 
     <ion-item> 
         <ion-label>Product Type</ion-label>
-        <ion-select value="b" [(ngModel)]="producttype" ok-text="Okay" cancel-text="Dismiss">
+        <ion-select value="tshirt" [(ngModel)]="producttype" ok-text="Okay" cancel-text="Dismiss">
             <ion-select-option value="tshirt">T-Shirt</ion-select-option>
             <ion-select-option value="pants">Pants</ion-select-option>
             <ion-select-option value="underwares">Underwares</ion-select-option> 
@@ -29,14 +29,15 @@
     </ion-item>   
     <ion-item> 
         <ion-label>Unit Type</ion-label>
-        <ion-select value="A" [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
+        <ion-select value="Kilo" [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
             <ion-select-option value="Kilo">Kilo</ion-select-option>
-            <ion-select-option value="Item">Per/Kilo</ion-select-option>
+            <ion-select-option value="Item">Item</ion-select-option>
+            <ion-select-option value="Set">Set</ion-select-option> 
             <ion-select-option value="Bundle">Bundle</ion-select-option> 
         </ion-select>
     </ion-item> 
     <ion-item> 
-        <ion-input required type="text" [(ngModel)]="price" placeholder="Price"></ion-input>
+        <ion-input required type="price" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
     </ion-item> 
     <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
     

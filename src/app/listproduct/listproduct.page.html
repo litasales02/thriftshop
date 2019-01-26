@@ -6,7 +6,7 @@
     <ion-title>
       Product List
     </ion-title> 
-    <ion-buttons *ngIf="loginStatus==true" slot="end">
+    <ion-buttons *ngIf="util.loginStatus==true" slot="end">
       <ion-button  (click)="presentActionSheet()">
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>

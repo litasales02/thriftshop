@@ -105,6 +105,7 @@ export class AppComponent {
             self.userid = data.key;
             self.drawerTitle = 'Hi ' + data.val().userdetails.firstname;
             self.loginStatus = true;
+            self.userType =  data.val().usertype;
             callback(true);
           } else {
             callback(false);
@@ -144,25 +145,21 @@ export class AppComponent {
   }
   getproductsall(){ 
     this.productdata = [];
-    let newInfo = firebase.database().ref('maindata').child('product').orderByKey();
-    newInfo.on('value',childSnapshot => {  
-      console.log(childSnapshot.child('product').val())
-      childSnapshot.child('product').forEach(childs => {
-        var d = childs.val();
-        // console.log(childs.child('product').val())
-        // console.log(childs.child('product').key)
-      //   if( d.usertype == 'seller'){
-      //     console.log("id " , d.product);
-      //     childs.forEach(element => {
-      //       console.log("val" , element);
-      //     });
-
-      //     // console.log(childs.key);
-      //     // this.storedata.forEach(st => {
-      //     //   console.log(st)
-      //     // });
- 
-      //   }        
+    let newInfo = firebase.database().ref('maindata').orderByKey();
+    newInfo.on('value',childSnapshot => {
+      childSnapshot.forEach(childs => {
+        var d = childs.val(); 
+        if( d.usertype == 'seller'){        
+          childs.forEach(element => {  
+            if (element.key == "product") {
+              element.forEach(element2 => {
+                let item = element2.val();
+                item.key = this.productdata
+                this.productdata.push(item);
+              });
+            }
+          });
+         }        
       });
     });
     console.log(this.productdata);
