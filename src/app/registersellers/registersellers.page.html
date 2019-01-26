@@ -12,45 +12,60 @@
   <ion-content>
       <ion-item style="text-align: center"> 
           <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
-              <img src="/assets/store.png" class="center_image avatar_logo" >
+              <img [src]="productimage" class="center_image avatar_logo" />
           </ion-avatar>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="sellerstorename" placeholder="Store Name"></ion-input>
+          <input type="file" value="" (change)="fileChange($event)">
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="selleraddress1" placeholder="Address 1"></ion-input>
+            <ion-label  position="floating">Store Name</ion-label>
+          <ion-input required type="text" [(ngModel)]="sellerstorename"  ></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="selleraddress2" placeholder="Address 2"></ion-input>
+            <ion-label  position="floating">Address 1</ion-label>
+          <ion-input required type="text" [(ngModel)]="selleraddress1"  ></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="sellerfirstname" placeholder="First Name"></ion-input>
+            <ion-label  position="floating">Address 2</ion-label>
+          <ion-input required type="text" [(ngModel)]="selleraddress2"  ></ion-input>
+      </ion-item> 
+      <ion-item> 
+            <ion-label  position="floating">First Name</ion-label>
+          <ion-input required type="text" [(ngModel)]="sellerfirstname"  ></ion-input>
       </ion-item>
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="sellerlastname" placeholder="Last Name"></ion-input>
+            <ion-label  position="floating">Last Name</ion-label>
+          <ion-input required type="text" [(ngModel)]="sellerlastname"  ></ion-input>
       </ion-item>
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="sellermiddlename" placeholder="Middle Name"></ion-input>
+            <ion-label  position="floating">Middle Name</ion-label>
+          <ion-input required type="text" [(ngModel)]="sellermiddlename"  ></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="cellnumber" placeholder="Cellphone Number"></ion-input>
+            <ion-label  position="floating">Cellphone Number</ion-label>
+          <ion-input required type="text" [(ngModel)]="cellnumber"  ></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="telnumber" placeholder="Tel. Number"></ion-input>
+            <ion-label  position="floating">Tel. Number</ion-label>
+          <ion-input required type="text" [(ngModel)]="telnumber"  ></ion-input>
       </ion-item> 
       <ion-item> 
-          <ion-input required type="text" [(ngModel)]="emails" placeholder="Email Address"></ion-input>
+            <ion-label  position="floating">Email Address</ion-label>
+          <ion-input required type="text" [(ngModel)]="emails"  ></ion-input>
       </ion-item> 
       <hr />      
       <ion-item> 
-            <ion-input required type="text" [(ngModel)]="sellerusername" placeholder="Username"></ion-input>
+            <ion-label  position="floating">Username</ion-label>
+            <ion-input required type="text" [(ngModel)]="sellerusername"  ></ion-input>
         </ion-item>
         <ion-item> 
-            <ion-input required type="password" [(ngModel)]="sellerpassword" placeholder="Password"></ion-input>
+                <ion-label  position="floating">Password</ion-label>
+            <ion-input required type="password" [(ngModel)]="sellerpassword"  ></ion-input>
         </ion-item>
         <ion-item> 
-            <ion-input required type="password" [(ngModel)]="sellerrepassword" placeholder="Re-type Password"></ion-input>
+                <ion-label  position="floating">Re-type Password</ion-label>
+            <ion-input required type="password" [(ngModel)]="sellerrepassword"  ></ion-input>
         </ion-item> 
       <ion-button class="button button-block button-positive button-large" (click)="submitdata();" >Submit</ion-button> 
       <ion-button class="button button-block button-positive button-large" routerLink="register" >Back</ion-button> 

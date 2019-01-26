@@ -19,7 +19,9 @@ export class RegisterBuyerPage implements OnInit {
   buyerrepass: "";
 
   cellnumber: "";  
-  emails: "";
+  emails: "";  
+  productimage = '/assets/store.png';
+  iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
@@ -27,12 +29,13 @@ export class RegisterBuyerPage implements OnInit {
       if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
         this.util.newdata({
           'userdetails': {
-            'address': this.buyeraddress,
-            'firstname': this.buyerfirstname, 
-            'lastname': this.buyerlastname, 
-            'middlename': this.buyermiddlename,
-            'cellnumber': this.cellnumber, 
-            'email': this.emails,
+            'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
+            'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
+            'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
+            'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
+            'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
+            'email':typeof(this.emails) != 'undefined'? this.emails:'none',
+            "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
           },
           'usertype': 'buyer',
           'username': this.buyerusername, 
@@ -67,5 +70,19 @@ export class RegisterBuyerPage implements OnInit {
   }
   navigate() {
     this.router.navigate(['/home']);
+  }
+  fileChange(event){ 
+    if(event.target.files && event.target.files[0]){
+      let reader = new FileReader();
+
+      reader.onload = (event:any) => {
+        this.productimage = event.target.result;        
+        this.iamgefile = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+      // let fileList: FileList = event.target.files;  
+      // let file: File = fileList[0];
+      // this.iamgefile = file;
   }
 }

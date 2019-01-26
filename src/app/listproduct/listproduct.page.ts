@@ -60,14 +60,13 @@ export class ListProductPage implements OnInit {
         text: 'My Products', 
         icon: 'paper',
         handler: () => {
-          self.util.getproducts(self.util.userid);
-          console.log('paper clicked ' + self.util.userid);
+          self.util.getproducts(self.util.userid); 
         }
       }, {
         text: 'All Products',
         icon: 'list',
         handler: () => {
-          console.log('Share clicked');
+          this.util.getproductsall(); 
         }
       }]
     });

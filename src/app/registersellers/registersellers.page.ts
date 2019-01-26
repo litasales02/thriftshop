@@ -24,7 +24,8 @@ export class RegisterSellersPage implements OnInit {
   cellnumber: "";
   telnumber: "";
   emails: "";
-
+  productimage = '/assets/store.png';
+  iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
@@ -39,19 +40,20 @@ export class RegisterSellersPage implements OnInit {
       if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) != 'undefined' && this.sellerrepassword == this.sellerpassword){
         this.util.newdata({
           'userdetails': { 
-            'address1': this.selleraddress1, 
-            'address2': this.selleraddress2, 
-            'firstname': this.sellerfirstname, 
-            'lastname': this.sellerlastname, 
-            'middlename': this.sellermiddlename,
-            'cellnumber': this.cellnumber,
-            'telnumber': this.telnumber,
-            'email': this.emails,
+            'address1': this.selleraddress1!=""?this.selleraddress1:'none', 
+            'address2': this.selleraddress2!=""?this.selleraddress2:'none', 
+            'firstname': this.sellerfirstname!=""?this.sellerfirstname:'none', 
+            'lastname': this.sellerlastname!=""?this.sellerlastname:'none', 
+            'middlename': this.sellermiddlename!=""?this.sellermiddlename:'none',
+            'cellnumber': this.cellnumber!=""?this.cellnumber:'none',
+            'telnumber': typeof(this.telnumber) != 'undefined'?this.telnumber:'none',
+            'email': typeof(this.emails) != 'undefined'?this.emails:'none',
+            "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
           },
           'usertype': 'seller',
-          'username': this.sellerusername, 
-          'password': this.sellerpassword,
-          'storename': this.sellerstorename
+          'username': this.sellerusername!=""?this.sellerusername:'none', 
+          'password': this.sellerpassword!=""?this.sellerpassword:'none',
+          'storename': this.sellerstorename!=""?this.sellerstorename:'none'
         });
         this.navigate();
       } else if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) && (this.sellerrepassword.length < 6 || this.sellerpassword.length < 6 )) {
@@ -65,5 +67,19 @@ export class RegisterSellersPage implements OnInit {
   }
   navigate() {
     this.router.navigate(['/home']);
+  }
+  fileChange(event){ 
+    if(event.target.files && event.target.files[0]){
+      let reader = new FileReader();
+
+      reader.onload = (event:any) => {
+        this.productimage = event.target.result;        
+        this.iamgefile = event.target.result;
+      }
+      reader.readAsDataURL(event.target.files[0]);
+    }
+      // let fileList: FileList = event.target.files;  
+      // let file: File = fileList[0];
+      // this.iamgefile = file;
   }
 }

@@ -19,6 +19,7 @@ export class StoreDetailsPage implements OnInit {
   emails: String = "";
   id: string = "";
   child: string = "";
+  img: string = "";
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -38,6 +39,7 @@ export class StoreDetailsPage implements OnInit {
         this.telnumber = element.userdetails.telnumber;
         this.emails = element.userdetails.email;
         this.ownername = firstname.concat(" " + lastname);
+        this.img = element.userdetails.profileimg;
       }
     });
   }
