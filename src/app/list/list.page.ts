@@ -13,7 +13,7 @@ export class ListPage implements OnInit {
   userlist = [];
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent){
     this.userlist = this.util.storedata;
-    console.log(this.userlist);
+    // console.log(this.userlist);
   }
 
   ngOnInit() {

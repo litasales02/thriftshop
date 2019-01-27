@@ -16,6 +16,10 @@ const routes: Routes = [
     loadChildren: './maps/maps.module#MapsPageModule'
   },
   {
+    path: 'questioner/:id',
+    loadChildren: './questioner/questioner.module#QuestionerPageModule'
+  },
+  {
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },

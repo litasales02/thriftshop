@@ -1,0 +1,188 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>
+        Feed Back
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Questionnaire for Product Quality</ion-card-title>
+                <ion-card-subtitle>If the quality of the product is good, how would you rate it?</ion-card-subtitle>
+            </ion-card-header>        
+            <ion-card-content>
+                <ion-radio-group [(ngModel)]="part1">
+                    <ion-item>
+                        <ion-label>1.	It is excellent</ion-label>
+                        <ion-radio value="1e"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>2.	It is good</ion-label>
+                        <ion-radio value="1g"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>3.	It is average</ion-label>
+                        <ion-radio value="1a"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>4.	It is bad</ion-label>
+                        <ion-radio value="1b"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>5.	It is poor</ion-label>
+                        <ion-radio value="1p"></ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-card-content>         
+            <ion-card-header> 
+                <ion-card-subtitle>If the quality of the product is terrible, how would you rate it?</ion-card-subtitle>
+            </ion-card-header>        
+            <ion-card-content>
+                <ion-radio-group [(ngModel)]="part11">
+                    <ion-item>
+                        <ion-label>1.	It is excellent</ion-label>
+                        <ion-radio value="11e"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>2.	It is good</ion-label>
+                        <ion-radio value="11g"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>3.	It is average</ion-label>
+                        <ion-radio value="11a"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>4.	It is bad</ion-label>
+                        <ion-radio value="11b"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>5.	It is poor</ion-label>
+                        <ion-radio value="11p"></ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-card-content>             
+        </ion-card>
+ 
+        <ion-card>
+            <ion-card-header>
+                    <ion-card-title>Questionnaire for Supplier Satisfaction during the transaction.</ion-card-title>
+                    <ion-card-subtitle>How would you feel if the supplier provided an excellent service during the transaction?</ion-card-subtitle>
+            </ion-card-header>        
+            <ion-card-content>
+                <ion-radio-group [(ngModel)]="part2">
+                    <ion-item>
+                        <ion-label>1.	It is excellent</ion-label>
+                        <ion-radio value="2e"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>2.	It is good</ion-label>
+                        <ion-radio value="2g"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>3.	It is average</ion-label>
+                        <ion-radio value="2a"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>4.	It is bad</ion-label>
+                        <ion-radio value="2b"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>5.	It is poor</ion-label>
+                        <ion-radio value="2p"></ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-card-content>         
+            <ion-card-header> 
+                <ion-card-subtitle>How would you feel if the supplier provided a poor service during the transaction?</ion-card-subtitle>
+            </ion-card-header>        
+            <ion-card-content>
+                <ion-radio-group [(ngModel)]="part22">
+                    <ion-item>
+                        <ion-label>1.	It is excellent</ion-label>
+                        <ion-radio value="22e"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>2.	It is good</ion-label>
+                        <ion-radio value="22g"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>3.	It is average</ion-label>
+                        <ion-radio value="22a"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>4.	It is bad</ion-label>
+                        <ion-radio value="22b"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>5.	It is poor</ion-label>
+                        <ion-radio value="22p"></ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-card-content>                   
+        </ion-card> 
+        <ion-card>
+                <ion-card-header>
+                        <ion-card-title>Questionnaire for the Customer Feedback.</ion-card-title>
+                        <ion-card-subtitle>After visiting the company and experiencing an excellent service, how would be your feedback?</ion-card-subtitle>
+                </ion-card-header>        
+                <ion-card-content>
+                    <ion-radio-group [(ngModel)]="part3">
+                        <ion-item>
+                            <ion-label>1.	It is excellent</ion-label>
+                            <ion-radio value="3e"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>2.	It is good</ion-label>
+                            <ion-radio value="3g"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>3.	It is average</ion-label>
+                            <ion-radio value="3a"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>4.	It is bad</ion-label>
+                            <ion-radio value="3b"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>5.	It is poor</ion-label>
+                            <ion-radio value="3p"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card-content>         
+                <ion-card-header> 
+                    <ion-card-subtitle>After visiting the company and experiencing an excellent service, how would be your feedback?</ion-card-subtitle>
+                </ion-card-header>        
+                <ion-card-content>
+                    <ion-radio-group [(ngModel)]="part33">
+                        <ion-item>
+                            <ion-label>1.	It is excellent</ion-label>
+                            <ion-radio value="33e"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>2.	It is good</ion-label>
+                            <ion-radio value="33g"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>3.	It is average</ion-label>
+                            <ion-radio value="33a"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>4.	It is bad</ion-label>
+                            <ion-radio value="33b"></ion-radio>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>5.	It is poor</ion-label>
+                            <ion-radio value="33p"></ion-radio>
+                        </ion-item>
+                    </ion-radio-group>
+                </ion-card-content>                      
+        </ion-card> 
+
+    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
+    
+</ion-content>

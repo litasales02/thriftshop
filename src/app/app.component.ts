@@ -174,6 +174,11 @@ export class AppComponent {
   async updatenewproduct(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/product').push();
     await newproduct.set(value);
+  }  
+  async updatenewkanodata(id,value){
+    // let newproduct =  
+    await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
+    // await newproduct.set(value);
   }
   initializeApp() {
     this.platform.ready().then(() => {
