@@ -191,6 +191,21 @@ export class AppComponent {
     });    
     // firebase.initializeApp(configfirebase);
   }
+  async kanoalgo(key){
+    var total_rate = 0;
+    var total_stars = 0;
+    var total_excellent = 0;
+    var total_average = 0;
+    var total_good = 0;
+    var total_bad = 0;
+    var total_poor = 0;
+
+  // 1.	It is excellent = e
+  // 2.	It is good = g
+  // 3.	It is average = a
+  // 4.	It is bad = b
+  // 5.	It is poor = p
+  }
 }
 export const snapshotToArray = snapshot => {
   let returnArr = [];

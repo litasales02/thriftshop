@@ -21,11 +21,9 @@
           <h3>{{userlists.userdetails.address1}}</h3>
           <h3>{{userlists.userdetails.firstname}} {{userlists.userdetails.lastname}}</h3>
           <h3>Contact : {{userlists.userdetails.cellnumber}}</h3>
-          <img src="/assets/star.png" height="20" width="20" />
-          <img src="/assets/star.png" height="20" width="20" />
-          <img src="/assets/star.png" height="20" width="20" />
-          <img src="/assets/star.png" height="20" width="20" />
-          <img src="/assets/star.png" height="20" width="20" />
+          <div ng-if="typeof(rate) != 'undefined'">
+              <img *ngFor="let userlists of [0,1,2,3,4]" src="/assets/star.png" height="20" width="20" />
+          </div>
           <p></p>
         </ion-label>
       </ion-item>

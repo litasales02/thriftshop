@@ -18,9 +18,9 @@ export class QuestionerPage implements OnInit {
   id = "";
   constructor(public activatedRoute: ActivatedRoute,public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    // if (this.util.userid == ''){
-    //   this.util.menuRouting('/login');
-    // }
+    if (this.util.userid == ''){
+      this.util.menuRouting('/login');
+    }
   }
   ngOnInit() {
 
@@ -42,7 +42,7 @@ export class QuestionerPage implements OnInit {
   // 5.	It is poor = p
 
 
-    console.log("id ",this.id);
+    // console.log("id ",this.id);
 
     if (typeof(this.part1) != 'undefined' &&
         typeof(this.part11) != 'undefined' &&
