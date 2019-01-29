@@ -17,7 +17,8 @@ const configfirebase = {
 firebase.initializeApp(configfirebase); 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent {
   drawerTitle: string = "Hi Guest!";
@@ -26,6 +27,7 @@ export class AppComponent {
   userType: string = '';
   username: '';
   fullname: ''; 
+  profileimg = '/assets/store.png';
   storedata = [];
   productdata = [];
   ref = firebase.database().ref('maindata').orderByChild('userdetails');

@@ -2,7 +2,10 @@
   <ion-split-pane>
     <ion-menu>
       <ion-header>
-        <ion-toolbar color="primary">
+        <ion-toolbar class="drawertitle" color="primary">
+          <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
+              <img [src]="profileimg" />
+          </ion-avatar>
           <ion-title >{{drawerTitle}}</ion-title>
         </ion-toolbar>
       </ion-header>
