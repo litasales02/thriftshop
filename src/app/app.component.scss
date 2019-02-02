@@ -1,5 +1,6 @@
 .drawertitle{
     // height: 300px;
+    padding: 10px;
 }
 
 .center_font {
@@ -10,6 +11,34 @@
     // margin-right: auto;
 }   
 .avatar_logo {
-    // height: 500px;
-    // width: 500px;
+    width:130px; 
+    height:130px;
+    border-style: solid;
+    border-width: 1px;
+    // margin-left: 15px;
+    // margin-top: 15px;
 }
+.drawer_title {
+    margin-left: 10px;
+    margin-top: 15px;
+}
+.drawer_titlesub{
+    margin-left: 10px;
+    margin-top: 5px;
+    font-size: 12px;
+}
+.drawerrate{
+    margin-left: 15px; 
+}
+.drawerBackground {
+    // background.jpg
+    background-image: url("../assets/background.jpg") center 150% !important;
+    background-repeat: no-repeat!important;
+    background-position: center!important;
+}
+//   --ion-color-drawers: url("../assets/background.jpg") center 150%;
+//   --ion-color-drawers-rgb: 152, 154, 162;
+//   --ion-color-drawers-contrast: #ffffff;
+//   --ion-color-drawers-contrast-rgb: 255, 255, 255;
+//   --ion-color-drawers-shade: #86888f;
+//   --ion-color-drawers-tint: #a2a4ab;

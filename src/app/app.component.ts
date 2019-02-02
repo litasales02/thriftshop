@@ -107,6 +107,7 @@ export class AppComponent {
             self.userid = data.key;
             self.drawerTitle = 'Hi ' + data.val().userdetails.firstname;
             self.loginStatus = true;
+            self.profileimg = data.val().userdetails.profileimg;
             self.userType =  data.val().usertype;
             callback(true);
           } else {
