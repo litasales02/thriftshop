@@ -30,6 +30,7 @@ export class AppComponent {
   profileimg = '/assets/store.png';
   storedata = [];
   productdata = [];
+  starscss = 'drawerrate hide';
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
   public appPages = [
     {
@@ -82,7 +83,8 @@ export class AppComponent {
     });
     this.initializeApp(); 
   }
-  logout(){
+  logout(){    
+    this.starscss = 'drawerrate hide';
     this.drawerTitle = 'Hi Guest!';
     this.loginStatus = false;
     this.username = '';
@@ -105,10 +107,11 @@ export class AppComponent {
         childs.forEach(function(data){
           if ( data.val().password === password ){
             self.userid = data.key;
-            self.drawerTitle = 'Hi ' + data.val().userdetails.firstname;
+            self.drawerTitle = data.val().userdetails.firstname;
             self.loginStatus = true;
             self.profileimg = data.val().userdetails.profileimg;
             self.userType =  data.val().usertype;
+            self.starscss = 'drawerrate show';
             callback(true);
           } else {
             callback(false);
@@ -183,6 +186,76 @@ export class AppComponent {
     await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
     // await newproduct.set(value);
   }
+  async kanoalgo(key){
+    var total_rate = 0;
+    var total_stars = 0;
+    var total_excellent = 0;
+    var total_average = 0;
+    var total_good = 0;
+    var total_bad = 0;
+    var total_poor = 0;
+    var total_count = 0;  
+  // -LXAsHXXhdBTaTXxh3Xp
+  // 1.	It is excellent = e
+  // 2.	It is good = g
+  // 3.	It is average = a
+  // 4.	It is bad = b
+  // 5.	It is poor = p
+    console.log('Called');
+    let arr = [];
+    this.storedata.forEach(element => {   
+      if(typeof(element.feedsseller) != 'undefined'){
+        Object.values(element.feedsseller).forEach(element2 => { 
+            // console.log(element2);
+            // console.log(element2['Q1P1']);
+            // console.log(element2['Q1P2']);
+            // console.log(element2['Q2P1']);
+            // console.log(element2['Q2P2']);
+            // console.log(element2['Q3P1']);
+            // console.log(element2['Q3P2']); 
+            total_rate = total_rate + this.kanu_cal(element2['Q1P1']);
+            total_rate = total_rate + this.kanu_cal(element2['Q1P2']);
+            total_rate = total_rate + this.kanu_cal(element2['Q2P1']);
+            total_rate = total_rate + this.kanu_cal(element2['Q2P2']);
+            total_rate = total_rate + this.kanu_cal(element2['Q3P1']);
+            total_rate = total_rate + this.kanu_cal(element2['Q3P2']);
+            total_rate = total_rate = total_rate / 5;
+            console.log('total_rate',total_rate);
+            if (this.kanu_cal(total_rate) == 5 ){
+              total_excellent++;
+            } else if(this.kanu_cal(total_rate) == 4 ){
+              total_average++;
+            } else if(this.kanu_cal(total_rate) == 3 ){
+              total_good++;
+            } else if(this.kanu_cal(total_rate) == 2 ){
+              total_bad++;
+            } else if(this.kanu_cal(total_rate) == 1 ){
+              total_poor++;
+            }
+            // 1.	It is excellent = e
+            // 2.	It is good = g
+            // 3.	It is average = a
+            // 4.	It is bad = b
+            // 5.	It is poor = p
+        });
+      }
+    });
+  }
+  kanu_cal(val){
+    if (val == 'e'){
+      return 5;
+    } else if(val == 'g') {
+      return 4;
+    } else if(val == 'a') {
+      return 3;
+    } else if(val == 'b') {
+      return 2;
+    } else if(val == 'p') {
+      return 1;
+    }else {
+      return 0
+    }
+  }
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
@@ -193,21 +266,6 @@ export class AppComponent {
       this.splashScreen.hide();
     });    
     // firebase.initializeApp(configfirebase);
-  }
-  async kanoalgo(key){
-    var total_rate = 0;
-    var total_stars = 0;
-    var total_excellent = 0;
-    var total_average = 0;
-    var total_good = 0;
-    var total_bad = 0;
-    var total_poor = 0;
-
-  // 1.	It is excellent = e
-  // 2.	It is good = g
-  // 3.	It is average = a
-  // 4.	It is bad = b
-  // 5.	It is poor = p
   }
 }
 export const snapshotToArray = snapshot => {

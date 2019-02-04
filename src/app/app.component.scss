@@ -36,6 +36,12 @@
     background-repeat: no-repeat!important;
     background-position: center!important;
 }
+.hide {
+    visibility: hidden;
+}
+.show {
+    visibility: initial;
+}
 //   --ion-color-drawers: url("../assets/background.jpg") center 150%;
 //   --ion-color-drawers-rgb: 152, 154, 162;
 //   --ion-color-drawers-contrast: #ffffff;

@@ -13,5 +13,7 @@ export class HomePage {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent){
     this.userlist = this.util.storedata;
     // console.log(this.userlist);
+    
+    this.util.kanoalgo('-LXAsHXXhdBTaTXxh3Xp');
   }
 }
