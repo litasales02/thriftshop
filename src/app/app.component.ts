@@ -201,7 +201,7 @@ export class AppComponent {
   // 3.	It is average = a
   // 4.	It is bad = b
   // 5.	It is poor = p
-    console.log('Called');
+    // console.log('Called');
     let arr = [];
     this.storedata.forEach(element => {   
       if(typeof(element.feedsseller) != 'undefined'){
