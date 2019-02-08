@@ -188,13 +188,13 @@ export class AppComponent {
   }
   async kanoalgo(key){
     var total_rate = 0;
+    var total_count = 0;  
     var total_stars = 0;
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
     var total_poor = 0;
-    var total_count = 0;  
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -202,24 +202,23 @@ export class AppComponent {
   // 4.	It is bad = b
   // 5.	It is poor = p
     // console.log('Called');
-    let arr = [];
     this.storedata.forEach(element => {   
       if(typeof(element.feedsseller) != 'undefined'){
         Object.values(element.feedsseller).forEach(element2 => { 
-            // console.log(element2);
-            // console.log(element2['Q1P1']);
-            // console.log(element2['Q1P2']);
-            // console.log(element2['Q2P1']);
-            // console.log(element2['Q2P2']);
-            // console.log(element2['Q3P1']);
-            // console.log(element2['Q3P2']); 
+          // if(element2.ke)
+            console.log('Q1P1',element2['Q1P1']);
+            console.log('Q1P2',element2['Q1P2']);
+            console.log('Q2P1',element2['Q2P1']);
+            console.log('Q2P2',element2['Q2P2']);
+            console.log('Q3P1',element2['Q3P1']);
+            console.log('Q3P2',element2['Q3P2']); 
             total_rate = total_rate + this.kanu_cal(element2['Q1P1']);
             total_rate = total_rate + this.kanu_cal(element2['Q1P2']);
             total_rate = total_rate + this.kanu_cal(element2['Q2P1']);
             total_rate = total_rate + this.kanu_cal(element2['Q2P2']);
             total_rate = total_rate + this.kanu_cal(element2['Q3P1']);
             total_rate = total_rate + this.kanu_cal(element2['Q3P2']);
-            total_rate = total_rate = total_rate / 5;
+            total_rate = total_rate = total_rate / 6;
             console.log('total_rate',total_rate);
             if (this.kanu_cal(total_rate) == 5 ){
               total_excellent++;
@@ -232,25 +231,23 @@ export class AppComponent {
             } else if(this.kanu_cal(total_rate) == 1 ){
               total_poor++;
             }
-            // 1.	It is excellent = e
-            // 2.	It is good = g
-            // 3.	It is average = a
-            // 4.	It is bad = b
-            // 5.	It is poor = p
+            
         });
+        total_count++;
       }
     });
+    
   }
   kanu_cal(val){
-    if (val == 'e'){
+    if (val == 'e'){ // 1.	It is excellent = e
       return 5;
-    } else if(val == 'g') {
+    } else if(val == 'g') { // 2.	It is good = g
       return 4;
-    } else if(val == 'a') {
+    } else if(val == 'a') { // 3.	It is average = a
       return 3;
-    } else if(val == 'b') {
+    } else if(val == 'b') { // 4.	It is bad = b
       return 2;
-    } else if(val == 'p') {
+    } else if(val == 'p') { // 5.	It is poor = p
       return 1;
     }else {
       return 0
