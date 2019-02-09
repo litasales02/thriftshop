@@ -198,9 +198,10 @@ export class AppComponent {
     await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
     // await newproduct.set(value);
   }
-  async kanoalgo(key){
+  kanoalgo(key){
+    var self = this;
     var total_rate = 0;
-    var total_count = 0;  
+    var total_final = 0;  
     var total_stars = 0;
     var total_excellent = 0;
     var total_average = 0;
@@ -212,45 +213,70 @@ export class AppComponent {
   // 2.	It is good = g
   // 3.	It is average = a
   // 4.	It is bad = b
-  // 5.	It is poor = p
-    // console.log('Called');
-    this.storedata.forEach(element => {   
-      if(typeof(element.feedsseller) != 'undefined'){
-        Object.values(element.feedsseller).forEach(element2 => { 
-          // if(element2.ke)
-            console.log('Q1P1',element2['Q1P1']);
-            console.log('Q1P2',element2['Q1P2']);
-            console.log('Q2P1',element2['Q2P1']);
-            console.log('Q2P2',element2['Q2P2']);
-            console.log('Q3P1',element2['Q3P1']);
-            console.log('Q3P2',element2['Q3P2']); 
-            total_rate = total_rate + this.kanu_cal(element2['Q1P1']);
-            total_rate = total_rate + this.kanu_cal(element2['Q1P2']);
-            total_rate = total_rate + this.kanu_cal(element2['Q2P1']);
-            total_rate = total_rate + this.kanu_cal(element2['Q2P2']);
-            total_rate = total_rate + this.kanu_cal(element2['Q3P1']);
-            total_rate = total_rate + this.kanu_cal(element2['Q3P2']);
-            total_rate = total_rate = total_rate / 6;
-            console.log('total_rate',total_rate);
-            if (this.kanu_cal(total_rate) == 5 ){
-              total_excellent++;
-            } else if(this.kanu_cal(total_rate) == 4 ){
-              total_average++;
-            } else if(this.kanu_cal(total_rate) == 3 ){
-              total_good++;
-            } else if(this.kanu_cal(total_rate) == 2 ){
-              total_bad++;
-            } else if(this.kanu_cal(total_rate) == 1 ){
-              total_poor++;
-            }
+  // 5.	It is poor = p 
+  this.storedata.forEach(function(element ,index1,arr1) {   
+      // console.log(element);
+      if(typeof(element.feedsseller) != 'undefined' && element.key == key){
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){  
+            // console.log('Q1P1',element2['Q1P1']);
+            // console.log('Q1P2',element2['Q1P2']);
+            // console.log('Q2P1',element2['Q2P1']);
+            // console.log('Q2P2',element2['Q2P2']);
+            // console.log('Q3P1',element2['Q3P1']);
+            // console.log('Q3P2',element2['Q3P2']); 
+            total_rate = 0;
+            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
+           
+            total_rate = total_rate / 5;
+            total_final = total_final + total_rate;
+            // console.log('total_rate',total_rate);
+            Object.keys(element2).forEach(elementkey => {
+              // console.log('element2' ,element2[elementkey]);
+              if (self.kanu_evalletters(element2[elementkey]) == 5 ){
+                total_excellent++;
+              } else if(self.kanu_evalletters(element2[elementkey]) == 4 ){
+                total_average++;
+              } else if(self.kanu_evalletters(element2[elementkey]) == 3 ){
+                total_good++;
+              } else if(self.kanu_evalletters(element2[elementkey]) == 2 ){
+                total_bad++;
+              } else if(self.kanu_evalletters(element2[elementkey]) == 1 ){
+                total_poor++;
+              }
+            });
+
             
+            if(index == arr.length - 1){ 
+              total_stars = ((total_final / arr.length) | 0);
+              
+              // console.log('total_excellent',total_excellent);  
+              // console.log('total_average',total_average);  
+              // console.log('total_good',total_good);  
+              // console.log('total_bad',total_bad);  
+              // console.log('total_poor',total_poor);  
+              
+            }
         });
-        total_count++;
       }
+      // if(index1 == arr1.length - 1){ 
+        
+      // }
     });
-    
+    return {
+      'total_stars': total_stars,
+      'total_excellent': total_excellent,
+      'total_average': total_average,
+      'total_good': total_good,
+      'total_bad': total_bad,
+      'total_poor': total_poor
+    }
   }
-  kanu_cal(val){
+  kanu_evalletters(val){
     if (val == 'e'){ // 1.	It is excellent = e
       return 5;
     } else if(val == 'g') { // 2.	It is good = g

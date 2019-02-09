@@ -13,7 +13,10 @@ export class HomePage {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent){
     this.userlist = this.util.storedata;
     // console.log(this.userlist);
-    
-    this.util.kanoalgo('-LXAsHXXhdBTaTXxh3Xp');
+    // var seek = setImmediate(()=>{
+    //   if(this.userlist != null){
+        console.log(this.util.kanoalgo('-LX8fqOZf3aHU_p5mdqd'));
+    //   }
+    // })
   }
 }
