@@ -3,6 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component'; 
 
+
 @Component({
   selector: 'app-list',
   templateUrl: 'storedetails.page.html',

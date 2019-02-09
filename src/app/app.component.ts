@@ -4,7 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
-import { AlertController, ToastController  } from '@ionic/angular';
+import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
 import * as firebase from 'firebase';
 
 const configfirebase = {
@@ -31,6 +31,7 @@ export class AppComponent {
   storedata = [];
   productdata = [];
   starscss = 'drawerrate hide';
+  isMD = this.platform.is('android');
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
   public appPages = [
     {
@@ -75,13 +76,24 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
-    public toastController: ToastController
+    public toastController: ToastController,
+    public loadingController: LoadingController
   ) { 
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
     });
     this.initializeApp(); 
+  }
+  async presentLoadingWithOptions() {
+    const loading = await this.loadingController.create({
+      spinner: null,
+      duration: 5000,
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
   }
   logout(){    
     this.starscss = 'drawerrate hide';
