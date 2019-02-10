@@ -15,8 +15,9 @@ export class HomePage {
     // console.log(this.userlist);
     // var seek = setImmediate(()=>{
     //   if(this.userlist != null){
-        console.log(this.util.kanoalgo('-LX8fqOZf3aHU_p5mdqd'));
+        // console.log(this.util.kanoalgo('-LX8fqOZf3aHU_p5mdqd'));
     //   }
-    // })
+    // }) 
+    
   }
 }

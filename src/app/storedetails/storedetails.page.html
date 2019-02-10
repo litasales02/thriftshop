@@ -20,19 +20,19 @@
         <img [class]="starscss" *ngFor="let userlists of stars" src="/assets/star.png" height="20" width="20" /> 
     </ion-item>
     <ion-item lines="none" style="padding:0%"> 
-        5: <progress-bar [progress]="kanoevaluation.total_excellent * 20" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_excellent}})
+        5: <progress-bar [progress]="kanoevaluation.total_excellentp" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_excellent}})
     </ion-item> 
     <ion-item lines="none" style="padding:0%">  
-        4: <progress-bar [progress]="kanoevaluation.total_average * 20" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_average}})
+        4: <progress-bar [progress]="kanoevaluation.total_averagep" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_average}})
     </ion-item> 
     <ion-item lines="none" style="padding:0%">  
-        3: <progress-bar [progress]="kanoevaluation.total_good * 20" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_good}})
+        3: <progress-bar [progress]="kanoevaluation.total_goodp " [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_good}})
     </ion-item>
     <ion-item lines="none" style="padding:0%">  
-        2: <progress-bar [progress]="kanoevaluation.total_bad * 20" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_bad}}) 
+        2: <progress-bar [progress]="kanoevaluation.total_badp" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_bad}}) 
     </ion-item> 
     <ion-item lines="none" style="padding:0%">  
-        1: <progress-bar [progress]="kanoevaluation.total_poor * 20" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_poor}})
+        1: <progress-bar [progress]="kanoevaluation.total_poorp" [color]="'#b3c3e0'" style="width:100%;"></progress-bar> ({{kanoevaluation.total_poor}})
     </ion-item> 
     <ion-item> 
         <ion-label type="text" >Store Name</ion-label>
@@ -63,7 +63,7 @@
         <ion-label >{{ownername}}</ion-label>
     </ion-item> 
     <ion-item> 
-        <ion-button size="default" fill="outline" routerLink="/questioner/{{id}}">Rate</ion-button> 
+        <ion-button size="default" fill="outline" [routerLink]="btndirectrate">Rate</ion-button> 
         <ion-button size="default" fill="outline" routerLink="/product/list/{{id}}/storedetailshome" >View Products</ion-button> 
     </ion-item> 
     

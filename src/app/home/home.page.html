@@ -22,7 +22,7 @@
           <h3>{{userlists.userdetails.firstname}} {{userlists.userdetails.lastname}}</h3>
           <h3>Contact : {{userlists.userdetails.cellnumber}}</h3>
           <div ng-if="typeof(rate) != 'undefined'">
-              <img *ngFor="let userlists of [0,1,2,3,4]" src="/assets/star.png" height="20" width="20" />
+              <img *ngFor="let userlists of  ' '.repeat(userlists.totalStars).split('')" src="/assets/star.png" height="20" width="20" />
           </div>
           <p></p>
         </ion-label>

@@ -8,7 +8,7 @@
           </ion-avatar>
           <ion-title class="drawer_title" >{{drawerTitle}}</ion-title>          
           <ion-title class="drawer_titlesub" >{{userType}}</ion-title>
-          <img [class]="starscss" *ngFor="let userlists of stars" src="/assets/star.png" height="20" width="20" />
+          <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
         </ion-toolbar>
       </ion-header>
       <ion-content>
