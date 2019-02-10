@@ -58,6 +58,10 @@ const routes: Routes = [
   {
     path: 'product/list/:id/:child',
     loadChildren: './listproduct/listproduct.module#ListProductPageModule'
+  },
+  {
+    path: 'favorites/products',
+    loadChildren: './listproduct_favorites/listproduct_favorites.module#ListProduct_FavoritePageModule'
   }
 ];
 

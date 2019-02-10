@@ -39,13 +39,20 @@
                   Messages
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/product/list/all/home'">
+              <ion-item [routerDirection]="'root'"  [routerLink]="'/product/list/all/home'">
                 <ion-icon slot="start" [name]="'list'"></ion-icon>
                 <ion-label>
                   Products
                 </ion-label>
               </ion-item>
                 <div *ngIf="userType=='seller'" >
+                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
+                    <ion-icon slot="start" [name]="'bookmarks'"></ion-icon>
+                    <ion-label>
+                      Favorites
+                    </ion-label>
+                    <ion-badge slot="end" color="primary">{{favoritecount}}</ion-badge>
+                  </ion-item>
                   <ion-item [routerDirection]="'root'" *ngSwitchCase="true"   [routerLink]="'/createproduct'">
                     <ion-icon slot="start" [name]="'add'"></ion-icon>
                     <ion-label>

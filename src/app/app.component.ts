@@ -30,6 +30,8 @@ export class AppComponent {
   profileimg = '/assets/store.png';
   storedata = [];
   productdata = [];
+  productdatafavorite = [];
+  favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
   stars = 0;
@@ -131,7 +133,9 @@ export class AppComponent {
             self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
             self.updatedataset(data.key,{
               totalStars: self.kanoevaluation.total_stars
-            })
+            });            
+            self.loadfavorite();
+            console.log(self.productdatafavorite);
             callback(true);
           } else {
             callback(false);
@@ -162,6 +166,15 @@ export class AppComponent {
   async menuRouting(link){
     this.router.navigate([link]);
   }
+  getproductsbyname(productname){
+    this.storedata.forEach(element => {
+      if(typeof(element.product) != 'undefined'){
+        Object.entries(element.product).forEach(function(element2,index,arr){
+          console.log(element2);
+        });
+      }
+    });
+  }
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
@@ -180,7 +193,7 @@ export class AppComponent {
             if (element.key == "product") {
               element.forEach(element2 => {
                 let item = element2.val();
-                item.key = this.productdata
+                item.key = element2.key; 
                 this.productdata.push(item);
               });
             }
@@ -189,6 +202,38 @@ export class AppComponent {
       });
     });
     // console.log(this.productdata);
+  }
+  getfravorites(productkey){
+    var self = this;  
+    var results = this.productdatafavorite.find(function(element) { 
+      return productkey == element.pID; 
+    });  
+    if (typeof(results) != 'undefined' && results.pID == productkey){
+      return true;
+    }else{
+      return false; 
+    } 
+  }
+  loadfavorite(){
+    var self = this;
+    this.productdatafavorite = [];
+    this.favoritecount = 0;
+    // console.log('this.storedata',this.storedata);
+    this.storedata.forEach(function(element ,index1,arr1) {     
+      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){
+        // console.log("element",element);
+        Object.entries(element.favorites).forEach(function(element2,index,arr){  
+          // console.log('element20',element2[0]);  
+          // console.log('element21',element2[1]); 
+          // console.log('arr',arr); 
+          self.favoritecount++;
+          let d = {key : element2[0], pID : element2[1]['key']};
+          // d.key = element2[0];
+          // console.log('d',d);
+          self.productdatafavorite.push(d);
+        });
+      }
+    });
   }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
@@ -203,6 +248,20 @@ export class AppComponent {
   async updatenewproduct(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/product').push();
     await newproduct.set(value);
+  }  
+  async updatefavorateproduct(key){
+    var resultskey = this.productdatafavorite.find(function(element) {  
+      return key == element.pID; 
+    }); 
+    if(typeof(resultskey) != 'undefined' && resultskey.pID == key){
+      console.log("tawag ng tangalan");
+      firebase.database().ref('maindata/'+ this.userid + '/favorites/'+resultskey.key).remove();
+    }else{
+      console.log("tawag ng duggag");
+      let newproduct = firebase.database().ref('maindata/'+ this.userid + '/favorites/').push();
+      await newproduct.set({'key':key});
+    }
+    this.loadfavorite();
   }  
   async updatenewkanodata(id,value){
     // let newproduct =  

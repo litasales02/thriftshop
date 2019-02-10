@@ -6,10 +6,10 @@ import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-list',
-  templateUrl: 'listproduct.page.html',
-  styleUrls: ['listproduct.page.scss']
+  templateUrl: 'listproduct_favorites.page.html',
+  styleUrls: ['listproduct_favorites.page.scss']
 })
-export class ListProductPage implements OnInit { 
+export class ListProduct_FavoritePage implements OnInit { 
   id: string = "";
   child: string = "";
   default_redirect: string = "home";
@@ -65,8 +65,7 @@ export class ListProductPage implements OnInit {
       this.default_redirect = "home"; 
     }
   }
-  favoriteselected(key){ 
-    // this.util.getfravorites(key);
+  favoriteselected(key){  
     return this.util.getfravorites(key);
   }
   favoritestar(key){ 
@@ -76,6 +75,9 @@ export class ListProductPage implements OnInit {
     }else{      
       return "/assets/unstar.png";
     } 
+  }
+  owneritem(key){
+    return this.util.getfravorites(key);
   }
   navigate(item) {
     this.router.navigate([item]);
@@ -106,10 +108,5 @@ export class ListProductPage implements OnInit {
       }]
     });
     await actionSheet.present();
-  }
-  getItems(ev) { 
-    // set val to the value of the ev target
-    var val = ev.target.value;
-    this.util.getproductsbyname(val);
   }
 }
