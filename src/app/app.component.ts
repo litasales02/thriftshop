@@ -29,6 +29,7 @@ export class AppComponent {
   fullname: ''; 
   profileimg = '/assets/store.png';
   storedata = [];
+  storedata2 = [];
   productdata = [];
   productdatafavorite = [];
   favoritecount = 0;
@@ -166,19 +167,43 @@ export class AppComponent {
   async menuRouting(link){
     this.router.navigate([link]);
   }
-  getproductsbyname(productname){
+  getstorebyname(productname,callback){
     console.clear();
+    var self = this;
+    self.storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.usertype) != 'undefined'){
+        // Object.entries(element).forEach(function(element2,index,arr){
+          var storename = String(JSON.stringify(element.storename)).toLowerCase();
+          if(typeof(storename) != "undefined" && storename.indexOf(productname.toLowerCase()) > -1){
+            // console.log(element);
+          //   console.log(element2[1]['productname']);
+            let item = element;
+            item.key = element.key; 
+          //   // item.push(element2[1]);
+          //   console.log(item);
+            self.storedata2.push(item);
+          }
+        // });
+      }
+      if(index == arr.length - 1){ 
+        callback(self.storedata2);
+      }
+    });
+  }
+  getproductsbyname(productname){
+    // console.clear();
     var self = this;
     self.productdata = [];
     this.storedata.forEach(element => {
       if(typeof(element.product) != 'undefined'){
         Object.entries(element.product).forEach(function(element2,index,arr){
           if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1){
-            console.log(element2[1]['productname']);
+            // console.log(element2[1]['productname']);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0]; 
             // item.push(element2[1]);
-            console.log(item);
+            // console.log(item);
             self.productdata.push(item);
           }
         });
@@ -189,16 +214,16 @@ export class AppComponent {
     console.clear();
     var self = this;
     self.productdata = [];
-    console.log('filtered')
+    // console.log('filtered')
     this.storedata.forEach(element => {
       if(typeof(element.product) != 'undefined'){
         Object.entries(element.product).forEach(function(element2,index,arr){
           if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
-            console.log(element2[1]['productname']);
+            // console.log(element2[1]['productname']);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0]; 
             // item.push(element2[1]);
-            console.log(item);
+            // console.log(item);
             self.productdata.push(item);
           }
         });

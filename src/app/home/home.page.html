@@ -11,7 +11,9 @@
 
 <ion-content scrollable="true" class="has-header">
   
-  <ion-list *ngFor="let userlists of util.storedata">
+  <ion-searchbar animated (ionInput)="getItems($event)"></ion-searchbar>
+
+  <ion-list *ngFor="let userlists of userlist">
       <ion-item *ngIf="userlists.usertype=='seller'&&util.userid!=userlists.key" routerLink="/list/storedetails/{{userlists.key}}/home"> 
         <ion-avatar slot="start">
           <img [src]="userlists.userdetails.profileimg" />
