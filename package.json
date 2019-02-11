@@ -11,7 +11,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "ionics": "ionic serve  -p 8000",
-    "cordovas": "ionic cordova run browser -p 8000"
+    "cordovas": "ionic cordova run browser -p 8000",
+    "cordovasandroid": "ionic cordova run android"
   },
   "private": true,
   "dependencies": {
@@ -80,8 +81,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyC3qWP8UR4km33e7L7Pj3cUut5kRCWfevU",
-        "API_KEY_FOR_IOS": "AIzaSyDRSpyMmjQ-yekHr9VxMXMZctA4N-shR0U"
+        "API_KEY_FOR_ANDROID": "AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64",
+        "API_KEY_FOR_IOS": "AIzaSyCVWrE1ZJgH8cK2BznEaY-AMZ9nNVaNy60"
       },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},

@@ -58,6 +58,10 @@ export class RegisterSellersPage implements OnInit {
             'status': 0,
             'govid': 'None',
             'storeimg':'None'
+          },
+          'geodata': {
+            'lat': '0.0',
+            'lng': '0.0'
           }
         });
         this.navigate();

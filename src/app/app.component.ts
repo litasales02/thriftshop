@@ -235,7 +235,7 @@ export class AppComponent {
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
-      console.log(childSnapshot);
+      // console.log(childSnapshot);
       this.productdata = [];
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
@@ -337,10 +337,10 @@ export class AppComponent {
       return key == element.pID; 
     }); 
     if(typeof(resultskey) != 'undefined' && resultskey.pID == key){
-      console.log("tawag ng tangalan");
+      // console.log("tawag ng tangalan");
       firebase.database().ref('maindata/'+ this.userid + '/favorites/'+resultskey.key).remove();
     }else{
-      console.log("tawag ng duggag");
+      // console.log("tawag ng duggag");
       let newproduct = firebase.database().ref('maindata/'+ this.userid + '/favorites/').push();
       await newproduct.set({'key':key});
     }
@@ -586,8 +586,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
-        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyC3qWP8UR4km33e7L7Pj3cUut5kRCWfevU',
-        'API_KEY_FOR_BROWSER_DEBUG': ''
+        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc',
+        'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc'
       });
       this.statusBar.styleDefault();
       this.splashScreen.hide();

@@ -27,11 +27,13 @@ export class SetStoreMapPage implements OnInit {
 
   }
   loadMap() {
+    var lat = 7.148419523108726;
+    var lng = 125.52915832519531;
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
-          lat: 43.0741704,
-          lng: -89.3809802
+          lat: lat,
+          lng: lng
         },
         zoom: 18,
         tilt: 30
