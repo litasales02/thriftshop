@@ -88,11 +88,41 @@ export class ListProductPage implements OnInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'Filter Options',
       buttons: [{
+        text: 'Create New', 
+        icon: 'add',
+        handler: () => { //createproduct
+          // self.util.getproducts(self.util.userid); 
+          this.navigate('/createproduct');
+        }
+      },{
+        text: 'My Products',
+        icon: 'list',
+        handler: () => {                  
+          this.util.getproductsallcant();
+          if(self.util.registrationstatus == 0 && self.util.loginStatus){
+            self.util.alerts('Hi','Your Product will not show on product list until you update and complete the requirements',['ok']);
+          }
+        }
+      },{
+        text: 'All Products',
+        icon: 'list',
+        handler: () => {                  
+          this.util.getproductsall();
+        }
+      }]
+    });
+    await actionSheet.present();
+  }
+  async presentActionSheetFilter() {
+    var self = this;
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Product Filter Options',
+      buttons: [{
         text: 'All',  
         handler: () => {
           self.selected = 'All';
           self.filterselected = 'all';
-          this.util.getproductsbyname(this.searchtext);
+          this.util.getproductsall();
         }
       },{
         text: 'T-shirt',  

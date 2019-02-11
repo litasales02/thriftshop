@@ -17,10 +17,14 @@ export class AccountSettingPage implements OnInit {
   validgorvermentidimage = '/assets/store.png';
   storeimage = '/assets/store.png';
   idtype: "";
+  storemapstatus = 'None';
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
   }
   submit(){
     if (typeof(this.storeimg) != 'undefined' && typeof(this.govid) != 'undefined' && typeof(this.idtype) != 'undefined'){
+        if(this.storemapstatus == "None"){
+          this.util.ShowToast("Please Update your Store Map Location");
+        }
         this.util.updaterequirements({ 
           'status': 0,
           'govid': this.govid,

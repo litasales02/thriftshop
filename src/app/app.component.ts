@@ -23,6 +23,7 @@ firebase.initializeApp(configfirebase);
 export class AppComponent {
   drawerTitle: string = "Hi Guest!";
   loginStatus: boolean = false;
+  registrationstatus = 0;
   userid: string = '';
   userType: string = '';
   username: '';
@@ -128,6 +129,7 @@ export class AppComponent {
             self.drawerTitle = data.val().userdetails.firstname;
             self.loginStatus = true;
             self.profileimg = data.val().userdetails.profileimg;
+            self.registrationstatus = data.val().requirements.status;
             self.userType =  data.val().usertype;
             self.starscss = 'drawerrate show';
             self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
@@ -136,7 +138,7 @@ export class AppComponent {
               totalStars: self.kanoevaluation.total_stars
             });            
             self.loadfavorite();
-            console.log(self.productdatafavorite);
+            // console.log(self.productdatafavorite);
             callback(true);
           } else {
             callback(false);
@@ -233,6 +235,7 @@ export class AppComponent {
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
+      console.log(childSnapshot);
       this.productdata = [];
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
@@ -242,7 +245,28 @@ export class AppComponent {
     let newInfo = firebase.database().ref('maindata').orderByKey();
     newInfo.on('value',childSnapshot => {
       childSnapshot.forEach(childs => {
-        var d = childs.val(); 
+        var d = childs.val();  
+        if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && d.requirements.status == 1){        
+          childs.forEach(element => {  
+            if (element.key == "product") {
+              element.forEach(element2 => {
+                let item = element2.val();
+                item.key = element2.key; 
+                this.productdata.push(item);
+              });
+            }
+          });
+         }        
+      });
+    });
+    // console.log(this.productdata);
+  }
+  getproductsallcant(){ 
+    this.productdata = [];
+    let newInfo = firebase.database().ref('maindata').orderByKey();
+    newInfo.on('value',childSnapshot => {
+      childSnapshot.forEach(childs => {
+        var d = childs.val();  
         if( d.usertype == 'seller'){        
           childs.forEach(element => {  
             if (element.key == "product") {

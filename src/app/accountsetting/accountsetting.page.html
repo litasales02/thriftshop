@@ -32,6 +32,15 @@
     <ion-item lines="none"> 
       <input type="file" value="" (change)="fileChange2($event)">
     </ion-item>  
+    <ion-item-divider>         
+    </ion-item-divider> 
+    <ion-item lines="full">        
+      <ion-label slot='start' >Store Location Status</ion-label>
+      <ion-label slot='end' >{{storemapstatus}}</ion-label>
+    </ion-item> 
+    <ion-button class="button button-block button-positive button-large"  routerLink="/setstoremap" > Update Store Location</ion-button>
+    <ion-item-divider>         
+      </ion-item-divider> 
     <ion-button class="button button-block button-positive button-large" (click)="submit()">Update</ion-button>
   </ion-list>
 </ion-content>
