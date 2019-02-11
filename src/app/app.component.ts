@@ -167,10 +167,40 @@ export class AppComponent {
     this.router.navigate([link]);
   }
   getproductsbyname(productname){
+    console.clear();
+    var self = this;
+    self.productdata = [];
     this.storedata.forEach(element => {
       if(typeof(element.product) != 'undefined'){
         Object.entries(element.product).forEach(function(element2,index,arr){
-          console.log(element2);
+          if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1){
+            console.log(element2[1]['productname']);
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0]; 
+            // item.push(element2[1]);
+            console.log(item);
+            self.productdata.push(item);
+          }
+        });
+      }
+    });
+  }
+  getproductsbyfilter(filers,productname){
+    console.clear();
+    var self = this;
+    self.productdata = [];
+    console.log('filtered')
+    this.storedata.forEach(element => {
+      if(typeof(element.product) != 'undefined'){
+        Object.entries(element.product).forEach(function(element2,index,arr){
+          if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+            console.log(element2[1]['productname']);
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0]; 
+            // item.push(element2[1]);
+            console.log(item);
+            self.productdata.push(item);
+          }
         });
       }
     });
@@ -518,6 +548,7 @@ export const snapshotToArray = snapshot => {
       let item = childSnapshot.val();
       item.key = childSnapshot.key;
       // console.log("data " , item);
+      // console.log("data 2 " , childSnapshot.val());
       returnArr.push(item);
   });
   return returnArr;

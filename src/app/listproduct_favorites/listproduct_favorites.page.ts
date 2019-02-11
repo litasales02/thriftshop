@@ -94,16 +94,10 @@ export class ListProduct_FavoritePage implements OnInit {
           this.navigate('/createproduct');
         }
       },{
-        text: 'My Products',  
-        icon: 'paper',
-        handler: () => {
-          self.util.getproducts(self.util.userid); 
-        }
-      }, {
         text: 'All Products',
         icon: 'list',
-        handler: () => {
-          this.util.getproductsall(); 
+        handler: () => {          
+          this.navigate('/product/list/all/home');
         }
       }]
     });

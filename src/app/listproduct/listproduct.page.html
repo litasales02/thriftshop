@@ -17,6 +17,14 @@
 <ion-content>
   
 <ion-searchbar animated (ionInput)="getItems($event)"></ion-searchbar>
+<ion-item >
+    <ion-button color="primary" (click)="presentActionSheet()" >
+       Filter
+    </ion-button>  
+    <ion-label style="margin-left:10px;">
+      : {{selected}}
+    </ion-label>
+</ion-item>
 
   <ion-list *ngFor="let datas of util.productdata">
     <ion-item routerLink="/list/storedetails" > 

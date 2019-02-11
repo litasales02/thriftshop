@@ -14,7 +14,10 @@ export class ListProductPage implements OnInit {
   child: string = "";
   default_redirect: string = "home";
   data = null;
-  star = '/assets/unstar.png';
+  star = '/assets/unstar.png'; 
+  selected = 'All';
+  searchtext = '';
+  filterselected = 'All';
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -83,25 +86,62 @@ export class ListProductPage implements OnInit {
   async presentActionSheet() {
     var self = this;
     const actionSheet = await this.actionSheetController.create({
-      header: 'Options',
+      header: 'Filter Options',
       buttons: [{
-        text: 'Create New', 
-        icon: 'add',
-        handler: () => { //createproduct
-          // self.util.getproducts(self.util.userid); 
-          this.navigate('/createproduct');
+        text: 'All',  
+        handler: () => {
+          self.selected = 'All';
+          self.filterselected = 'all';
+          this.util.getproductsbyname(this.searchtext);
         }
       },{
-        text: 'My Products',  
-        icon: 'paper',
+        text: 'T-shirt',  
         handler: () => {
-          self.util.getproducts(self.util.userid); 
+          self.selected = 'T-shirt';   
+          self.filterselected = 'tshirt';   
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);    
+        }
+      },{
+        text: 'Pants',   
+        handler: () => {
+          self.selected = 'Pants';    
+          self.filterselected = 'pants';      
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext); 
         }
       }, {
-        text: 'All Products',
-        icon: 'list',
+        text: 'Shorts Pants', 
         handler: () => {
-          this.util.getproductsall(); 
+          self.selected = 'Short Pants';  
+          self.filterselected = 'shortpants';   
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);      
+        }
+      }, {
+        text: 'Long Pants', 
+        handler: () => {
+          self.selected = 'Long Pants';  
+          self.filterselected = 'longpants';    
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);     
+        }
+      }, {
+        text: 'Underwares', 
+        handler: () => {
+          self.selected = 'Underwares'; 
+          self.filterselected = 'underwares';    
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);      
+        }
+      }, {
+        text: 'Bags', 
+        handler: () => {
+          self.selected = 'Bags';  
+          self.filterselected = 'bags';    
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);     
+        }
+      }, {
+        text: 'Shoes', 
+        handler: () => {
+          self.selected = 'Shoes';  
+          self.filterselected = 'shoes';     
+          self.util.getproductsbyfilter(self.filterselected,self.searchtext);    
         }
       }]
     });
@@ -109,7 +149,7 @@ export class ListProductPage implements OnInit {
   }
   getItems(ev) { 
     // set val to the value of the ev target
-    var val = ev.target.value;
-    this.util.getproductsbyname(val);
+    this.searchtext = ev.target.value;
+    this.util.getproductsbyname(this.searchtext);
   }
 }
