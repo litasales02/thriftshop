@@ -5,10 +5,10 @@ import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-list',
-  templateUrl: 'createproduct.page.html',
-  styleUrls: ['createproduct.page.scss']
+  templateUrl: 'productdetails.page.html',
+  styleUrls: ['productdetails.page.scss']
 })
-export class CreateProductPage implements OnInit {
+export class ProductDetailsPage implements OnInit {
   productname: "";
   unittype: "";
   price: "";
@@ -38,10 +38,10 @@ export class CreateProductPage implements OnInit {
         this.util.alerts("New Product","Product Added",['Ok']);
         this.util.menuRouting('/home');
       } else {
-        this.util.alerts("Add New","Please fill required text",['Ok']);
+        this.util.alerts("Add New","Please fill required text1",['Ok']);
       }
     }else {
-      this.util.alerts("Add New","Please fill required text",['Ok']);
+      this.util.alerts("Add New","Please fill required text2",['Ok']);
     }
   }
   fileChange(event){ 

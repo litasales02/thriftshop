@@ -10,33 +10,28 @@
 </ion-header>
 
 <ion-content scrollable="true" class="has-header">
-  <ion-list >
-    <ion-item class="center_font"> 
-      <ion-avatar style="text-align: center">
-          <img src="img/avatar-cher.png" class="center_image avatar_logo" height="500" width="500">
-      </ion-avatar>
+  <ion-list > 
+    <ion-item lines="full"> 
+      <ion-label slot='start' >Registration Status</ion-label>
+      <ion-label slot='end' >{{acountstatus}}</ion-label>
     </ion-item> 
-    <ion-item> 
-        <ion-input required type="file" value="Open File"></ion-input>
+    <ion-item lines="none"> 
+      <ion-label slot='start' >Valid Goverment Id's</ion-label>
+      <ion-label slot='end' >{{validgorvermentidstatus}}</ion-label>
     </ion-item> 
-    <ion-item> 
-        <ion-input required type="text" placeholder="Store Name"></ion-input>
+    <ion-item lines="full"> 
+      <ion-input required type="text" [(ngModel)]="idtype" placeholder="ID TYPE"></ion-input> 
     </ion-item> 
-    <ion-item> 
-        <ion-input required type="text" placeholder="Address 1"></ion-input>
+    <ion-item lines="none">  
+      <input type="file" value="" (change)="fileChange($event)">
     </ion-item> 
-    <ion-item> 
-        <ion-input required type="text" placeholder="Address 2"></ion-input>
+    <ion-item lines="none"> 
+      <ion-label slot='start' >Store Front Image</ion-label>
+      <ion-label slot='end' >{{storeimagestatus}}</ion-label>
     </ion-item> 
-    <ion-item> 
-        <ion-input required type="text" placeholder="First Name"></ion-input>
-    </ion-item>
-    <ion-item> 
-        <ion-input required type="text" placeholder="Last Name"></ion-input>
-    </ion-item>
-    <ion-item> 
-        <ion-input required type="text" placeholder="Middle Name"></ion-input>
-    </ion-item> 
-    <ion-button style="text-align:center" >Update</ion-button>
-    </ion-list>
+    <ion-item lines="none"> 
+      <input type="file" value="" (change)="fileChange2($event)">
+    </ion-item>  
+    <ion-button class="button button-block button-positive button-large" (click)="submit()">Update</ion-button>
+  </ion-list>
 </ion-content>

@@ -53,7 +53,12 @@ export class RegisterSellersPage implements OnInit {
           'usertype': 'seller',
           'username': this.sellerusername!=""?this.sellerusername:'none', 
           'password': this.sellerpassword!=""?this.sellerpassword:'none',
-          'storename': this.sellerstorename!=""?this.sellerstorename:'none'
+          'storename': this.sellerstorename!=""?this.sellerstorename:'none',
+          'requirements' : { 
+            'status': 0,
+            'govid': 'None',
+            'storeimg':'None'
+          }
         });
         this.navigate();
       } else if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) && (this.sellerrepassword.length < 6 || this.sellerpassword.length < 6 )) {

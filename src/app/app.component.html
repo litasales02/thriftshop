@@ -66,6 +66,12 @@
                     Register
                   </ion-label>
                 </ion-item>
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
+                  <ion-icon slot="start" [name]="'cog'"></ion-icon>
+                  <ion-label>
+                    Settings
+                  </ion-label>
+                </ion-item>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="true" (click)="logout();">
                   <ion-icon slot="start" [name]="'log-out'"></ion-icon>
                   <ion-label>
@@ -76,6 +82,21 @@
                   <ion-icon slot="start" [name]="'log-in'"></ion-icon>
                   <ion-label>
                     Login
+                  </ion-label>
+                </ion-item> 
+                <ion-item-divider class="--padding-top"> 
+
+                </ion-item-divider>
+                <ion-item [routerDirection]="'root'" line="none" [routerLink]="'/login'">
+                  <ion-icon slot="start" [name]="'call'"></ion-icon>
+                  <ion-label>
+                    Contact Us
+                  </ion-label>
+                </ion-item> 
+                <ion-item [routerDirection]="'root'" line="none"  [routerLink]="'/login'">
+                  <ion-icon slot="start" [name]="'help'"></ion-icon>
+                  <ion-label>
+                    About Us
                   </ion-label>
                 </ion-item> 
           </ion-menu-toggle>

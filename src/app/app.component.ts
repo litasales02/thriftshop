@@ -303,6 +303,10 @@ export class AppComponent {
   async updatenewproduct(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/product').push();
     await newproduct.set(value);
+  } 
+  async updaterequirements(value){
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/requirements');
+    await newproduct.update(value);
   }  
   async updatefavorateproduct(key){
     var resultskey = this.productdatafavorite.find(function(element) {  
