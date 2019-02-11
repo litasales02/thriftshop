@@ -64,7 +64,7 @@ const routes: Routes = [
     loadChildren: './listproduct_favorites/listproduct_favorites.module#ListProduct_FavoritePageModule'
   },
   {
-    path: 'products/details',
+    path: 'products/details/:id',
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
   },
   {

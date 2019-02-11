@@ -13,6 +13,7 @@ export class ListProductPage implements OnInit {
   id: string = "";
   child: string = "";
   default_redirect: string = "home";
+  list_redirect = "/list/storedetails";
   data = null;
   star = '/assets/unstar.png'; 
   selected = 'All';
@@ -31,18 +32,33 @@ export class ListProductPage implements OnInit {
         var child = "";
         if (this.child == "storedetailshome"){
           child = "list/storedetails/" + this.id + "/home";
+          this.list_redirect = "/products/details";
           this.util.getproducts(this.id);
         } else if (this.child == "myproduct"){
           child = "list/storedetails/" + this.id + "/home";
+          this.list_redirect = "/products/details";
           this.util.getproducts(this.id);
         } else {
           child = "home";
+          this.list_redirect = "/products/details";
           this.util.getproductsall();
         }
         this.default_redirect = child;
       }catch(er){
         this.default_redirect = "home"; 
       }
+  }
+  returnlinks(id){
+    if (this.child == "storedetailshome"){
+      // child = "list/storedetails/" + this.id + "/home";
+      this.list_redirect = "/products/details";
+    } else if (this.child == "myproduct"){
+      // child = "list/storedetails/" + this.id + "/home";
+      this.list_redirect = "/products/details";
+    } else {
+      // child = "home";
+      this.list_redirect = "/products/details";
+    }
   }
   ngOnInit() {
   } 

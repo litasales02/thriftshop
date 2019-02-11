@@ -240,6 +240,30 @@ export class AppComponent {
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
   }
+  
+  getproductsbyid(key){ 
+    this.productdata = [];
+    let newInfo = firebase.database().ref('maindata').orderByKey();
+    newInfo.on('value',childSnapshot => {
+      childSnapshot.forEach(childs => {
+        var d = childs.val();  
+        if( d.usertype == 'seller'){        
+          childs.forEach(element => {  
+            if (element.key == "product") {
+              element.forEach(element2 => {
+                if(element2.key == key){
+                  let item = element2.val();
+                  item.key = element2.key;  
+                  this.productdata.push(item);
+                }
+              });
+            }
+          });
+         }        
+      });
+    });
+    // console.log(this.productdata);
+  }
   getproductsall(){ 
     this.productdata = [];
     let newInfo = firebase.database().ref('maindata').orderByKey();
