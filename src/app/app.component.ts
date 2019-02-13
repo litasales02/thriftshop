@@ -240,7 +240,6 @@ export class AppComponent {
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
   }
-  
   getproductsbyid(key){ 
     this.productdata = [];
     let newInfo = firebase.database().ref('maindata').orderByKey();
@@ -262,7 +261,6 @@ export class AppComponent {
          }        
       });
     });
-    // console.log(this.productdata);
   }
   getproductsall(){ 
     this.productdata = [];
