@@ -60,6 +60,7 @@ export class RegisterSellersPage implements OnInit {
             'storeimg':'None'
           },
           'geodata': {
+            'status': 1,
             'lat': '0.0',
             'lng': '0.0'
           }

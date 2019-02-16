@@ -39,6 +39,11 @@ export class AppComponent {
     'govid': null,
     'storeimg': null
   };
+  storemapstatus = 'None';
+  geodatastatus = 'None';
+  geodata = 0;
+  geolat = 0.0;
+  geolong = 0.0;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -144,7 +149,9 @@ export class AppComponent {
               totalStars: self.kanoevaluation.total_stars
             });            
             self.loadfavorite();
-            // console.log(self.productdatafavorite);
+            if(typeof(data.val().requirements) != 'undefined'){ 
+              self.requirementsdata = data.val().requirements; 
+            }
             callback(true);
           } else {
             callback(false);
@@ -345,23 +352,10 @@ export class AppComponent {
   load_user_requirements(){
     console.clear();
     var self = this;
-    // this.requirementsdata = [];
-    // console.log('filtered')
     this.storedata.forEach(element => {
-      if(element.key == "-LX8fqOZf3aHU_p5mdqd"){
-        if(typeof(element.requirements) != 'undefined'){
-          console.log(element.requirements);
-          // self.requirementsdata = snapshotToArray(element.requirements);
-          // Object.entries(element.requirements).forEach(function(element2,index,arr){
-          // //   if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
-          //     console.log(element2);
-          //     let item = Object.assign({}, element2)[1];
-          //     item['key'] = Object.assign({}, element2)[0]; 
-          // //     // item.push(element2[1]);
-          // //     // console.log(item);
-              self.requirementsdata = element.requirements;
-          //   }
-          // });
+      if(element.key == self.userid){
+        if(typeof(element.requirements) != 'undefined'){ 
+          self.requirementsdata = element.requirements; 
         }
       }
     });
@@ -382,6 +376,10 @@ export class AppComponent {
   } 
   async updaterequirements(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/requirements');
+    await newproduct.update(value);
+  }  
+  async updategeodata(value){
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/geodata');
     await newproduct.update(value);
   }  
   async updatefavorateproduct(key){

@@ -17,12 +17,11 @@ export class AccountSettingPage implements OnInit {
   validgorvermentidimage = '/assets/store.png';
   storeimage = '/assets/store.png';
   idtype: "";
-  storemapstatus = 'None';
+
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     
     this.util.load_user_requirements();
-    
-      console.log(this.util.requirementsdata);
+      // console.log(this.util.requirementsdata);
       this.idtype = this.util.requirementsdata.idtype;
       this.acountstatus = this.util.requirementsdata.status == 0?'In-Active':'Active';
       this.validgorvermentidstatus = this.util.requirementsdata.govid == null?'None':'Validated'; 
@@ -31,7 +30,7 @@ export class AccountSettingPage implements OnInit {
   }
   submit(){
     if (typeof(this.storeimg) != 'undefined' && typeof(this.govid) != 'undefined' && typeof(this.idtype) != 'undefined'){
-        if(this.storemapstatus == "None"){
+        if(this.util.geodata == 0){
           this.util.ShowToast("Please Update your Store Map Location");
         }
         this.util.updaterequirements({ 
@@ -40,6 +39,15 @@ export class AccountSettingPage implements OnInit {
           'govid': this.govid,
           'storeimg':this.storeimg
         });
+        if(this.util.geodata == 1){
+          this.util.updategeodata({
+            'geodata': {
+              'status': this.util.geodata,
+              'lat': this.util.geolat,
+              'lng': this.util.geolong
+            }
+          });
+        }
         this.util.alerts("Update","Store Updated!, Please wait for the comformation of your registration or call us. Thank you!.",['Ok']);
         this.util.menuRouting('/home');
     }else {
