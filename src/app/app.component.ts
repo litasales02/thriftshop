@@ -33,6 +33,7 @@ export class AppComponent {
   storedata2 = [];
   productdata = [];
   productdatafavorite = [];
+  requirementsdata = [];
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -333,6 +334,30 @@ export class AppComponent {
           // console.log('d',d);
           self.productdatafavorite.push(d);
         });
+      }
+    });
+  }
+  load_user_requirements(){
+    console.clear();
+    var self = this;
+    this.requirementsdata = [];
+    // console.log('filtered')
+    this.storedata.forEach(element => {
+      if(element.key == "-LX8fqOZf3aHU_p5mdqd"){
+        if(typeof(element.requirements) != 'undefined'){
+          console.log(element.requirements);
+          // self.requirementsdata = snapshotToArray(element.requirements);
+          Object.entries(element.requirements).forEach(function(element2,index,arr){
+          //   if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+              console.log(element2);
+          //     let item = Object.assign({}, element2)[1];
+          //     item['key'] = Object.assign({}, element2)[0]; 
+          // //     // item.push(element2[1]);
+          // //     // console.log(item);
+          //     self.requirementsdata.push(item);
+          //   }
+          });
+        }
       }
     });
   }

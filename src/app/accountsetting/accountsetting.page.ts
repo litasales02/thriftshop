@@ -19,6 +19,8 @@ export class AccountSettingPage implements OnInit {
   idtype: "";
   storemapstatus = 'None';
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+    this.util.load_user_requirements();
+    console.log(this.util.registrationstatus);
   }
   submit(){
     if (typeof(this.storeimg) != 'undefined' && typeof(this.govid) != 'undefined' && typeof(this.idtype) != 'undefined'){
@@ -27,6 +29,7 @@ export class AccountSettingPage implements OnInit {
         }
         this.util.updaterequirements({ 
           'status': 0,
+          'idtype': this.idtype,
           'govid': this.govid,
           'storeimg':this.storeimg
         });
