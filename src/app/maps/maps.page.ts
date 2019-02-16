@@ -37,15 +37,6 @@ export class MapsPage implements OnInit {
   ];
   public items: Array<{ title: string; note: string; icon: string }> = [];
   loadMap() {
-<<<<<<< HEAD
-    this.map = GoogleMaps.create('map_canvas', {
-      camera: {
-        target: {
-          lat: 43.0741704,
-          lng: -89.3809802
-        },
-        zoom: 18,
-=======
     var lat = 7.148419523108726;
     var lng = 125.52915832519531;
     this.map = GoogleMaps.create('map_canvas', {
@@ -55,22 +46,12 @@ export class MapsPage implements OnInit {
           lng: lng
         },
         zoom: 12,
->>>>>>> develop
         tilt: 30
       }
     });
 
   }
   constructor() { 
-<<<<<<< HEAD
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
-=======
     // for (let i = 1; i < 11; i++) {
     //   this.items.push({
     //     title: 'Item ' + i,
@@ -78,7 +59,6 @@ export class MapsPage implements OnInit {
     //     icon: this.icons[Math.floor(Math.random() * this.icons.length)]
     //   });
     // }
->>>>>>> develop
   }
 
   async ngOnInit() {

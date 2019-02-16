@@ -3,10 +3,6 @@
   "integrations": {
     "cordova": {}
   },
-<<<<<<< HEAD
-  "type": "angular"
-=======
   "type": "angular",
   "pro_id": "bcd574d9"
->>>>>>> develop
 }

@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-import { Component } from '@angular/core';
-=======
 import { Component, OnInit } from '@angular/core';
 import { AlertController,  ActionSheetController, PopoverController  } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component'; 
->>>>>>> develop
 
 @Component({
   selector: 'app-home',
@@ -13,9 +9,6 @@ import { AppComponent } from '../app.component';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-<<<<<<< HEAD
-
-=======
   userlist = [];
   searchtext = '';
   filterselected = '';
@@ -59,5 +52,4 @@ export class HomePage {
   //   });
   //   await actionSheet.present();
   // }
->>>>>>> develop
 }

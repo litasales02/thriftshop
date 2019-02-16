@@ -16,32 +16,23 @@ const routes: Routes = [
     loadChildren: './maps/maps.module#MapsPageModule'
   },
   {
-<<<<<<< HEAD
-=======
     path: 'questioner/:id',
     loadChildren: './questioner/questioner.module#QuestionerPageModule'
   },
   {
->>>>>>> develop
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
   },
   {
-<<<<<<< HEAD
-=======
     path: 'list/storedetails/:id/:child',
     loadChildren: './storedetails/storedetails.module#StoreDetailsPageModule'
   },
   {
->>>>>>> develop
     path: 'messages',
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
   {
     path: 'register',
-<<<<<<< HEAD
-    loadChildren: './register/register.module#RegisterPageModule'
-=======
     loadChildren: './registration_select/registration_select.module#Registration_SelectPageModule'
   },
   {
@@ -51,13 +42,10 @@ const routes: Routes = [
   {
     path: 'register/seller',
     loadChildren: './registersellers/registersellers.module#RegisterSellersPageModule'
->>>>>>> develop
   },
   {
     path: 'login',
     loadChildren: './login/login.module#LoginPageModule'
-<<<<<<< HEAD
-=======
   },
   {
     path: 'accountsetting',
@@ -82,7 +70,6 @@ const routes: Routes = [
   {
     path: 'setstoremap',
     loadChildren: './setstoremap/setstoremap.module#SetStoreMapPageModule'
->>>>>>> develop
   }
 ];
 

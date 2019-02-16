@@ -1,16 +1,4 @@
 import { Component } from '@angular/core';
-<<<<<<< HEAD
-
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html'
-})
-export class AppComponent {
-=======
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -62,7 +50,6 @@ export class AppComponent {
   stars = 0;
   kanoevaluation = {total_stars:0};
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
->>>>>>> develop
   public appPages = [
     {
       title: 'Home',
@@ -87,36 +74,12 @@ export class AppComponent {
     {
       title: 'Register',
       url: '/register',
-<<<<<<< HEAD
-      icon: 'add'
-=======
       icon: 'person-add'
->>>>>>> develop
     },
     {
       title: 'Login',
       url: '/login',
       icon: 'log-in'
-<<<<<<< HEAD
-    }
-  ];
-
-  constructor(
-    private platform: Platform,
-    private splashScreen: SplashScreen,
-    private statusBar: StatusBar
-  ) {
-    this.initializeApp();
-  }
-
-  initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
-  }
-}
-=======
     },
     {
       title: 'Logout',
@@ -715,4 +678,3 @@ export const snapshotToArrayproductnested = snapshot => {
   });
   return returnArr;
 };
->>>>>>> develop
