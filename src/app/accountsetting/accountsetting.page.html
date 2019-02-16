@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Settings
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content scrollable="true" class="has-header">
+  <ion-list > 
+    <ion-item lines="full"> 
+      <ion-label slot='start' >Registration Status</ion-label>
+      <ion-label slot='end' >{{acountstatus}}</ion-label>
+    </ion-item> 
+    <ion-item-divider lines="none"> 
+      <ion-label slot='start' >Valid Goverment Id's</ion-label>
+      <ion-label slot='end' >{{validgorvermentidstatus}}</ion-label>
+    </ion-item-divider> 
+    <ion-item lines="full"> 
+      <ion-input required type="text" [(ngModel)]="idtype" placeholder="ID TYPE"></ion-input> 
+    </ion-item> 
+    <ion-item lines="none">  
+      <input type="file" value="" (change)="fileChange($event)">
+    </ion-item> 
+    <ion-item lines="none"> 
+      <ion-label slot='start' >Store Front Image</ion-label>
+      <ion-label slot='end' >{{storeimagestatus}}</ion-label>
+    </ion-item> 
+    <ion-item lines="none"> 
+      <input type="file" value="" (change)="fileChange2($event)">
+    </ion-item>  
+    <ion-item-divider>         
+    </ion-item-divider> 
+    <ion-item lines="full">        
+      <ion-label slot='start' >Store Location Status</ion-label>
+      <ion-label slot='end' >{{storemapstatus}}</ion-label>
+    </ion-item> 
+    <ion-button class="button button-block button-positive button-large"  routerLink="/setstoremap" > Update Store Location</ion-button>
+    <ion-item-divider>         
+      </ion-item-divider> 
+    <ion-button class="button button-block button-positive button-large" (click)="submit()">Update</ion-button>
+  </ion-list>
+</ion-content>

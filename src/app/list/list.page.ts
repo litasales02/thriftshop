@@ -1,4 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+<<<<<<< HEAD
+=======
+import { AlertController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from '../app.component'
+>>>>>>> develop
 
 @Component({
   selector: 'app-list',
@@ -6,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['list.page.scss']
 })
 export class ListPage implements OnInit {
+<<<<<<< HEAD
   private selectedItem: any;
   private icons = [
     'flask',
@@ -28,12 +35,23 @@ export class ListPage implements OnInit {
         icon: this.icons[Math.floor(Math.random() * this.icons.length)]
       });
     }
+=======
+ 
+  userlist = [];
+  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent){
+    this.userlist = this.util.storedata;
+    // console.log(this.userlist);
+>>>>>>> develop
   }
 
   ngOnInit() {
   }
+<<<<<<< HEAD
   // add back when alpha.4 is out
   // navigate(item) {
   //   this.router.navigate(['/list', JSON.stringify(item)]);
   // }
+=======
+ 
+>>>>>>> develop
 }

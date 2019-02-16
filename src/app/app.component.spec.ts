@@ -48,6 +48,7 @@ describe('AppComponent', () => {
     const fixture = await TestBed.createComponent(AppComponent);
     await fixture.detectChanges();
     const app = fixture.nativeElement;
+<<<<<<< HEAD
     const menuItems = app.querySelectorAll('ion-label');
     console.log(menuItems.length);
     expect(menuItems.length).toEqual(6);
@@ -57,6 +58,16 @@ describe('AppComponent', () => {
     expect(menuItems[1].textContent).toContain('Messages'); 
     expect(menuItems[1].textContent).toContain('Register'); 
     expect(menuItems[1].textContent).toContain('Login'); 
+=======
+    const menuItems = app.querySelectorAll('ion-label'); 
+    expect(menuItems.length).toEqual(6);
+    expect(menuItems[0].textContent).toContain('Home');
+    expect(menuItems[1].textContent).toContain('Maps');
+    expect(menuItems[2].textContent).toContain('Shop List'); 
+    expect(menuItems[3].textContent).toContain('Messages'); 
+    expect(menuItems[4].textContent).toContain('Register'); 
+    expect(menuItems[5].textContent).toContain('Login'); 
+>>>>>>> develop
   });
 
   it('should have urls', async () => {

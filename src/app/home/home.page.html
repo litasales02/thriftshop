@@ -10,6 +10,7 @@
 </ion-header>
 
 <ion-content scrollable="true" class="has-header">
+<<<<<<< HEAD
   <ion-list >
     
       <ion-item > 
@@ -47,4 +48,27 @@
 
     
   </ion-list>
+=======
+  
+  <ion-searchbar animated (ionInput)="getItems($event)"></ion-searchbar>
+
+  <ion-list *ngFor="let userlists of userlist">
+      <ion-item *ngIf="userlists.usertype=='seller'&&util.userid!=userlists.key" routerLink="/list/storedetails/{{userlists.key}}/home"> 
+        <ion-avatar slot="start">
+          <img [src]="userlists.userdetails.profileimg" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{userlists.storename}}</h2>
+          <h3>{{userlists.userdetails.address1}}</h3>
+          <h3>{{userlists.userdetails.firstname}} {{userlists.userdetails.lastname}}</h3>
+          <h3>Contact : {{userlists.userdetails.cellnumber}}</h3>
+          <div ng-if="typeof(rate) != 'undefined'">
+              <img *ngFor="let userlists of  ' '.repeat(userlists.totalStars).split('')" src="/assets/star.png" height="20" width="20" />
+          </div>
+          <p></p>
+        </ion-label>
+      </ion-item>
+  </ion-list>
+
+>>>>>>> develop
 </ion-content>

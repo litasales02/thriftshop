@@ -1,0 +1,50 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>
+        New Product
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item style="text-align: center"> 
+        <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
+            <img [src]="productimage" class="center_image avatar_logo" />
+        </ion-avatar>
+    </ion-item> 
+    <ion-item> 
+        <input type="file" value="" (change)="fileChange($event)">
+    </ion-item> 
+    <ion-item> 
+        <ion-input required type="text" [(ngModel)]="productname" placeholder="Product Name"></ion-input>
+    </ion-item> 
+    <ion-item> 
+        <ion-label>Product Type</ion-label>
+        <ion-select [(ngModel)]="producttype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="tshirt">T-Shirt</ion-select-option>
+            <ion-select-option value="pants">Pants</ion-select-option>
+            <ion-select-option value="shortpants">short Pants</ion-select-option>
+            <ion-select-option value="longpants">Long Pants</ion-select-option>
+            <ion-select-option value="underwares">Underwares</ion-select-option> 
+            <ion-select-option value="bags">Bags</ion-select-option> 
+            <ion-select-option value="shoes">Shoes</ion-select-option> 
+        </ion-select>
+    </ion-item>   
+    <ion-item> 
+        <ion-label>Unit Type</ion-label>
+        <ion-select [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="Kilo"  >Kilo</ion-select-option>
+            <ion-select-option value="Item"  >Item</ion-select-option>
+            <ion-select-option value="Set"   >Set</ion-select-option> 
+            <ion-select-option value="Bundle">Bundle</ion-select-option> 
+        </ion-select>
+    </ion-item> 
+    <ion-item> 
+        <ion-input required type="number" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
+    </ion-item> 
+    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
+    
+</ion-content>

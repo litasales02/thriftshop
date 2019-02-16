@@ -60,7 +60,11 @@
   --ion-color-dark-tint: #383a3e;
 
   /** medium **/
+<<<<<<< HEAD
   --ion-color-medium: #989aa2;
+=======
+  --ion-color-medium: url("../assets/background.jpg") center / 120% ;
+>>>>>>> develop
   --ion-color-medium-rgb: 152, 154, 162;
   --ion-color-medium-contrast: #ffffff;
   --ion-color-medium-contrast-rgb: 255, 255, 255;
@@ -74,5 +78,10 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+<<<<<<< HEAD
+=======
+
+    /** drawer **/
+>>>>>>> develop
 }
  
