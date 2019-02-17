@@ -59,7 +59,7 @@ export class QuestionerPage implements OnInit {
           'Q3P1':this.part3,
           'Q3P2':this.part33
         });
-
+        this.util.kanoalgo(this.id);
         this.util.alerts("Feed Back","Thank you!.",['Ok']);
         this.util.menuRouting('/home');
     }else {

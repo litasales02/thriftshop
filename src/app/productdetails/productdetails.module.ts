@@ -3,23 +3,21 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
-import {ProgressBarModule} from "angular-progress-bar"
 
-import { StoreDetailsPage } from './storedetails.page';
+import { ProductDetailsPage } from './productdetails.page';
 
 @NgModule({
   imports: [
-    ProgressBarModule,
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild([
       {
         path: '',
-        component: StoreDetailsPage
+        component: ProductDetailsPage
       }
     ])
   ],
-  declarations: [StoreDetailsPage]
+  declarations: [ProductDetailsPage]
 })
-export class StoreDetailsPageModule {}
+export class ProductDetailsPageModule {}

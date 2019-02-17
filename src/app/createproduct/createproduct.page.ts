@@ -38,10 +38,10 @@ export class CreateProductPage implements OnInit {
         this.util.alerts("New Product","Product Added",['Ok']);
         this.util.menuRouting('/home');
       } else {
-        this.util.alerts("Add New","Please fill required text1",['Ok']);
+        this.util.alerts("Add New","Please fill required text",['Ok']);
       }
     }else {
-      this.util.alerts("Add New","Please fill required text2",['Ok']);
+      this.util.alerts("Add New","Please fill required text",['Ok']);
     }
   }
   fileChange(event){ 

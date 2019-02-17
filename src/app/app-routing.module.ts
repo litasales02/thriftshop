@@ -58,6 +58,18 @@ const routes: Routes = [
   {
     path: 'product/list/:id/:child',
     loadChildren: './listproduct/listproduct.module#ListProductPageModule'
+  },
+  {
+    path: 'favorites/products',
+    loadChildren: './listproduct_favorites/listproduct_favorites.module#ListProduct_FavoritePageModule'
+  },
+  {
+    path: 'products/details/:id',
+    loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
+  },
+  {
+    path: 'setstoremap',
+    loadChildren: './setstoremap/setstoremap.module#SetStoreMapPageModule'
   }
 ];
 

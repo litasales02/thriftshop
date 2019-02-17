@@ -3,6 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component'; 
 
+
 @Component({
   selector: 'app-list',
   templateUrl: 'storedetails.page.html',
@@ -20,6 +21,9 @@ export class StoreDetailsPage implements OnInit {
   id: string = "";
   child: string = "";
   img: string = "";
+  stars = [];
+  kanoevaluation = {total_stars:0};
+  btndirectrate = '/login';
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -40,8 +44,17 @@ export class StoreDetailsPage implements OnInit {
         this.emails = element.userdetails.email;
         this.ownername = firstname.concat(" " + lastname);
         this.img = element.userdetails.profileimg;
+        this.kanoevaluation = this.util.kanoalgo(element.key);
+        this.stars =  Array(this.kanoevaluation.total_stars).map((x,i)=>i);
+        this.util.updatedataset(element.key,{
+          totalStars: this.kanoevaluation.total_stars
+        });
+        console.log(this.kanoevaluation);
       }
     });
+    if(this.util.loginStatus){
+      this.btndirectrate = '/questioner/' + this.id;
+    }
   }
 
   ngOnInit() {

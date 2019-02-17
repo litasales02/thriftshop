@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/product/list/all/home"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>
+        Product Details
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item style="text-align: center"> 
+        <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
+            <img [src]="productimage" class="center_image avatar_logo" />
+        </ion-avatar>
+    </ion-item>  
+    <ion-item> 
+            <ion-label>Product Name</ion-label> 
+            <ion-label>{{productname}}</ion-label> 
+    </ion-item> 
+    <ion-item> 
+            <ion-label>Product Type</ion-label> 
+            <ion-label>{{producttype}}</ion-label> 
+    </ion-item>   
+    <ion-item> 
+        <ion-label>Unit Type</ion-label>        
+        <ion-label>{{unittype}}</ion-label>
+    </ion-item> 
+    <ion-item> 
+        <ion-label>Price</ion-label>        
+        <ion-label>{{price}}</ion-label>
+    </ion-item> 
+  
+</ion-content>

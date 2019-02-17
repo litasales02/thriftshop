@@ -2,13 +2,19 @@
   <ion-split-pane>
     <ion-menu>
       <ion-header>
-        <ion-toolbar color="primary">
-          <ion-title >{{drawerTitle}}</ion-title>
+        <ion-toolbar class="drawertitle" color="medium" >
+          <ion-avatar class="avatar_logo">
+              <img [src]="profileimg" />
+          </ion-avatar>
+          <ion-title class="drawer_title" >{{drawerTitle}}</ion-title>          
+          <ion-title class="drawer_titlesub" >{{userType}}</ion-title>
+          <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
         </ion-toolbar>
       </ion-header>
       <ion-content>
+        <ion-split-pane when="md"></ion-split-pane>
         <ion-list>
-          <ion-menu-toggle auto-hide="false">
+          <ion-menu-toggle  [ngSwitch]="loginStatus" auto-hide="false">
               <ion-item [routerDirection]="'root'"  [routerLink]="'/home'">
                 <ion-icon slot="start" [name]="'home'"></ion-icon>
                 <ion-label>
@@ -26,22 +32,28 @@
                 <ion-label>
                   Shop List
                 </ion-label>
+              </ion-item> 
+              <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/messages'">
+                <ion-icon slot="start" [name]="'chatboxes'"></ion-icon>
+                <ion-label>
+                  Messages
+                </ion-label>
               </ion-item>
-              <div [ngSwitch]="loginStatus">
-                <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/messages'">
-                  <ion-icon slot="start" [name]="'chatboxes'"></ion-icon>
-                  <ion-label>
-                    Messages
-                  </ion-label>
-                </ion-item>
-                <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/product/list/all/home'">
-                  <ion-icon slot="start" [name]="'list'"></ion-icon>
-                  <ion-label>
-                    Products
-                  </ion-label>
-                </ion-item>
+              <ion-item [routerDirection]="'root'"  [routerLink]="'/product/list/all/home'">
+                <ion-icon slot="start" [name]="'list'"></ion-icon>
+                <ion-label>
+                  Products
+                </ion-label>
+              </ion-item>
                 <div *ngIf="userType=='seller'" >
-                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/createproduct'">
+                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
+                    <ion-icon slot="start" [name]="'bookmarks'"></ion-icon>
+                    <ion-label>
+                      Favorites
+                    </ion-label>
+                    <ion-badge slot="end" color="primary">{{favoritecount}}</ion-badge>
+                  </ion-item>
+                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"   [routerLink]="'/createproduct'">
                     <ion-icon slot="start" [name]="'add'"></ion-icon>
                     <ion-label>
                       Create Product
@@ -52,6 +64,12 @@
                   <ion-icon slot="start" [name]="'person-add'"></ion-icon>
                   <ion-label>
                     Register
+                  </ion-label>
+                </ion-item>
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
+                  <ion-icon slot="start" [name]="'cog'"></ion-icon>
+                  <ion-label>
+                    Settings
                   </ion-label>
                 </ion-item>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="true" (click)="logout();">
@@ -65,8 +83,22 @@
                   <ion-label>
                     Login
                   </ion-label>
-                </ion-item>
-              </div>
+                </ion-item> 
+                <ion-item-divider class="--padding-top"> 
+
+                </ion-item-divider>
+                <ion-item [routerDirection]="'root'" line="none" [routerLink]="'/login'">
+                  <ion-icon slot="start" [name]="'call'"></ion-icon>
+                  <ion-label>
+                    Contact Us
+                  </ion-label>
+                </ion-item> 
+                <ion-item [routerDirection]="'root'" line="none"  [routerLink]="'/login'">
+                  <ion-icon slot="start" [name]="'help'"></ion-icon>
+                  <ion-label>
+                    About Us
+                  </ion-label>
+                </ion-item> 
           </ion-menu-toggle>
         </ion-list>
       </ion-content>
