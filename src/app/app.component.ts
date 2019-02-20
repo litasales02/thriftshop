@@ -179,10 +179,7 @@ export class AppComponent {
             if (typeof(data.val().requirements) != 'undefined'){ 
               self.requirementsdata = data.val().requirements; 
             }            
-            if(self.requirementsdata.status == 0){
-            if( this.alert != null )  this.alert.dismiss();
-              self.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);
-            }
+            
             callback(true);
           } else {
             callback(false);

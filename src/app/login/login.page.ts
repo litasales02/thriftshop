@@ -12,6 +12,7 @@ export class LoginPage implements OnInit {
   txtusername: "";
   txtpassword: "";
   public isDisabled = false;
+  count = 0;
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
        
   }
@@ -23,6 +24,10 @@ export class LoginPage implements OnInit {
         await this.util.login(this.txtusername,this.txtpassword,function(returns){
           if (returns){
             self.util.ShowToast('Welcome User!.');
+            self.count++;
+            if(self.util.requirementsdata.status == 0 && self.count == 1){
+              self.util.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);
+            }
             self.navigate();
           } else {
             self.alerts('Login','Invalid Username or password.',['ok']);
