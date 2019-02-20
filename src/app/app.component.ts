@@ -161,15 +161,20 @@ export class AppComponent {
             self.drawerTitle = data.val().userdetails.firstname;
             self.loginStatus = true;
             self.profileimg = data.val().userdetails.profileimg;
-            self.registrationstatus = data.val().requirements.status;
             self.userType =  data.val().usertype;
-            self.starscss = 'drawerrate show';
-            self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
-            self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
-            self.updatedataset(data.key,{
-              totalStars: self.kanoevaluation.total_stars
-            });            
-            self.loadfavorite();
+            if(data.val().usertype == 'seller'){
+              self.registrationstatus = data.val().requirements.status;
+              self.starscss = 'drawerrate show';
+              self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
+              self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.updatedataset(data.key,{
+                totalStars: self.kanoevaluation.total_stars
+              });            
+              self.loadfavorite();
+            }else {
+              self.registrationstatus = 1; //for buyer
+              self.starscss = 'drawerrate hide';
+            }
             if(typeof(data.val().requirements) != 'undefined'){ 
               self.requirementsdata = data.val().requirements; 
             }

@@ -62,7 +62,7 @@ export class MapsPage implements OnInit {
     var inter = setInterval(()=>{
       console.log("this.lat",this.lat);
       console.log("this.lng",this.lng);
-      this.markermyposition.setPosition([this.lat,this.lng]);
+      // this.markermyposition.setPosition([this.lat,this.lng]);
     },5000);
   }
 
