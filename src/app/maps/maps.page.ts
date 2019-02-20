@@ -29,6 +29,7 @@ export class MapsPage implements OnInit {
   lng = 125.52915832519531;
   markermyposition:any;
   loadMap() {
+    var self = this;
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
@@ -39,7 +40,25 @@ export class MapsPage implements OnInit {
         tilt: 30
       }
     });
-
+    this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
+        (data) => {
+          self.lat = data.coords.latitude;
+          self.lng = data.coords.longitude;
+            console.log("Click MAP",data);
+            this.markermyposition = this.map.addMarkerSync({
+              title: 'Your Here!',
+              icon: 'red',
+              animation: 'DROP',
+              position: {
+                lat: self.lat,
+                lng: self.lng
+              }
+            });
+            this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+        
+            });
+        }
+    );
     this.markermyposition = this.map.addMarkerSync({
       title: 'Your Here!',
       icon: 'blue',
@@ -50,6 +69,7 @@ export class MapsPage implements OnInit {
       }
     });
     this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+
     });
 
   }
