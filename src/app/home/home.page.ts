@@ -12,6 +12,7 @@ export class HomePage {
   userlist = [];
   searchtext = '';
   filterselected = '';
+  profileimg = '/assets/store.png';
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent,
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController){

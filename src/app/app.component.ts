@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
 import * as firebase from 'firebase';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -49,6 +50,9 @@ export class AppComponent {
   isMD = this.platform.is('android');
   stars = 0;
   kanoevaluation = {total_stars:0};
+  watch: any;
+  usergeolocationlat = 0;
+  usergeolocationlng = 0;
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
   public appPages = [
     {
@@ -94,13 +98,30 @@ export class AppComponent {
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
     public toastController: ToastController,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private geolocation: Geolocation
   ) { 
+    var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
     });
     this.initializeApp(); 
+    this.geolocation.getCurrentPosition().then((resp) => {
+      self.usergeolocationlat = resp.coords.latitude;
+      self.usergeolocationlng = resp.coords.longitude;
+      console.log("resp.coords.latitude",resp.coords.latitude)
+      console.log("resp.coords.longitude",resp.coords.longitude) 
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+     this.watch = this.geolocation.watchPosition();
+      this.watch.subscribe((data) => { 
+        self.usergeolocationlat = data.coords.latitude;
+        self.usergeolocationlng = data.coords.longitude;
+        console.log("data.coords.latitude",data.coords.latitude);
+        console.log("data.coords.longitude",data.coords.longitude);
+      });
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
