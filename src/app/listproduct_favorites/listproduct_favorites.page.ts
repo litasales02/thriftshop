@@ -87,6 +87,20 @@ export class ListProduct_FavoritePage implements OnInit {
     const actionSheet = await this.actionSheetController.create({
       header: 'Options',
       buttons: [{
+        text: 'All Products',
+        icon: 'list',
+        handler: () => {          
+          this.navigate('/product/list/all/home');
+        }
+      }]
+    });
+    await actionSheet.present();
+  }
+  async presentActionSheetseller() {
+    var self = this;
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Options',
+      buttons: [{
         text: 'Create New', 
         icon: 'add',
         handler: () => { //createproduct
