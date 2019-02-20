@@ -53,6 +53,7 @@ export class AppComponent {
   watch: any;
   usergeolocationlat = 0;
   usergeolocationlng = 0;
+  alert: any;
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
   public appPages = [
     {
@@ -175,8 +176,12 @@ export class AppComponent {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            if(typeof(data.val().requirements) != 'undefined'){ 
+            if (typeof(data.val().requirements) != 'undefined'){ 
               self.requirementsdata = data.val().requirements; 
+            }            
+            if(self.requirementsdata.status == 0){
+            if( this.alert != null )  this.alert.dismiss();
+              self.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);
             }
             callback(true);
           } else {
@@ -197,6 +202,14 @@ export class AppComponent {
       buttons: buttons
     });
     await alert.present();
+  }
+  async alerts2(title,header,buttons) { 
+    this.alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await this.alert.present();
   }
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({

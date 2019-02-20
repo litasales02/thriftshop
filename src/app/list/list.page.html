@@ -15,7 +15,7 @@
     <div *ngFor="let userlists of util.storedata" >
       <ion-item *ngIf="userlists.usertype=='seller'" routerLink="/list/storedetails/{{userlists.key}}/list"> 
         <ion-avatar slot="start">
-            <img [src]="userlists.userdetails.profileimg!=''?userlists.userdetails.profileimg:'/assets/store.png'" />
+          <img [src]="userlists.userdetails.profileimg!=''?userlists.userdetails.profileimg:'/assets/store.png'" />
         </ion-avatar>
         <ion-label>
           <h2>{{userlists.storename}}</h2>
