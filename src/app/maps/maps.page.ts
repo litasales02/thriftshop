@@ -42,9 +42,10 @@ export class MapsPage implements OnInit {
     });
     this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
         (data) => {
-          self.lat = data.coords.latitude;
-          self.lng = data.coords.longitude;
-            console.log("Click MAP",data);
+          console.log("Click MAP",data);
+          console.log("Click MAP",data[0].lat);
+          self.lat = data[0].lat;
+          self.lng = data[0].lng;
             this.markermyposition = this.map.addMarkerSync({
               title: 'Your Here!',
               icon: 'red',
