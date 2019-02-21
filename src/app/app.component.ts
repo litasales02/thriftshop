@@ -45,6 +45,8 @@ export class AppComponent {
   geodata = 0;
   geolat = 0.0;
   geolong = 0.0;
+  setgeolat = 0.0;
+  setgeolong = 0.0;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -55,43 +57,7 @@ export class AppComponent {
   usergeolocationlng = 0;
   alert: any;
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Maps',
-      url: '/maps',
-      icon: 'map'
-    },
-    {
-      title: 'Shop List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'Messages',
-      url: '/messages',
-      icon: 'chatboxes'
-    },
-    {
-      title: 'Register',
-      url: '/register',
-      icon: 'person-add'
-    },
-    {
-      title: 'Login',
-      url: '/login',
-      icon: 'log-in'
-    },
-    {
-      title: 'Logout',
-      url: '/login',
-      icon: 'log-out'
-    }
-  ];
+ 
   constructor(
     public router: Router,
     private platform: Platform,
@@ -164,6 +130,7 @@ export class AppComponent {
             self.profileimg = data.val().userdetails.profileimg;
             self.userType =  data.val().usertype;
             if(data.val().usertype == 'seller'){
+              self.geodata =  data.val().geodata.status;
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);

@@ -65,7 +65,7 @@
                   <ion-label>
                     Settings
                   </ion-label>
-                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0" style="color:red;"></ion-icon>
+                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0||geodata==0" style="color:red;"></ion-icon>
                 </ion-item>
                 </div>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/register'">
