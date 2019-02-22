@@ -187,6 +187,25 @@ export class AppComponent {
   async menuRouting(link){
     this.router.navigate([link]);
   }
+  getuserlogbyname(username,callback){
+    console.clear();
+    var self = this;
+    self.storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.usertype) != 'undefined'){
+        // Object.entries(element).forEach(function(element2,index,arr){
+          var storename = String(JSON.stringify(element.username)).toLowerCase();
+          if(typeof(storename) != "undefined" && storename.indexOf(username.toLowerCase()) > -1){
+            
+            callback(true);
+          }
+        // });
+      }
+      if(index == arr.length - 1){ 
+        callback(false);
+      }
+    });
+  }
   getstorebyname(productname,callback){
     console.clear();
     var self = this;

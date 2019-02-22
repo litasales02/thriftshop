@@ -29,7 +29,12 @@ export class RegisterSellersPage implements OnInit {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
-    if (typeof(this.sellerstorename) != 'undefined' && 
+    this.util.getuserlogbyname(this.sellerusername,(result)=>{
+      if(result){        
+        this.util.alerts("Add New","Username is already used",['Ok']);
+        return;
+      }else{
+         if (typeof(this.sellerstorename) != 'undefined' && 
     typeof(this.selleraddress1) != 'undefined' && 
     typeof(this.selleraddress2) != 'undefined' && 
     typeof(this.sellerfirstname) != 'undefined'  && 
@@ -71,9 +76,11 @@ export class RegisterSellersPage implements OnInit {
       }else {
         this.util.alerts("Add New","User password did not equal",['Ok']);
       }
-    } else {    
-      this.util.alerts("Add New","Please fill all text required",['Ok']);
+    } else {
     }
+      }
+    });
+   
   }
   navigate() {
     this.router.navigate(['/home']);
