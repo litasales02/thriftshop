@@ -187,24 +187,18 @@ export class AppComponent {
   async menuRouting(link){
     this.router.navigate([link]);
   }
-  getuserlogbyname(username,callback){
+  async getuserlogbyname(username,callback){
     console.clear();
     var self = this;
-    self.storedata2 = [];
+    var result = false; 
     this.storedata.forEach(function(element,index,arr){
-      if(typeof(element.usertype) != 'undefined'){
-        // Object.entries(element).forEach(function(element2,index,arr){
-          var storename = String(JSON.stringify(element.username)).toLowerCase();
-          if(typeof(storename) != "undefined" && storename.indexOf(username.toLowerCase()) > -1){
-            
-            callback(true);
-          }
-        // });
-      }
-      if(index == arr.length - 1){ 
-        callback(false);
+      if(typeof(element.usertype) != 'undefined'){ 
+        if(element.username == username){
+          result = true;
+        }
       }
     });
+    callback(await result)
   }
   getstorebyname(productname,callback){
     console.clear();

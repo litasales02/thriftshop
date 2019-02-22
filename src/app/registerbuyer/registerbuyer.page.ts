@@ -25,31 +25,40 @@ export class RegisterBuyerPage implements OnInit {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
-    if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  && typeof(this.buyerusername) != 'undefined'  && typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' ){
-      if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
-        this.util.newdata({
-          'userdetails': {
-            'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
-            'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
-            'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
-            'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
-            'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
-            'email':typeof(this.emails) != 'undefined'? this.emails:'none',
-            "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
-          },
-          'usertype': 'buyer',
-          'username': this.buyerusername, 
-          'password': this.buyerpassword,
-          'stores':[]});
-        this.navigate();
-      } else if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerusername) && (this.buyerpassword.length < 6 || this.buyerusername.length < 6 )) {
-        this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
-      }else {
-        this.util.alerts("Add New","User password did not equal",['Ok']);
+    var self = this;
+    this.util.getuserlogbyname(this.buyerusername,function(result){
+      if(result){        
+        self.util.alerts("Sorry","Username is already used",['Ok']); 
+      } else {
+        if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  && typeof(this.buyerusername) != 'undefined'  && typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' ){
+          if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
+            this.util.newdata({
+              'userdetails': {  
+                'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
+                'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
+                'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
+                'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
+                'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
+                'email':typeof(this.emails) != 'undefined'? this.emails:'none',
+                "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
+              },
+              'usertype': 'buyer',
+              'username': this.buyerusername, 
+              'password': this.buyerpassword,
+              'stores':[]});
+            this.navigate();
+          } else if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerusername) && (this.buyerpassword.length < 6 || this.buyerusername.length < 6 )) {
+            this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
+          }else {
+            this.util.alerts("Add New","User password did not equal",['Ok']);
+          }
+        } else {    
+          this.erroralert();
+        }        
       }
-    } else {    
-      this.erroralert();
-    }
+    });
+
+    
   }
   async erroralert() { 
     const alert = await this.alertCtrl.create({
