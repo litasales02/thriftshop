@@ -51,6 +51,7 @@ export class AppComponent {
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
   stars = 0;
+  rates = 0;
   kanoevaluation = {total_stars:0};
   watch: any;
   usergeolocationlat = 0;
@@ -134,12 +135,13 @@ export class AppComponent {
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
-              self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.rates = self.kanoevaluation.total_stars;
               self.updatedataset(data.key,{
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
-            }else {
+            } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
@@ -481,7 +483,7 @@ export class AppComponent {
             }
             
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / arr.length) | 0);
+              total_stars = (total_final / arr.length);//((total_final / arr.length) | 0);
 
               total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
               total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);

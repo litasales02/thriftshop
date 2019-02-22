@@ -19,6 +19,7 @@
         <input type="file" value="" (change)="fileChange($event)">
     </ion-item> 
     <ion-item> 
+        <ion-label  position="floating">Product Name</ion-label>
         <ion-input required type="text" [(ngModel)]="productname" placeholder="Product Name"></ion-input>
     </ion-item> 
     <ion-item> 
@@ -61,7 +62,12 @@
         </ion-select>
     </ion-item> 
     <ion-item> 
+        <ion-label  position="floating">Price</ion-label>
         <ion-input required type="number" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
+    </ion-item> 
+    <ion-item> 
+        <ion-label  position="floating">QTY</ion-label>
+        <ion-input required type="number" [(ngModel)]="qty" placeholder="Price 0.00"></ion-input>
     </ion-item> 
     <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
     
