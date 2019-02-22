@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from '../app.component'
 import {
   ToastController,
   Platform,
@@ -22,43 +25,66 @@ import {
 export class MapsPage implements OnInit {
   map: GoogleMap;
   loading: any;
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
+  lat = 7.148419523108726;
+  lng = 125.52915832519531;
+  markerdata = []
+  markermyposition = null;
   loadMap() {
-    var lat = 7.148419523108726;
-    var lng = 125.52915832519531;
+    var self = this;
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
-          lat: lat,
-          lng: lng
+          lat: this.lat,
+          lng: this.lng
         },
         zoom: 12,
         tilt: 30
       }
     });
+    
+    this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
+        (data) => {
+          console.log("Click MAP",data);
+          console.log("Click MAP",data[0].lat);
+          self.lat = data[0].lat;
+          self.lng = data[0].lng;
+          this.map.clear();
+          self.markermyposition = this.map.addMarkerSync({
+            title: 'Your Here!',
+            icon: 'red',
+            animation: 'DROP',
+            position: {
+              lat: self.lat,
+              lng: self.lng
+            }
+          }); 
+        }
+    );
+    this.markermyposition = this.map.addMarkerSync({
+      title: 'Your Here!',
+      icon: 'blue',
+      animation: 'DROP',
+      position: {
+        lat: this.lat,
+        lng: this.lng
+      }
+    });
+    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
+
+    });
 
   }
-  constructor() { 
-    // for (let i = 1; i < 11; i++) {
-    //   this.items.push({
-    //     title: 'Item ' + i,
-    //     note: 'This is item #' + i,
-    //     icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-    //   });
-    // }
+  constructor(
+    public router: Router, 
+    public alertCtrl: AlertController,
+    private util: AppComponent) { 
+    this.lat = this.util.usergeolocationlat;
+    this.lng = this.util.usergeolocationlng;
+    var inter = setInterval(()=>{
+      console.log("this.lat",this.lat);
+      console.log("this.lng",this.lng);
+      // this.markermyposition.setPosition([this.lat,this.lng]);
+    },5000);
   }
 
   async ngOnInit() {

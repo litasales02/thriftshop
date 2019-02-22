@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
 import * as firebase from 'firebase';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -33,49 +34,31 @@ export class AppComponent {
   storedata2 = [];
   productdata = [];
   productdatafavorite = [];
+  requirementsdata = {
+    'status': 0,
+    'idtype':null,
+    'govid': null,
+    'storeimg': null
+  };
+  storemapstatus = 'None';
+  geodatastatus = 'None';
+  geodata = 0;
+  geolat = 0.0;
+  geolong = 0.0;
+  setgeolat = 0.0;
+  setgeolong = 0.0;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
   stars = 0;
+  rates = 0;
   kanoevaluation = {total_stars:0};
+  watch: any;
+  usergeolocationlat = 0;
+  usergeolocationlng = 0;
+  alert: any;
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Maps',
-      url: '/maps',
-      icon: 'map'
-    },
-    {
-      title: 'Shop List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'Messages',
-      url: '/messages',
-      icon: 'chatboxes'
-    },
-    {
-      title: 'Register',
-      url: '/register',
-      icon: 'person-add'
-    },
-    {
-      title: 'Login',
-      url: '/login',
-      icon: 'log-in'
-    },
-    {
-      title: 'Logout',
-      url: '/login',
-      icon: 'log-out'
-    }
-  ];
+ 
   constructor(
     public router: Router,
     private platform: Platform,
@@ -83,13 +66,30 @@ export class AppComponent {
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
     public toastController: ToastController,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private geolocation: Geolocation
   ) { 
+    var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
     });
     this.initializeApp(); 
+    this.geolocation.getCurrentPosition().then((resp) => {
+      self.usergeolocationlat = resp.coords.latitude;
+      self.usergeolocationlng = resp.coords.longitude;
+      console.log("resp.coords.latitude",resp.coords.latitude)
+      console.log("resp.coords.longitude",resp.coords.longitude) 
+     }).catch((error) => {
+       console.log('Error getting location', error);
+     });
+     this.watch = this.geolocation.watchPosition();
+      this.watch.subscribe((data) => { 
+        self.usergeolocationlat = data.coords.latitude;
+        self.usergeolocationlng = data.coords.longitude;
+        console.log("data.coords.latitude",data.coords.latitude);
+        console.log("data.coords.longitude",data.coords.longitude);
+      });
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -129,16 +129,26 @@ export class AppComponent {
             self.drawerTitle = data.val().userdetails.firstname;
             self.loginStatus = true;
             self.profileimg = data.val().userdetails.profileimg;
-            self.registrationstatus = data.val().requirements.status;
             self.userType =  data.val().usertype;
-            self.starscss = 'drawerrate show';
-            self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
-            self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
-            self.updatedataset(data.key,{
-              totalStars: self.kanoevaluation.total_stars
-            });            
-            self.loadfavorite();
-            // console.log(self.productdatafavorite);
+            if(data.val().usertype == 'seller'){
+              self.geodata =  data.val().geodata.status;
+              self.registrationstatus = data.val().requirements.status;
+              self.starscss = 'drawerrate show';
+              self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
+              self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.rates = self.kanoevaluation.total_stars;
+              self.updatedataset(data.key,{
+                totalStars: self.kanoevaluation.total_stars
+              });            
+              self.loadfavorite();
+            } else {
+              self.registrationstatus = 1; //for buyer
+              self.starscss = 'drawerrate hide';
+            }
+            if (typeof(data.val().requirements) != 'undefined'){ 
+              self.requirementsdata = data.val().requirements; 
+            }            
+            
             callback(true);
           } else {
             callback(false);
@@ -158,6 +168,14 @@ export class AppComponent {
       buttons: buttons
     });
     await alert.present();
+  }
+  async alerts2(title,header,buttons) { 
+    this.alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await this.alert.present();
   }
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
@@ -336,6 +354,17 @@ export class AppComponent {
       }
     });
   }
+  load_user_requirements(){
+    console.clear();
+    var self = this;
+    this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.requirements) != 'undefined'){ 
+          self.requirementsdata = element.requirements; 
+        }
+      }
+    });
+  }
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
@@ -352,6 +381,10 @@ export class AppComponent {
   } 
   async updaterequirements(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/requirements');
+    await newproduct.update(value);
+  }  
+  async updategeodata(value){
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/geodata');
     await newproduct.update(value);
   }  
   async updatefavorateproduct(key){
@@ -450,7 +483,7 @@ export class AppComponent {
             }
             
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / arr.length) | 0);
+              total_stars = (total_final / arr.length);//((total_final / arr.length) | 0);
 
               total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
               total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);

@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-        <ion-back-button defaultHref="{{default_redirect}}"></ion-back-button> 
+        <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>
       Favorites
     </ion-title>
     <ion-buttons slot="end">
-      <ion-button  (click)="presentActionSheet()">
+      <ion-button  (click)="util.usertType=='seller'?presentActionSheetseller():presentActionSheet()">
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
     </ion-buttons>

@@ -13,6 +13,7 @@ export class CreateProductPage implements OnInit {
   unittype: "";
   price: "";
   producttype: ""; 
+  qty:"";
   productimage = '/assets/store.png';
   iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
@@ -26,12 +27,14 @@ export class CreateProductPage implements OnInit {
     if (typeof(this.productname) != 'undefined' &&
         typeof(this.price) != 'undefined' &&
         typeof(this.producttype) != 'undefined' &&
-        typeof(this.unittype) != 'undefined'){
+        typeof(this.unittype) != 'undefined' &&
+        typeof(this.qty) != 'undefined'){
       if (this.productname != "" && this.price != ""){
         this.util.updatenewproduct({
           'productname': this.productname,
           'unittype': this.unittype,
           'price': this.price,
+          'qty': this.qty,
           'producttype': this.producttype,
           'itemimg':this.iamgefile
         });

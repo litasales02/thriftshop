@@ -2,13 +2,14 @@
   <ion-split-pane>
     <ion-menu>
       <ion-header>
-        <ion-toolbar class="drawertitle" color="medium" >
+        <ion-toolbar class="drawertitle"  [ngSwitch]="loginStatus" color="medium" >
           <ion-avatar class="avatar_logo">
-              <img [src]="profileimg" />
+              <img [src]="profileimg!=''?profileimg:'/assets/store.png'" />
           </ion-avatar>
           <ion-title class="drawer_title" >{{drawerTitle}}</ion-title>          
           <ion-title class="drawer_titlesub" >{{userType}}</ion-title>
           <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
+          <ion-title class="drawer_titlesub" *ngSwitchCase="true" >Ratings: {{rates}}</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -45,31 +46,33 @@
                   Products
                 </ion-label>
               </ion-item>
+              <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
+                <ion-icon slot="start" [name]="'bookmarks'"></ion-icon>
+                <ion-label>
+                  Favorites
+                </ion-label>
+                <ion-badge slot="end" color="primary">{{favoritecount}}</ion-badge>
+              </ion-item>
                 <div *ngIf="userType=='seller'" >
-                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
-                    <ion-icon slot="start" [name]="'bookmarks'"></ion-icon>
-                    <ion-label>
-                      Favorites
-                    </ion-label>
-                    <ion-badge slot="end" color="primary">{{favoritecount}}</ion-badge>
-                  </ion-item>
                   <ion-item [routerDirection]="'root'" *ngSwitchCase="true"   [routerLink]="'/createproduct'">
                     <ion-icon slot="start" [name]="'add'"></ion-icon>
                     <ion-label>
                       Create Product
                     </ion-label>
                   </ion-item>
+                  
+                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
+                  <ion-icon slot="start" [name]="'cog'"></ion-icon>
+                  <ion-label>
+                    Settings
+                  </ion-label>
+                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0||geodata==0" style="color:red;"></ion-icon>
+                </ion-item>
                 </div>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/register'">
                   <ion-icon slot="start" [name]="'person-add'"></ion-icon>
                   <ion-label>
                     Register
-                  </ion-label>
-                </ion-item>
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
-                  <ion-icon slot="start" [name]="'cog'"></ion-icon>
-                  <ion-label>
-                    Settings
                   </ion-label>
                 </ion-item>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="true" (click)="logout();">
