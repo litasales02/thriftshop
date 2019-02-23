@@ -28,7 +28,48 @@ export class MapsPage implements OnInit {
   lat = 7.148419523108726;
   lng = 125.52915832519531;
   markerdata = []
-  markermyposition = null;
+  markermyposition:any;
+  constructor(
+    public router: Router, 
+    public alertCtrl: AlertController,
+    private util: AppComponent) { 
+
+    this.lat = this.util.usergeolocationlat;
+    this.lng = this.util.usergeolocationlng;
+    var inter = setInterval(()=>{
+      // console.log("this.lat",this.lat);
+      // console.log("this.lng",this.lng);
+      this.util.mapdata();
+      // console.log(this.util.sellergeodata);
+      this.reset();
+    },5000);
+    
+  }
+  reset(){
+    
+    var self = this;
+    this.map.clear();
+    this.markermyposition = this.map.addMarkerClusterSync({
+      markers: self.util.sellergeodata,
+      animation: 'DROP',
+      icons: [
+          {min: 2, max: 100, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
+      ]
+    });
+    self.markermyposition = this.map.addMarkerSync({
+      title: 'Your Here!',
+      icon: 'red', 
+      position: {
+      lat: self.lat,
+      lng: self.lng
+      }
+    }); 
+
+
+    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
+      console.log("click reset data");
+    });
+  }
   loadMap() {
     var self = this;
     this.map = GoogleMaps.create('map_canvas', {
@@ -42,60 +83,40 @@ export class MapsPage implements OnInit {
       }
     });
     
-    this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
-        (data) => {
-          console.log("Click MAP",data);
-          console.log("Click MAP",data[0].lat);
-          self.lat = data[0].lat;
-          self.lng = data[0].lng;
-          this.map.clear();
-          self.markermyposition = this.map.addMarkerSync({
-            title: 'Your Here!',
-            icon: 'red',
-            animation: 'DROP',
-            position: {
-              lat: self.lat,
-              lng: self.lng
-            }
-          }); 
-        }
-    );
+    // this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
+    //     (data) => {
+    //       console.log("Click MAP",data);
+    //       console.log("Click MAP",data[0].lat);
+    //       self.lat = data[0].lat;
+    //       self.lng = data[0].lng;
+    //       self.markermyposition = this.map.addMarkerSync({
+    //         title: 'Your Here!',
+    //         icon: 'red',
+    //         animation: 'DROP',
+    //         position: {
+    //           lat: self.lat,
+    //           lng: self.lng
+    //         }
+    //       }); 
+    //     }
+    // );
     this.markermyposition = this.map.addMarkerSync({
       title: 'Your Here!',
-      icon: 'blue',
+      icon: 'red',
       animation: 'DROP',
       position: {
-        lat: this.lat,
-        lng: this.lng
+        lat: self.lat,
+        lng: self.lng
       }
-    });
-    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-
+    }); 
+    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
+      console.log("click reset data");
     });
 
   }
-  constructor(
-    public router: Router, 
-    public alertCtrl: AlertController,
-    private util: AppComponent) { 
-    this.lat = this.util.usergeolocationlat;
-    this.lng = this.util.usergeolocationlng;
-    var inter = setInterval(()=>{
-      console.log("this.lat",this.lat);
-      console.log("this.lng",this.lng);
-      // this.markermyposition.setPosition([this.lat,this.lng]);
-    },5000);
-  }
-
-  async ngOnInit() {
-    // Since ngOnInit() is executed before `deviceready` event,
-    // you have to wait the event.
-    // await this.platform.ready();
+  async ngOnInit() { 
     await this.loadMap();
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
+ 
   
 }

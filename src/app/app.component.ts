@@ -33,6 +33,7 @@ export class AppComponent {
   storedata = [];
   storedata2 = [];
   productdata = [];
+  sellergeodata = [];
   productdatafavorite = [];
   requirementsdata = {
     'status': 0,
@@ -199,6 +200,23 @@ export class AppComponent {
       }
     });
     callback(await result)
+  }
+  mapdata(){
+    var self = this;
+    self.sellergeodata = [];
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.geodata) != 'undefined'){ 
+        // console.log(element.geodata.status);
+        if(element.usertype == 'seller' && element.geodata.status == 1 ){ 
+          let item = element.geodata;
+          item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
+          item.key = element.key; 
+          item.storename = element.storename;
+          // console.log(item);
+          self.sellergeodata.push(item);
+        }
+      }
+    });
   }
   getstorebyname(productname,callback){
     console.clear();
