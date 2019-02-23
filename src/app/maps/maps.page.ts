@@ -105,6 +105,7 @@ export class MapsPage implements OnInit {
       }
     });
     
+    // var stricbound = this.map.
     // this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
     //     (data) => {
     //       console.log("Click MAP",data);
