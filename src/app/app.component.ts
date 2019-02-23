@@ -178,6 +178,22 @@ export class AppComponent {
     });
     await this.alert.present();
   }
+  async markeralerts(title,header,buttons) { 
+    this.alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await this.alert.present();
+    // {
+    //   text: 'Cancel',
+    //   role: 'cancel',
+    //   cssClass: 'secondary',
+    //   handler: (blah) => {
+    //     console.log('Confirm Cancel: blah');
+    //   }
+    // }
+  }
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
       message: message,
@@ -201,9 +217,10 @@ export class AppComponent {
     });
     callback(await result)
   }
-  mapdata(){
+  mapdata(item){
     var self = this;
     self.sellergeodata = [];
+    self.sellergeodata.push(item);
     this.storedata.forEach(function(element,index,arr){
       if(typeof(element.geodata) != 'undefined'){ 
         // console.log(element.geodata.status);
@@ -211,7 +228,7 @@ export class AppComponent {
           let item = element.geodata;
           item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
           item.key = element.key; 
-          item.storename = element.storename;
+          item.title = "Store :" + element.storename;
           // console.log(item);
           self.sellergeodata.push(item);
         }

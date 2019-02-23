@@ -33,23 +33,31 @@ export class MapsPage implements OnInit {
     public router: Router, 
     public alertCtrl: AlertController,
     private util: AppComponent) { 
-
+    var self = this;
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;
-    var inter = setInterval(()=>{
+   // var inter = setInterval(()=>{
       // console.log("this.lat",this.lat);
       // console.log("this.lng",this.lng);
-      this.util.mapdata();
-      // console.log(this.util.sellergeodata);
-      this.reset();
-    },5000);
+      // this.util.mapdata({
+      //   title: 'Your Here!',
+      //   icon: 'red', 
+      //   position: {
+      //   lat: self.lat,
+      //   lng: self.lng
+      //   }
+      // });
+      // // console.log(this.util.sellergeodata);
+      // this.reset();
+    //},5000);
     
   }
   reset(){
     
     var self = this;
-    this.map.clear();
+    // this.map.clear();
     this.markermyposition = this.map.addMarkerClusterSync({
+      title: 'Your Here!',
       markers: self.util.sellergeodata,
       animation: 'DROP',
       icons: [
@@ -65,9 +73,23 @@ export class MapsPage implements OnInit {
       }
     }); 
 
-
     this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
-      console.log("click reset data");
+      console.log("click reset data",data);
+      self.util.markeralerts("title","label",[
+        {
+          text: 'Cancel', 
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+          }
+        }
+
+      ])
     });
   }
   loadMap() {
@@ -100,19 +122,28 @@ export class MapsPage implements OnInit {
     //       }); 
     //     }
     // );
-    this.markermyposition = this.map.addMarkerSync({
+    
+    // this.markermyposition = this.map.addMarkerSync({
+    //   title: 'Your Here!',
+    //   icon: 'red',
+    //   animation: 'DROP',
+    //   position: {
+    //     lat: self.lat,
+    //     lng: self.lng
+    //   }
+    // }); 
+    // this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
+    //   console.log("click reset data");
+    // });
+    this.util.mapdata({
       title: 'Your Here!',
-      icon: 'red',
-      animation: 'DROP',
+      icon: 'red', 
       position: {
-        lat: self.lat,
-        lng: self.lng
+      lat: self.lat,
+      lng: self.lng
       }
     }); 
-    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
-      console.log("click reset data");
-    });
-
+    this.reset();
   }
   async ngOnInit() { 
     await this.loadMap();
