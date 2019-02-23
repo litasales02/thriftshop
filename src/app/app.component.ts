@@ -33,6 +33,7 @@ export class AppComponent {
   storedata = [];
   storedata2 = [];
   productdata = [];
+  sellergeodata = [];
   productdatafavorite = [];
   requirementsdata = {
     'status': 0,
@@ -45,53 +46,20 @@ export class AppComponent {
   geodata = 0;
   geolat = 0.0;
   geolong = 0.0;
+  setgeolat = 0.0;
+  setgeolong = 0.0;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
   stars = 0;
+  rates = 0;
   kanoevaluation = {total_stars:0};
   watch: any;
   usergeolocationlat = 0;
   usergeolocationlng = 0;
   alert: any;
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
-  public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
-    },
-    {
-      title: 'Maps',
-      url: '/maps',
-      icon: 'map'
-    },
-    {
-      title: 'Shop List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'Messages',
-      url: '/messages',
-      icon: 'chatboxes'
-    },
-    {
-      title: 'Register',
-      url: '/register',
-      icon: 'person-add'
-    },
-    {
-      title: 'Login',
-      url: '/login',
-      icon: 'log-in'
-    },
-    {
-      title: 'Logout',
-      url: '/login',
-      icon: 'log-out'
-    }
-  ];
+ 
   constructor(
     public router: Router,
     private platform: Platform,
@@ -164,15 +132,17 @@ export class AppComponent {
             self.profileimg = data.val().userdetails.profileimg;
             self.userType =  data.val().usertype;
             if(data.val().usertype == 'seller'){
+              self.geodata =  data.val().geodata.status;
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
-              self.stars =  self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
+              self.rates = self.kanoevaluation.total_stars;
               self.updatedataset(data.key,{
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
-            }else {
+            } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
@@ -208,6 +178,22 @@ export class AppComponent {
     });
     await this.alert.present();
   }
+  async markeralerts(title,header,buttons) { 
+    this.alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await this.alert.present();
+    // {
+    //   text: 'Cancel',
+    //   role: 'cancel',
+    //   cssClass: 'secondary',
+    //   handler: (blah) => {
+    //     console.log('Confirm Cancel: blah');
+    //   }
+    // }
+  }
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
       message: message,
@@ -217,6 +203,37 @@ export class AppComponent {
   }
   async menuRouting(link){
     this.router.navigate([link]);
+  }
+  async getuserlogbyname(username,callback){
+    console.clear();
+    var self = this;
+    var result = false; 
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.usertype) != 'undefined'){ 
+        if(element.username == username){
+          result = true;
+        }
+      }
+    });
+    callback(await result)
+  }
+  mapdata(item){
+    var self = this;
+    self.sellergeodata = [];
+    self.sellergeodata.push(item);
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.geodata) != 'undefined'){ 
+        // console.log(element.geodata.status);
+        if(element.usertype == 'seller' && element.geodata.status == 1 ){ 
+          let item = element.geodata;
+          item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
+          item.key = element.key; 
+          item.title = "Store :" + element.storename;
+          // console.log(item);
+          self.sellergeodata.push(item);
+        }
+      }
+    });
   }
   getstorebyname(productname,callback){
     console.clear();
@@ -514,7 +531,7 @@ export class AppComponent {
             }
             
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / arr.length) | 0);
+              total_stars = (total_final / arr.length);//((total_final / arr.length) | 0);
 
               total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
               total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);

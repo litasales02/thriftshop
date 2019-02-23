@@ -16,7 +16,9 @@
         </ion-avatar>
     </ion-item> 
     <ion-item lines="none">
-        <ion-label type="text" >Rate : </ion-label>
+        <ion-label type="text" >Rate : {{stars}}</ion-label>
+    </ion-item>
+    <ion-item lines="none"> 
         <img [class]="starscss" *ngFor="let userlists of stars" src="/assets/star.png" height="20" width="20" /> 
     </ion-item>
     <ion-item lines="none" style="padding:0%"> 

@@ -13,6 +13,8 @@ export class LoginPage implements OnInit {
   txtpassword: "";
   public isDisabled = false;
   count = 0;
+  seennot = "eye-off";
+  typtexts = "password";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
        
   }
@@ -48,6 +50,15 @@ export class LoginPage implements OnInit {
   }
   ngOnInit() {
   } 
+  seenot(){
+    if(this.seennot=="eye-off"){
+      this.seennot="eye";
+      this.typtexts= "text";
+    }else{
+      this.seennot="eye-off";
+      this.typtexts= "password";
+    }
+  }
   navigate() {
     this.router.navigate(['/home']);
   }

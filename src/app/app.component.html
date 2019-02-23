@@ -2,13 +2,14 @@
   <ion-split-pane>
     <ion-menu>
       <ion-header>
-        <ion-toolbar class="drawertitle" color="medium" >
+        <ion-toolbar class="drawertitle"  [ngSwitch]="loginStatus" color="medium" >
           <ion-avatar class="avatar_logo">
               <img [src]="profileimg!=''?profileimg:'/assets/store.png'" />
           </ion-avatar>
           <ion-title class="drawer_title" >{{drawerTitle}}</ion-title>          
           <ion-title class="drawer_titlesub" >{{userType}}</ion-title>
           <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
+          <ion-title class="drawer_titlesub" *ngSwitchCase="true" >Ratings: {{rates}}</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -65,7 +66,7 @@
                   <ion-label>
                     Settings
                   </ion-label>
-                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0" style="color:red;"></ion-icon>
+                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0||geodata==0" style="color:red;"></ion-icon>
                 </ion-item>
                 </div>
                 <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/register'">

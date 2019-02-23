@@ -17,7 +17,7 @@ export class AccountSettingPage implements OnInit {
   validgorvermentidimage = '/assets/store.png';
   storeimage = '/assets/store.png';
   idtype: "";
-
+  storemapstatus = "Not Set"
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     
     this.util.load_user_requirements();
@@ -27,28 +27,31 @@ export class AccountSettingPage implements OnInit {
       this.validgorvermentidstatus = this.util.requirementsdata.govid == null?'None':'Validated'; 
       this.idtype = this.util.requirementsdata.idtype; 
       this.storeimagestatus = this.util.requirementsdata.storeimg == null?'None':'Validated'; 
+      this.storemapstatus = this.util.geodata == 1?'Already Set':'No Set';
   }
   submit(){
     if (typeof(this.storeimg) != 'undefined' && typeof(this.govid) != 'undefined' && typeof(this.idtype) != 'undefined'){
         if(this.util.geodata == 0){
           this.util.ShowToast("Please Update your Store Map Location");
+          return;
         }
-        this.util.updaterequirements({ 
-          'status': 0,
-          'idtype': this.idtype,
-          'govid': this.govid,
-          'storeimg':this.storeimg
-        });
+        if(this.govid != '' && this.storeimg != ''){
+          this.util.updaterequirements({ 
+            'status': 1,
+            'idtype': this.idtype,
+            'govid': this.govid,
+            'storeimg':this.storeimg
+          });          
+          this.util.alerts("Update","Store Updated!, Please wait for the comformation of your registration or call us. Thank you!.",['Ok']);
+        }
+
         if(this.util.geodata == 1){
-          this.util.updategeodata({
-            'geodata': {
-              'status': this.util.geodata,
-              'lat': this.util.geolat,
-              'lng': this.util.geolong
-            }
+          this.util.updategeodata({            
+            'status': this.util.geodata,
+            'lat': this.util.setgeolat, 
+            'lng': this.util.setgeolong
           });
         }
-        this.util.alerts("Update","Store Updated!, Please wait for the comformation of your registration or call us. Thank you!.",['Ok']);
         this.util.menuRouting('/home');
     }else {
       this.util.alerts("Update","Please fill required text2",['Ok']);
