@@ -224,10 +224,11 @@ export class AppComponent {
     this.storedata.forEach(function(element,index,arr){
       if(typeof(element.geodata) != 'undefined'){ 
         // console.log(element.geodata.status);
-        if(element.usertype == 'seller' && element.geodata.status == 1 ){ 
+        if(element.usertype == 'seller' && element.geodata.status == 1 && element.key != self.userid){ 
           let item = element.geodata;
           item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
           item.key = element.key; 
+          item.sellers = 1; 
           item.title = "Store :" + element.storename;
           // console.log(item);
           self.sellergeodata.push(item);
@@ -632,7 +633,7 @@ export class AppComponent {
             // console.log('index',index);
             // console.log('arr.length',arr.length);
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / users) | 0);
+              total_stars = (total_final / users); // ((total_final / users) | 0);
 
               // console.log('users',users);  
               // console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
