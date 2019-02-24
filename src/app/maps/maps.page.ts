@@ -83,7 +83,7 @@ export class MapsPage implements OnInit {
     this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => {
       // console.log("click reset data",data); 
       if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
-        self.util.markeralerts("Store: " + data[1].get("title"),'Do you want to track to your location?',[
+        self.util.markeralerts(data[1].get("title"),'Do you want to track to your location?',[
           {
             text:  "Yes", 
             cssClass: 'Do you want to track to your location?',
