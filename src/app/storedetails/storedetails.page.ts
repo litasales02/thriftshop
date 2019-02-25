@@ -22,6 +22,7 @@ export class StoreDetailsPage implements OnInit {
   child: string = "";
   img: string = "";
   stars = [];
+  rate = 0;
   kanoevaluation = {total_stars:0};
   btndirectrate = '/login';
   constructor(
@@ -45,7 +46,8 @@ export class StoreDetailsPage implements OnInit {
         this.ownername = firstname.concat(" " + lastname);
         this.img = element.userdetails.profileimg;
         this.kanoevaluation = this.util.kanoalgo(element.key);
-        this.stars =  Array(this.kanoevaluation.total_stars).map((x,i)=>i);
+        this.rate = this.kanoevaluation.total_stars;
+        this.stars =  Array(this.kanoevaluation.total_stars | 0).map((x,i)=>i);
         this.util.updatedataset(element.key,{
           totalStars: this.kanoevaluation.total_stars
         });

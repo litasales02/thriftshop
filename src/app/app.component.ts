@@ -231,7 +231,8 @@ export class AppComponent {
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
       message: message,
-      duration: timeout
+      duration: timeout,
+      position: 'bottom'
     });
     toast.present();
   }

@@ -38,7 +38,7 @@ export class MapsPage implements OnInit {
     public alertCtrl: AlertController,
     private util: AppComponent) {  
     if(!this.util.geoaccurate){
-      this.util.ShowToast("Your Phone Location is not Accurate. you notice your location is not same.");
+      this.util.ShowToast("Your Phone Location is not Accurate.\nyou notice your location is not same.");
     }
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;     
