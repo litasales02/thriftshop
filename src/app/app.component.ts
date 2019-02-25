@@ -48,6 +48,7 @@ export class AppComponent {
   geolong = 0.0;
   setgeolat = 0.0;
   setgeolong = 0.0;
+  geoaccurate = true;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -70,6 +71,7 @@ export class AppComponent {
     public loadingController: LoadingController,
     private geolocation: Geolocation
   ) { 
+    
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -77,10 +79,24 @@ export class AppComponent {
     });
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
-      self.usergeolocationlat = resp.coords.latitude;
-      self.usergeolocationlng = resp.coords.longitude;
+      // self.usergeolocationlat = resp.coords.latitude;
+      // self.usergeolocationlng = resp.coords.longitude;
       console.log("resp.coords.latitude",resp.coords.latitude)
       console.log("resp.coords.longitude",resp.coords.longitude) 
+      if((resp.coords.latitude == 0 && resp.coords.longitude == 0) ||       
+        ((resp.coords.latitude < 6.9782 || resp.coords.latitude >= 7.5858) &&   
+        (resp.coords.longitude < 125.2579 || resp.coords.longitude >= 125.7056))){
+        self.usergeolocationlat =  7.148419523108726;
+        self.usergeolocationlng =  125.52915832519531;
+        console.log("resp.coords",11);
+        self.geoaccurate = false;
+      }else{        
+        self.usergeolocationlat = resp.coords.latitude;
+        self.usergeolocationlng = resp.coords.longitude;
+        console.log("resp.coords",22);
+        self.geoaccurate = true;
+      }
+
      }).catch((error) => {
        console.log('Error getting location', error);
      });
@@ -90,10 +106,25 @@ export class AppComponent {
         self.usergeolocationlng = data.coords.longitude;
         console.log("data.coords.latitude",data.coords.latitude);
         console.log("data.coords.longitude",data.coords.longitude);
+        if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
+          ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
+          (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
+
+          self.geoaccurate = false;
+          self.usergeolocationlat =  7.148419523108726;
+          self.usergeolocationlng =  125.52915832519531;
+    
+          console.log("data.coords",1);
+        }else{        
+          self.usergeolocationlat = data.coords.latitude;
+          self.usergeolocationlng = data.coords.longitude;
+          console.log("data.coords",2);
+          self.geoaccurate = true;
+        }
       });
   }
   maplimitviewgeo(){
-    
+
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({

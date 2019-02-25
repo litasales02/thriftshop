@@ -37,32 +37,20 @@ export class MapsPage implements OnInit {
     public router: Router, 
     public alertCtrl: AlertController,
     private util: AppComponent) {  
+    if(!this.util.geoaccurate){
+      this.util.ShowToast("Your Phone Location is not Accurate. you notice your location is not same.");
+    }
     this.lat = this.util.usergeolocationlat;
-    this.lng = this.util.usergeolocationlng;
-   // var inter = setInterval(()=>{
-      // console.log("this.lat",this.lat);
-      // console.log("this.lng",this.lng);
-      // this.util.mapdata({
-      //   title: 'Your Here!',
-      //   icon: 'red', 
-      //   position: {
-      //   lat: self.lat,
-      //   lng: self.lng
-      //   }
-      // });
-      // // console.log(this.util.sellergeodata);
-      // this.reset();
-    //},5000);
-    
+    this.lng = this.util.usergeolocationlng;     
   }
   reset(){
     
     var self = this;
-    // try {
-    //   this.map.clear();
-    // }catch(er){
+    try {
+      this.map.clear();
+    }catch(er){
 
-    // }
+    }
     this.markermyposition = this.map.addMarkerClusterSync({
       title: 'Your Here!',
       markers: self.util.sellergeodata,
@@ -112,14 +100,14 @@ export class MapsPage implements OnInit {
   loadMap() {
     // lat = 7.148419523108726;
     // lng = 125.52915832519531;
-    if(
-      this.util.usergeolocationlat == 0 && 
-      this.util.usergeolocationlng == 0 &&       
-      this.util.usergeolocationlat <= 7.5858 &&  
-      this.util.usergeolocationlat <= 6.9782 &&   
-      this.util.usergeolocationlng >= 125.2579){
+    if((this.util.usergeolocationlat == 0 && this.util.usergeolocationlng == 0) ||      
+      ((this.util.usergeolocationlat < 7.5858 || this.util.usergeolocationlat > 6.9782) &&   
+      (this.util.usergeolocationlng < 125.25792 || this.util.usergeolocationlng > 125.7056))){
       this.lat =  7.148419523108726;
       this.lng =  125.52915832519531;
+      console.log("data.coords",1);
+    }else{
+      console.log("data.coords",2);
     }
     var self = this;
     // var bounds = new LatLngBounds([new LatLng(-35.0, 138.58), new LatLng(-34.9, 138.61)]);  
