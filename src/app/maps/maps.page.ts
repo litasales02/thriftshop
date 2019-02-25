@@ -112,7 +112,12 @@ export class MapsPage implements OnInit {
   loadMap() {
     // lat = 7.148419523108726;
     // lng = 125.52915832519531;
-    if(this.util.usergeolocationlat == 0 && this.util.usergeolocationlng == 0){
+    if(
+      this.util.usergeolocationlat == 0 && 
+      this.util.usergeolocationlng == 0 &&       
+      this.util.usergeolocationlat <= 7.5858 &&  
+      this.util.usergeolocationlat <= 6.9782 &&   
+      this.util.usergeolocationlng >= 125.2579){
       this.lat =  7.148419523108726;
       this.lng =  125.52915832519531;
     }
@@ -125,7 +130,7 @@ export class MapsPage implements OnInit {
           lat: this.lat,
           lng: this.lng
         },
-        zoom: 12,
+        zoom: 14,
         tilt: 30
       }
     }); 

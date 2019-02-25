@@ -92,6 +92,9 @@ export class AppComponent {
         console.log("data.coords.longitude",data.coords.longitude);
       });
   }
+  maplimitviewgeo(){
+    
+  }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
       spinner: null,
@@ -487,8 +490,8 @@ export class AppComponent {
             // console.log('Q2P2',element2['Q2P2']);
             // console.log('Q3P1',element2['Q3P1']);
             // console.log('Q3P2',element2['Q3P2']); 
-            total_rate = 0;
             users++;
+            total_rate = 0;
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
@@ -496,7 +499,7 @@ export class AppComponent {
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
            
-            total_rate = total_rate / 5;
+            total_rate = total_rate / 6;
             total_final = total_final + total_rate;
             // console.log('total_rate',total_rate);
             // Object.keys(element2).forEach(elementkey => {
@@ -513,7 +516,7 @@ export class AppComponent {
             //     total_poor++;
             //   }
             // });
-            switch(total_rate){
+            switch(total_rate | 0){
               case 5:
                 total_excellent++;
                 break;
