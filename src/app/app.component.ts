@@ -110,11 +110,9 @@ export class AppComponent {
         if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
           ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
           (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
-
           self.geoaccurate = false;
           self.usergeolocationlat =  7.148419523108726;
-          self.usergeolocationlng =  125.52915832519531;
-    
+          self.usergeolocationlng =  125.52915832519531;    
           // console.log("data.coords",1);
         }else{        
           self.usergeolocationlat = data.coords.latitude;

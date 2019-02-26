@@ -16,7 +16,8 @@ import {
   MyLocation,
   LatLngBounds,
   GeocoderRequest,
-  VisibleRegion, 
+  VisibleRegion,
+  LatLng, 
 } from '@ionic-native/google-maps';
 
  declare var google;
@@ -53,6 +54,14 @@ export class MapsPage implements OnInit {
   reset(){
     
     var self = this;
+    self.trackingdata = {
+      key: '',
+      title: '',
+      position: {
+        lat: 0.0,
+        lng: 0.0
+      },
+    }
     try {
       this.map.clear();
     }catch(er){
@@ -66,33 +75,26 @@ export class MapsPage implements OnInit {
       icons: [
           {min: 2000, max: 100000, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
       ]
-    });
-    // self.markermyposition = this.map.addMarkerSync({
-    //   title: 'Your Here!',
-    //   icon: 'red', 
-    //   position: {
-    //   lat: self.lat,
-    //   lng: self.lng
-    //   }
-    // }); 
+    }); 
     this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
       if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
         self.util.markeralerts(data[1].get("title"),'Do you want to track to your location?',[
           {
             text:  "Yes", 
             cssClass: 'Do you want to track to your location?',
-            handler: (blah) => {
-              console.log(blah);
+            handler: (blah) => { 
               // console.log(data[1].get('key'));
               self.tracking = true;
               self.trackingdata = {
                 key: data[1].get('key'),
                 title: data[1].get('title'),
                 position: data[1].get('position'),
-              }
+              };
               self.trackinglat = data[0].lat;
               self.trackinglng = data[0].lng;
-              self.map.clear();
+              var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
+              console.log(geodata);
+              this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
               // self.trackings([0,0] ,[0,0]);
             }
           }, {
@@ -127,17 +129,11 @@ export class MapsPage implements OnInit {
           lat: this.lat,
           lng: this.lng
         },
-        zoom: 14,
-        tilt: 30,
-      }
-    });
-    // this.map =  google.maps.Map(this.map,{
-    //   restriction: {
-    //     latLngBounds: davao_bound,
-    //     strictBounds: false,
-    //   },
-    //   zoom: 7,
-    // })
+        zoom: 12,
+        tilt: 30
+      },
+        maxZoom: 12,
+    }); 
     this.util.mapdata({
       title: 'Your Here!',
       icon: 'red', 
@@ -150,7 +146,7 @@ export class MapsPage implements OnInit {
   } 
   trackings(start:any,end:any){ 
     this.directionsService.route({
-      origin: "bangkal",
+      origin: start,
       destination: end,
       travelMode: 'DRIVING'
     }, (response, status) => {
@@ -167,7 +163,10 @@ export class MapsPage implements OnInit {
       destination: end,
       travelMode: 'DRIVING'
     }, (response, status) => {
-      if (status === 'OK') {
+      console.log(response);
+      console.log(status);
+      if (status === 'OK') {        
+        this.map.clear();
         this.directionsDisplay.setDirections(response);
       } else {
         window.alert('Directions request failed due to ' + status);
