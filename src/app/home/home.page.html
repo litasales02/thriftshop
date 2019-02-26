@@ -27,6 +27,7 @@
             <div ng-if="typeof(rate) != 'undefined'">
                 <img *ngFor="let userlists of  ' '.repeat(userlists.totalStars).split('')" src="/assets/star.png" height="20" width="20" />
             </div> 
+            <h3>Rate : {{userlists.totalStars.toFixed(1)}}</h3>
           </ion-label>
         </ion-item>
       </div>

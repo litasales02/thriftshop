@@ -48,6 +48,7 @@ export class AppComponent {
   geolong = 0.0;
   setgeolat = 0.0;
   setgeolong = 0.0;
+  geoaccurate = true;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -70,6 +71,7 @@ export class AppComponent {
     public loadingController: LoadingController,
     private geolocation: Geolocation
   ) { 
+    
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -77,10 +79,24 @@ export class AppComponent {
     });
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
-      self.usergeolocationlat = resp.coords.latitude;
-      self.usergeolocationlng = resp.coords.longitude;
+      // self.usergeolocationlat = resp.coords.latitude;
+      // self.usergeolocationlng = resp.coords.longitude;
       console.log("resp.coords.latitude",resp.coords.latitude)
       console.log("resp.coords.longitude",resp.coords.longitude) 
+      if((resp.coords.latitude == 0 && resp.coords.longitude == 0) ||       
+        ((resp.coords.latitude < 6.9782 || resp.coords.latitude >= 7.5858) &&   
+        (resp.coords.longitude < 125.2579 || resp.coords.longitude >= 125.7056))){
+        self.usergeolocationlat =  7.148419523108726;
+        self.usergeolocationlng =  125.52915832519531;
+        console.log("resp.coords",11);
+        self.geoaccurate = false;
+      }else{        
+        self.usergeolocationlat = resp.coords.latitude;
+        self.usergeolocationlng = resp.coords.longitude;
+        console.log("resp.coords",22);
+        self.geoaccurate = true;
+      }
+
      }).catch((error) => {
        console.log('Error getting location', error);
      });
@@ -90,7 +106,25 @@ export class AppComponent {
         self.usergeolocationlng = data.coords.longitude;
         console.log("data.coords.latitude",data.coords.latitude);
         console.log("data.coords.longitude",data.coords.longitude);
+        if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
+          ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
+          (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
+
+          self.geoaccurate = false;
+          self.usergeolocationlat =  7.148419523108726;
+          self.usergeolocationlng =  125.52915832519531;
+    
+          console.log("data.coords",1);
+        }else{        
+          self.usergeolocationlat = data.coords.latitude;
+          self.usergeolocationlng = data.coords.longitude;
+          console.log("data.coords",2);
+          self.geoaccurate = true;
+        }
       });
+  }
+  maplimitviewgeo(){
+
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -197,7 +231,8 @@ export class AppComponent {
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
       message: message,
-      duration: timeout
+      duration: timeout,
+      position: 'bottom'
     });
     toast.present();
   }
@@ -224,10 +259,11 @@ export class AppComponent {
     this.storedata.forEach(function(element,index,arr){
       if(typeof(element.geodata) != 'undefined'){ 
         // console.log(element.geodata.status);
-        if(element.usertype == 'seller' && element.geodata.status == 1 ){ 
+        if(element.usertype == 'seller' && element.geodata.status == 1 && element.key != self.userid){ 
           let item = element.geodata;
           item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
           item.key = element.key; 
+          item.sellers = 1; 
           item.title = "Store :" + element.storename;
           // console.log(item);
           self.sellergeodata.push(item);
@@ -486,8 +522,8 @@ export class AppComponent {
             // console.log('Q2P2',element2['Q2P2']);
             // console.log('Q3P1',element2['Q3P1']);
             // console.log('Q3P2',element2['Q3P2']); 
-            total_rate = 0;
             users++;
+            total_rate = 0;
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
@@ -495,7 +531,7 @@ export class AppComponent {
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
            
-            total_rate = total_rate / 5;
+            total_rate = total_rate / 6;
             total_final = total_final + total_rate;
             // console.log('total_rate',total_rate);
             // Object.keys(element2).forEach(elementkey => {
@@ -512,7 +548,7 @@ export class AppComponent {
             //     total_poor++;
             //   }
             // });
-            switch(total_rate){
+            switch(total_rate | 0){
               case 5:
                 total_excellent++;
                 break;
@@ -632,7 +668,7 @@ export class AppComponent {
             // console.log('index',index);
             // console.log('arr.length',arr.length);
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / users) | 0);
+              total_stars = (total_final / users); // ((total_final / users) | 0);
 
               // console.log('users',users);  
               // console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
