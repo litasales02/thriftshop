@@ -10,9 +10,6 @@
 </ion-header>
 
 <ion-content>
-    <ion-item> 
-        <ion-input required type="text" placeholder="Search Store"></ion-input>
-    </ion-item> 
-
-    <div id="map_canvas"> </div> 
+  <ion-searchbar ([ngModel])="searchtxt"  placeholder="Search Store" (keyup.enter)="search($event)" show-cancel="true" ></ion-searchbar >
+  <div id="map_canvas"> </div> 
 </ion-content>
