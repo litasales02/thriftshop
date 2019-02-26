@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -65,12 +66,13 @@ export class AppComponent {
   constructor(
     public router: Router,
     private platform: Platform,
-    private splashScreen: SplashScreen,
+    private splashScreen: SplashScreen, 
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
     public toastController: ToastController,
     public loadingController: LoadingController,
-    private geolocation: Geolocation
+    private geolocation: Geolocation,
+    private fm: FirebaseMessaging
   ) { 
     
     var self = this;
@@ -121,6 +123,9 @@ export class AppComponent {
           self.geoaccurate = true;
         }
       });
+    //   this.fm.logEvent('page_view', {page: "dashboard"})
+    // .then((res: any) => console.log(res))
+    // .catch((error: any) => console.error(error));
   }
   maplimitviewgeo(){
 
