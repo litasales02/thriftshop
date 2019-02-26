@@ -8,8 +8,10 @@
           </ion-avatar>
           <ion-title class="drawer_title" >{{drawerTitle}}</ion-title>          
           <ion-title class="drawer_titlesub" >{{userType}}</ion-title>
-          <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
-          <ion-title class="drawer_titlesub" *ngSwitchCase="true" >Ratings: {{rates.toFixed(1)}}</ion-title>
+          <div *ngIf="userType=='seller'" >
+            <img [class]="starscss" *ngFor="let userlists of ' '.repeat(stars).split('')" src="/assets/star.png" height="20" width="20" />
+            <ion-title class="drawer_titlesub" *ngSwitchCase="true" *ngIf="userType=='seller'"  >Ratings: {{rates.toFixed(1)}}</ion-title>
+          </div>
         </ion-toolbar>
       </ion-header>
       <ion-content>
