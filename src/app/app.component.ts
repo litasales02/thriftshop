@@ -724,8 +724,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
-        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc',
-        'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc'
+        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI',
+        'API_KEY_FOR_BROWSER_DEBUG': ''
       });
       this.statusBar.styleDefault();
       this.splashScreen.hide();
