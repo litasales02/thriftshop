@@ -528,10 +528,12 @@ export class AppComponent {
             // console.log('Q3P2',element2['Q3P2']); 
             users++;
             total_rate = 0;
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
+            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']); 
+            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);  
+
             total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
+            
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
            
