@@ -481,16 +481,17 @@ export class AppComponent {
           Object.entries(element.messages).forEach(element2 => {
             console.log(element2[0])  
             self.getstorebyid(element2[0],function(rdata){
-              console.log(rdata[0])
-                
+              console.log(rdata[0])  
+              let msges = [];              
               let item = rdata[0];
-              item.key = element2[0];
-              item.messages = element2[1];
-              Object.entries(element[1]).forEach(msg=>{
+              Object.entries(element2[1]).forEach(msg=>{
                 console.log(msg);
-                
-              })
-              
+                let mgss = msg[1];
+                mgss.key = msg[0];
+                msges.push(mgss);
+              });
+              item.messages = msges;
+              item.key = element2[0];
               console.log(item)
               self.usermessage.push(item);
 
@@ -500,7 +501,18 @@ export class AppComponent {
       }
     });
   }
-  
+  async usersendmsg(key,message){
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
+    await newproduct.set({
+      'send': message,
+      'reply': ''
+    });
+    let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+    await newproduct2.set({
+      'send': '',
+      'reply': message
+    });
+  } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);

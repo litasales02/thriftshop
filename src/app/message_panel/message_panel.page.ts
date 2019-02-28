@@ -10,6 +10,7 @@ import { AppComponent } from '../app.component';
 })
 export class Messages_panelPage implements OnInit {  
   id = "";
+  messages: "";
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -21,7 +22,9 @@ export class Messages_panelPage implements OnInit {
       this.id = this.activatedRoute.snapshot.paramMap.get('id');
       console.log(util.usermessage, this.id );
   }
-
+  sendmsg(){
+    this.util.usersendmsg(this.id,this.messages);
+  }
   ngOnInit() {
   }
 
