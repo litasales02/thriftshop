@@ -62,12 +62,16 @@
         </ion-select>
     </ion-item> 
     <ion-item> 
+        <ion-label  position="floating">QTY</ion-label>
+        <ion-input required type="number" [(ngModel)]="qty" placeholder="Price 0.00"></ion-input>
+    </ion-item> 
+    <ion-item> 
         <ion-label  position="floating">Price</ion-label>
         <ion-input required type="number" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
     </ion-item> 
     <ion-item> 
-        <ion-label  position="floating">QTY</ion-label>
-        <ion-input required type="number" [(ngModel)]="qty" placeholder="Price 0.00"></ion-input>
+        <ion-label  position="floating">Description</ion-label>
+        <ion-input required type="text" [(ngModel)]="description" placeholder="Type here"></ion-input>
     </ion-item> 
     <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
     
