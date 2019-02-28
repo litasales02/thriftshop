@@ -1,23 +1,23 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 
-import { MessagesPage } from './messages.page';
+import { Messages_panelPage } from './message_panel.page';
 
-describe('MessagesPage', () => {
-  let component: MessagesPage;
-  let fixture: ComponentFixture<MessagesPage>;
+describe('Messages_panelPage', () => {
+  let component: Messages_panelPage;
+  let fixture: ComponentFixture<Messages_panelPage>;
   let listPage: HTMLElement;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MessagesPage ],
+      declarations: [ Messages_panelPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
       .compileComponents();
   }));
 
   beforeEach(async () => {
-    fixture = await TestBed.createComponent(MessagesPage);
+    fixture = await TestBed.createComponent(Messages_panelPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

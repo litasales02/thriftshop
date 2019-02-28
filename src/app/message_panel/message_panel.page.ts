@@ -5,11 +5,11 @@ import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-list',
-  templateUrl: 'messages.page.html',
-  styleUrls: ['messages.page.scss']
+  templateUrl: 'message_panel.page.html',
+  styleUrls: ['message_panel.page.scss']
 })
-export class MessagesPage implements OnInit {
-
+export class Messages_panelPage implements OnInit {  
+  id = "";
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -17,10 +17,9 @@ export class MessagesPage implements OnInit {
     private util: AppComponent,
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
-
-      
-
-
+    
+      this.id = this.activatedRoute.snapshot.paramMap.get('id');
+      console.log(util.usermessage, this.id );
   }
 
   ngOnInit() {

@@ -14,7 +14,7 @@ export class HomePage {
   default_redirect: string = "home";
   list_redirect = "/list/storedetails";
   data = null;
-  star = '/assets/unstar.png'; 
+  star = '/assets/unhart.png'; 
   selected = 'All';
   searchtext = '';
   filterselected = 'All';
@@ -91,9 +91,9 @@ export class HomePage {
   favoritestar(key){ 
     var result = this.util.getfravorites(key);
     if(result){
-      return "/assets/star.png";
+      return "/assets/hart.png";
     }else{      
-      return "/assets/unstar.png";
+      return "/assets/unhart.png";
     } 
   }
   navigate(item) {

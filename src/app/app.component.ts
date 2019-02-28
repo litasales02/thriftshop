@@ -36,6 +36,8 @@ export class AppComponent {
   productdata = [];
   sellergeodata = [];
   productdatafavorite = [];
+  usermessage = [];
+  usermessagepanel = [];
   requirementsdata = {
     'status': 0,
     'idtype':null,
@@ -180,6 +182,7 @@ export class AppComponent {
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
+              self.load_messages(data.key);
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
@@ -272,6 +275,21 @@ export class AppComponent {
           // console.log(item);
           self.sellergeodata.push(item);
         }
+      }
+    });
+  }
+  async getstorebyid(key,callback){
+    var self = this;
+    var storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+          if(element.key == key ){
+            let item = element.userdetails;
+            item.utype = element.usertype; 
+            item.key = element.key; 
+            storedata2.push(item);
+          }
+      if(index == arr.length - 1){ 
+        callback(storedata2);
       }
     });
   }
@@ -453,6 +471,36 @@ export class AppComponent {
       }
     });
   }
+  load_messages(key){// key sa client kong kinsa ang nka contact
+    console.clear();
+    var self = this;
+    this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.messages) != 'undefined'){ 
+          // console.log(element.messages);
+          Object.entries(element.messages).forEach(element2 => {
+            console.log(element2[0])  
+            self.getstorebyid(element2[0],function(rdata){
+              console.log(rdata[0])
+                
+              let item = rdata[0];
+              item.key = element2[0];
+              item.messages = element2[1];
+              Object.entries(element[1]).forEach(msg=>{
+                console.log(msg);
+                
+              })
+              
+              console.log(item)
+              self.usermessage.push(item);
+
+            })
+          }); 
+        }
+      }
+    });
+  }
+  
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);

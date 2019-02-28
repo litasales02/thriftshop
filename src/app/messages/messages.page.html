@@ -10,14 +10,14 @@
 </ion-header>
 
 <ion-content>
-    <ion-list no-lines>
-      <ion-item no-lines> 
+    <ion-list no-lines *ngFor="let datas of util.usermessage">
+      <ion-item no-lines  routerLink="/message/panel/{{datas.key}}"> 
         <ion-avatar slot="start">
-          <img src=".." />
+          <img [src]="datas.profileimg" />
         </ion-avatar>
         <ion-label>
-          <h2>user 1</h2>
-          <h3>matina</h3>
+          <h2>{{datas.firstname}} {{datas.lastname}}</h2>
+          <h3>{{datas.utype}}</h3>
           <p></p>
         </ion-label>
       </ion-item>

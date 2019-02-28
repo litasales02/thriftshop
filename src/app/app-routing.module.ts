@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
   {
+    path: 'message/panel/:id',
+    loadChildren: './message_panel/message_panel.module#Messages_panelPageModule'
+  },
+  {
     path: 'register',
     loadChildren: './registration_select/registration_select.module#Registration_SelectPageModule'
   },
