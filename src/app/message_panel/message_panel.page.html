@@ -9,31 +9,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content  #content >
     <ion-list class="mglist"  lines="none" *ngFor="let datas of util.usermessage">
       <div *ngIf="id==datas.key" >
         <div  *ngFor="let datas2 of datas.messages" > 
-          <div  *ngIf="datas2.send!='';then first else seconds "></div>
+          <div  *ngIf="datas2.send=='';then first else seconds "></div>
           
           <ng-template lines="none" #first> 
           <ion-item lines="none">  
             <ion-label>
-              <p>{{datas2.send}}</p>
+               {{datas2.reply}} 
             </ion-label>
           </ion-item>
           </ng-template>
           <ng-template lines="none" #seconds> 
             <ion-item lines="none"> 
               <ion-label slot="end" style="text-align:right"> 
-                <p>{{datas2.reply}}</p>
+                 {{datas2.send}} 
               </ion-label> 
             </ion-item>
           </ng-template>
         </div>
       </div>
     </ion-list>
-    <ion-item class="mgtxtarea" >
-      <ion-textarea ([ngModel])="messages" aria-placeholder="Type Message here" slot="start"></ion-textarea>
-      <ion-button class="button button-block button-positive button-large" (click)="sendmsg()" style="width:50px" slot="end" >Send</ion-button> 
-    </ion-item>
+
 </ion-content>
+<ion-footer>
+    <ion-item class="mgtxtarea" >
+      <ion-textarea [(ngModel)]="messagess" aria-placeholder="Type Message here"></ion-textarea>
+      <ion-button class="button button-block button-positive button-large" slot="end" (click)="sendmsg()" style="width:50px" slot="end" >Send</ion-button> 
+    </ion-item>
+</ion-footer>
