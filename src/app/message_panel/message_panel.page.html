@@ -16,19 +16,21 @@
           <div  *ngIf="datas2.send=='';then first else seconds "></div>
           
           <ng-template lines="none" #first> 
-          <ion-item lines="none">  
-            <ion-label>
-               {{datas2.reply}} 
-            </ion-label>
-          </ion-item>
+            <ion-item lines="none">  
+              <ion-label slot="start" class="messagepopsend" style="white-space: normal;">
+                {{datas2.reply}} 
+              </ion-label>
+            </ion-item>
           </ng-template>
+
           <ng-template lines="none" #seconds> 
             <ion-item lines="none"> 
-              <ion-label slot="end" style="text-align:right"> 
+              <ion-label  class="messagepopreply" slot="end" style="text-align:right;white-space: normal;"> 
                  {{datas2.send}} 
               </ion-label> 
             </ion-item>
           </ng-template>
+
         </div>
       </div>
     </ion-list>
