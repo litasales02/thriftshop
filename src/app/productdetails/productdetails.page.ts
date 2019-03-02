@@ -17,6 +17,7 @@ export class ProductDetailsPage implements OnInit {
   producttype = ""; 
   productimage = '/assets/store.png';
   iamgefile="";
+  fav = 0;
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -24,6 +25,7 @@ export class ProductDetailsPage implements OnInit {
     private util: AppComponent,
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
+      var self =  this;
     try{
       this.id = this.activatedRoute.snapshot.paramMap.get('id');     
       this.util.getproductsbyid(this.id);
@@ -34,8 +36,12 @@ export class ProductDetailsPage implements OnInit {
         this.unittype = element.unittype;
         this.price = element.price;
         this.producttype = element.producttype;
-      });
 
+        this.util.loadfavorite2(element.ukey,function(r){
+          self.fav = r;
+        });
+        
+      });
     }catch(err){
       
     }

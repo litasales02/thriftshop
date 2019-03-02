@@ -32,7 +32,7 @@ const routes: Routes = [
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
   {
-    path: 'message/panel/:id',
+    path: 'message/panel/:id/:child',
     loadChildren: './message_panel/message_panel.module#Messages_panelPageModule'
   },
   {

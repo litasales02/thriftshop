@@ -11,6 +11,8 @@ import { AppComponent } from '../app.component';
 })
 export class Messages_panelPage implements OnInit {  
   id = "";
+  child = "";
+  parentroute = "messages";
   messagess: "";  
   @ViewChild('content') content:any;
   constructor(
@@ -22,6 +24,7 @@ export class Messages_panelPage implements OnInit {
     public popoverController: PopoverController) {
     
       this.id = this.activatedRoute.snapshot.paramMap.get('id');
+      this.id = this.activatedRoute.snapshot.paramMap.get('child');
       console.log(util.usermessage, this.id ); 
       // setInterval(function(){
       // },1000) 

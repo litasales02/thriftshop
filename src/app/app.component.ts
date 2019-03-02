@@ -335,7 +335,7 @@ export class AppComponent {
         });
       }
     });
-  }
+  }    
   getproductsbyfilter(filers,productname){
     console.clear();
     var self = this;
@@ -377,6 +377,7 @@ export class AppComponent {
                 if(element2.key == key){
                   let item = element2.val();
                   item.key = element2.key;  
+                  item.ukey = childs.key;  
                   this.productdata.push(item);
                 }
               });
@@ -459,6 +460,28 @@ export class AppComponent {
         });
       }
     });
+  }
+  async loadfavorite2(keys,cb){
+    var self = this;
+    var productdatafavorite = [];
+    var favoritecount = 0;
+    // console.log('this.storedata',this.storedata);
+    await this.storedata.forEach(function(element ,index1,arr1) {     
+      if(typeof(element.favorites) != 'undefined' && element.key == keys){
+        // console.log("element",element);
+        Object.entries(element.favorites).forEach(function(element2,index,arr){  
+          // console.log('element20',element2[0]);   m n 
+          // console.log('element21',element2[1]); 
+          // console.log('arr',arr); 
+          favoritecount++;
+          let d = {key : element2[0], pID : element2[1]['key']};
+          // d.key = element2[0];
+          // console.log('d',d);
+          productdatafavorite.push(d);
+        });
+      }
+    });
+    cb(favoritecount);
   }
   load_user_requirements(){
     console.clear();
