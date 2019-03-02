@@ -97,7 +97,7 @@
         <variable name="API_KEY_FOR_IOS" value="AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA83FAk" />
     </plugin>
     <plugin name="cordova-plugin-firebase-messaging" spec="1.2.1" />
-    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
     <engine name="browser" spec="5.0.4" />
+    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
 </widget>

@@ -25,7 +25,7 @@
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
     "@ionic-native/core": "^5.0.0-beta.22",
-    "@ionic-native/firebase": "^5.0.0-beta.23",
+    "@ionic-native/firebase": "^5.2.0",
     "@ionic-native/firebase-messaging": "^5.2.0",
     "@ionic-native/geolocation": "^5.1.0",
     "@ionic-native/google-maps": "^5.0.0-beta.25",
