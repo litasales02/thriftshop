@@ -78,16 +78,11 @@ export class AppComponent {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private geolocation: Geolocation,
-    private fm: FirebaseMessaging
-  ) { 
-    
+    private fm: FirebaseMessaging ) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
-      // if(this.loginStatus){        
-      //   self.load_messages();
-      // }
     });
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -132,7 +127,7 @@ export class AppComponent {
           self.geoaccurate = true;
         }
       });
-    //   this.fm.logEvent('page_view', {page: "dashboard"})
+    //  this.fm.logEvent('page_view', {page: "dashboard"})
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
   }
@@ -157,6 +152,13 @@ export class AppComponent {
     this.username = '';
     this.fullname = '';
     this.userid = '';
+    // this.storedata = [];
+    // this.storedata2 = [];
+    this.productdata = [];
+    this.sellergeodata = [];
+    this.productdatafavorite = [];
+    this.usermessage = [];
+    this.usermessagepanel = [];
     this.router.navigate(['/home']);
     this.ShowToast('Logging Out Good Bye!');
   }
@@ -368,38 +370,20 @@ export class AppComponent {
   getmessages(){
     let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
     newInfo.on('child_changed',childSnapshot => {  
-      var total_change = childSnapshot.numChildren();
-      // var total_data = this.usermessage[0].messages.length;
-      // console.log("childSnapshot.val()",childSnapshot.val());
-      // console.log("childSnapshot.numChildren()",childSnapshot.numChildren());
-      // console.log("this.usermessage",this.usermessage[0].messages.length);
+      var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
-      childSnapshot.forEach(data =>{
-        // console.log(coun_data);
-        if(total_change <= coun_data ){//&& total_data < total_change
-          // console.log(data.val());          
+      childSnapshot.forEach(data => { 
+        if(total_change <= coun_data ){
           this.usermessage[0].messages.push(data.val());
+          this.messagechange = true;
         }
         coun_data++;
-      });
-      // for(var x = 0 ;this.usermessage[0].messages.length <= childSnapshot.numChildren();x++){
-
-      // }
-      // this.usermessage[0].messages.push({
-      //   'send': message,
-      //   'reply': ''
-      // });
-
-      // console.log(snapshotToArraymessages(childSnapshot)); 
-      // this.messagechange = true;
-      // this.load_messages(); 
-
+      }); 
     });
   }
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
-      // console.log(childSnapshot);
       this.productdata = [];
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
@@ -483,19 +467,12 @@ export class AppComponent {
   loadfavorite(){
     var self = this;
     this.productdatafavorite = [];
-    this.favoritecount = 0;
-    // console.log('this.storedata',this.storedata);
+    this.favoritecount = 0; 
     this.storedata.forEach(function(element ,index1,arr1) {     
-      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){
-        // console.log("element",element);
-        Object.entries(element.favorites).forEach(function(element2,index,arr){  
-          // console.log('element20',element2[0]);  
-          // console.log('element21',element2[1]); 
-          // console.log('arr',arr); 
+      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
           self.favoritecount++;
-          let d = {key : element2[0], pID : element2[1]['key']};
-          // d.key = element2[0];
-          // console.log('d',d);
+          let d = {key : element2[0], pID : element2[1]['key']}; 
           self.productdatafavorite.push(d);
         });
       }
@@ -504,27 +481,19 @@ export class AppComponent {
   async loadfavorite2(keys,cb){
     var self = this;
     var productdatafavorite = [];
-    var favoritecount = 0;
-    // console.log('this.storedata',this.storedata);
+    var favoritecount = 0; 
     await this.storedata.forEach(function(element ,index1,arr1) {     
-      if(typeof(element.favorites) != 'undefined' && element.key == keys){
-        // console.log("element",element);
-        Object.entries(element.favorites).forEach(function(element2,index,arr){  
-          // console.log('element20',element2[0]);   m n 
-          // console.log('element21',element2[1]); 
-          // console.log('arr',arr); 
+      if(typeof(element.favorites) != 'undefined' && element.key == keys){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
           favoritecount++;
-          let d = {key : element2[0], pID : element2[1]['key']};
-          // d.key = element2[0];
-          // console.log('d',d);
+          let d = {key : element2[0], pID : element2[1]['key']}; 
           productdatafavorite.push(d);
         });
       }
     });
     cb(favoritecount);
   }
-  load_user_requirements(){
-    // console.clear();
+  load_user_requirements(){ 
     var self = this;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
@@ -535,71 +504,55 @@ export class AppComponent {
     });
   }
   load_messages(){// key sa client kong kinsa ang nka contact
-    // console.clear();
     var self = this;
     self.usermessage = [];
     this.storedata.forEach(element => {
       if(element.key == self.userid){
-        if(typeof(element.messages) != 'undefined'){ 
-          // console.log(element.messages);
-          Object.entries(element.messages).forEach(element2 => {
-            // console.log(element2[0])  
-            self.getstorebyid(element2[0],function(rdata){
-              // console.log(rdata[0])  
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => { 
+            self.getstorebyid(element2[0],function(rdata){ 
               let msges = [];              
               let item = rdata[0];
-              Object.entries(element2[1]).forEach(msg=>{
-                // console.log(msg);
+              Object.entries(element2[1]).forEach(msg=>{ 
                 let mgss = msg[1];
                 mgss.key = msg[0];
                 msges.push(mgss);
               });
               item.messages = msges;
-              item.key = element2[0];
-              // console.log(item)
+              item.key = element2[0]; 
               self.usermessage.push(item);
             })
           }); 
         }
       }
-    });
-    // console.log(self.usermessage[0].messages.length);
-    // console.log(self.usermessage['messages']);
+    }); 
   }
-  async load_messages2(callback){// key sa client kong kinsa ang nka contact
-    // console.clear();
+  async load_messages2(callback){ 
     var self = this;
     self.usermessage = [];
     await this.storedata.forEach(element => {
       if(element.key == self.userid){
-        if(typeof(element.messages) != 'undefined'){ 
-          // console.log(element.messages);
-          Object.entries(element.messages).forEach(element2 => {
-            // console.log(element2[0])  
-            self.getstorebyid(element2[0],function(rdata){
-              // console.log(rdata[0])  
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => { 
+            self.getstorebyid(element2[0],function(rdata){ 
               let msges = [];              
               let item = rdata[0];
-              Object.entries(element2[1]).forEach(msg=>{
-                // console.log(msg);
+              Object.entries(element2[1]).forEach(msg=>{ 
                 let mgss = msg[1];
                 mgss.key = msg[0];
                 msges.push(mgss);
               });
               item.messages = msges;
-              item.key = element2[0];
-              // console.log(item)
+              item.key = element2[0]; 
               self.usermessage.push(item);
             })
           }); 
         }
       }
-    });    
-    // console.log(1)
+    });     
     callback(true);
   }
-  async usersendmsg(key,message,callbacks){
-    // console.log(message);
+  async usersendmsg(key,message,callbacks){ 
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
     await newproduct.set({
       'send': message,
@@ -613,11 +566,8 @@ export class AppComponent {
     this.usermessage[0].messages.push({
       'send': message,
       'reply': ''
-    });
-    // this.load_messages2(()=>{
-    //   // console.log(2)
-      callbacks("done");
-    // });
+    }); 
+    callbacks("done"); 
   } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();

@@ -30,32 +30,25 @@ export class Messages_panelPage implements OnInit {
       }else{
         this.parentroute = "messages";
       }
-      // console.log(util.usermessage, this.id ); 
-      // setInterval(function(){
-      //   if(self.util.messagechange){
-      //     self.util.messagechange = false;
-      //     self.content.scrollToBottom(300);
-      //   }
-      // },1000) 
+      setInterval(function(){
+        if(self.util.messagechange){
+          self.util.messagechange = false;
+          self.content.scrollToBottom(300);
+        }
+      },1000) 
 
   }
   sendmsg(){ 
-    var self = this;
-    // console.log(this.id,this.messagess);
+    var self = this; 
     if(typeof(this.messagess) != 'undefined' && this.messagess != ''){
-      this.util.usersendmsg(this.id,this.messagess,function(d){
-        self.messagess = "";
-        setTimeout(()=>{
-          self.content.scrollToBottom(300);
-        },2000);
+      this.util.usersendmsg(this.id,this.messagess,function(d){ 
+          self.content.scrollToBottom(300); 
       });
+      self.messagess = "";
     }
   }
   ngOnInit() {
-    this.content.scrollToBottom(300);
-    // this.util.usermessage.subscribe((e) => {
-    //   console.log("item is change");
-    // });
+    this.content.scrollToBottom(300); 
   }
 
 }
