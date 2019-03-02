@@ -25,22 +25,21 @@ export class ProductDetailsPage implements OnInit {
     private util: AppComponent,
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
-      var self =  this;
+    var self =  this;
     try{
-      this.id = this.activatedRoute.snapshot.paramMap.get('id');     
+      this.id = this.activatedRoute.snapshot.paramMap.get('id'); // idkey ni sa product    
       this.util.getproductsbyid(this.id);
-      console.log(this.util.productdata);
+      // console.log(this.util.productdata);
       this.util.productdata.forEach(element => {
         this.productimage = element.itemimg;
         this.productname = element.productname;
         this.unittype = element.unittype;
         this.price = element.price;
         this.producttype = element.producttype;
-
+        self.util.selecteduserkey = element.ukey;
         this.util.loadfavorite2(element.ukey,function(r){
           self.fav = r;
         });
-        
       });
     }catch(err){
       

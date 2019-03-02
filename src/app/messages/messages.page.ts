@@ -18,9 +18,6 @@ export class MessagesPage implements OnInit {
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
 
-      
-
-
   }
 
   ngOnInit() {

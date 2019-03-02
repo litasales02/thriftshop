@@ -65,6 +65,10 @@ export class AppComponent {
   maxExtent = [125.2524,6.9946,125.6589,7.5885];
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
  
+  selecteditem = "";
+  selecteduserkey = "";
+  messagechange = false;
+
   constructor(
     public router: Router,
     private platform: Platform,
@@ -81,6 +85,9 @@ export class AppComponent {
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
+      // if(this.loginStatus){        
+      //   self.load_messages();
+      // }
     });
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -182,15 +189,16 @@ export class AppComponent {
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
-              self.load_messages();
+              if (typeof(data.val().requirements) != 'undefined'){ 
+                self.requirementsdata = data.val().requirements; 
+              }            
+              
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            if (typeof(data.val().requirements) != 'undefined'){ 
-              self.requirementsdata = data.val().requirements; 
-            }            
-            
+            self.getmessages();
+            self.load_messages();
             callback(true);
           } else {
             callback(false);
@@ -247,7 +255,7 @@ export class AppComponent {
     this.router.navigate([link]);
   }
   async getuserlogbyname(username,callback){
-    console.clear();
+    // console.clear();
     var self = this;
     var result = false; 
     this.storedata.forEach(function(element,index,arr){
@@ -283,18 +291,19 @@ export class AppComponent {
     var storedata2 = [];
     this.storedata.forEach(function(element,index,arr){
           if(element.key == key ){
-            let item = element.userdetails;
-            item.utype = element.usertype; 
+            let item = element.userdetails; 
             item.key = element.key; 
+            item.utype = element.usertype; 
             storedata2.push(item);
           }
-      if(index == arr.length - 1){ 
-        callback(storedata2);
-      }
+      // if(index == arr.length - 1){ 
+      //   callback(storedata2);
+      // }
     });
+    callback(storedata2);
   }
   getstorebyname(productname,callback){
-    console.clear();
+    // console.clear();
     var self = this;
     self.storedata2 = [];
     this.storedata.forEach(function(element,index,arr){
@@ -337,7 +346,7 @@ export class AppComponent {
     });
   }    
   getproductsbyfilter(filers,productname){
-    console.clear();
+    // console.clear();
     var self = this;
     self.productdata = [];
     // console.log('filtered')
@@ -354,6 +363,37 @@ export class AppComponent {
           }
         });
       }
+    });
+  }
+  getmessages(){
+    let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
+    newInfo.on('child_changed',childSnapshot => {  
+      var total_change = childSnapshot.numChildren();
+      // var total_data = this.usermessage[0].messages.length;
+      // console.log("childSnapshot.val()",childSnapshot.val());
+      // console.log("childSnapshot.numChildren()",childSnapshot.numChildren());
+      // console.log("this.usermessage",this.usermessage[0].messages.length);
+      var coun_data = 1;
+      childSnapshot.forEach(data =>{
+        // console.log(coun_data);
+        if(total_change <= coun_data ){//&& total_data < total_change
+          // console.log(data.val());          
+          this.usermessage[0].messages.push(data.val());
+        }
+        coun_data++;
+      });
+      // for(var x = 0 ;this.usermessage[0].messages.length <= childSnapshot.numChildren();x++){
+
+      // }
+      // this.usermessage[0].messages.push({
+      //   'send': message,
+      //   'reply': ''
+      // });
+
+      // console.log(snapshotToArraymessages(childSnapshot)); 
+      // this.messagechange = true;
+      // this.load_messages(); 
+
     });
   }
   getproducts(key){
@@ -484,7 +524,7 @@ export class AppComponent {
     cb(favoritecount);
   }
   load_user_requirements(){
-    console.clear();
+    // console.clear();
     var self = this;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
@@ -495,7 +535,7 @@ export class AppComponent {
     });
   }
   load_messages(){// key sa client kong kinsa ang nka contact
-    console.clear();
+    // console.clear();
     var self = this;
     self.usermessage = [];
     this.storedata.forEach(element => {
@@ -523,9 +563,11 @@ export class AppComponent {
         }
       }
     });
+    // console.log(self.usermessage[0].messages.length);
+    // console.log(self.usermessage['messages']);
   }
   async load_messages2(callback){// key sa client kong kinsa ang nka contact
-    console.clear();
+    // console.clear();
     var self = this;
     self.usermessage = [];
     await this.storedata.forEach(element => {
@@ -568,10 +610,14 @@ export class AppComponent {
       'send': '',
       'reply': message
     });    
-    this.load_messages2(()=>{
-      // console.log(2)
-      callbacks("done");
+    this.usermessage[0].messages.push({
+      'send': message,
+      'reply': ''
     });
+    // this.load_messages2(()=>{
+    //   // console.log(2)
+      callbacks("done");
+    // });
   } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
@@ -886,6 +932,16 @@ export const snapshotToArrayproductnested = snapshot => {
       // console.log("data " , childSnapshot);
       // console.log("data 1" , item);
       // console.log("data 2 " , childSnapshot.key);
+      // item.key = childSnapshot.key;
+      returnArr.push(item);
+  });
+  return returnArr;
+};
+export const snapshotToArraymessages = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+    // console.log(childSnapshot);
+      let item = childSnapshot.val();  
       // item.key = childSnapshot.key;
       returnArr.push(item);
   });
