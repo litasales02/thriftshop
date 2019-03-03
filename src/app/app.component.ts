@@ -193,12 +193,12 @@ export class AppComponent {
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
                 self.requirementsdata = data.val().requirements; 
-              }            
-              
+              }
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
+            self.kanoalgo(self.userid);
             self.getmessages();
             self.load_messages();
             callback(true);
@@ -717,19 +717,31 @@ export class AppComponent {
     var self = this;
     var users = 0;
     var total_rate = 0;
-    var total_final = 0;  
+    var total_rate2 = 0;
+    var total_final = 0; 
+    var total_final2 = 0;  
     var total_stars = 0;
+    
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
     var total_poor = 0; 
     
+    var total_excellent2 = 0;
+    var total_average2 = 0;
+    var total_good2 = 0;
+    var total_bad2 = 0;
+    var total_poor2 = 0; 
+    
     var total_excellentp = 0;
     var total_averagep = 0;
     var total_goodp = 0;
     var total_badp = 0;
     var total_poorp = 0; 
+
+    var si = 0;
+    var di = 0;
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -739,35 +751,30 @@ export class AppComponent {
   this.storedata.forEach(function(element ,index1,arr1) {   
       // console.log(element);
       if(typeof(element.feedsseller) != 'undefined' && element.key == key){
-        Object.values(element.feedsseller).forEach(function(element2,index,arr){  
-            // console.log('Q1P1',element2['Q1P1']);
-            // console.log('Q1P2',element2['Q1P2']);
-            // console.log('Q2P1',element2['Q2P1']);
-            // console.log('Q2P2',element2['Q2P2']);
-            // console.log('Q3P1',element2['Q3P1']);
-            // console.log('Q3P2',element2['Q3P2']); 
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){   
             users++;
             total_rate = 0;
-            
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
-            // console.log('Q1P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
-            // console.log('Q1P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
-            // console.log('Q2P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
-            // console.log('Q2P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
-            // console.log('Q3P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
-            // console.log('Q3P2',total_rate);
-           
-            total_rate = total_rate / 6;
-            total_final = total_final + total_rate;
-            // console.log('total_rate',total_rate);
-            // console.log('total_final',total_final);
 
-            switch(total_rate | 0){
+            total_rate  = self.kanu_evalletters(element2['Q1P1']);
+            total_rate2 = self.kanu_evalletters(element2['Q1P2']);
+
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q2P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q2P2']);
+            
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q3P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q3P2']);
+          
+
+            total_rate  = (total_rate  / 3);
+            total_rate2 = (total_rate2 / 3);
+ 
+            console.log('total_rate'   ,total_rate);
+            console.log('total_rate2'  ,total_rate2);
+            console.log('total_rate r' ,Math.round(total_rate));
+            console.log('total_rate2 r',Math.round(total_rate2));
+            console.log("=========================================");
+
+            switch(Math.round(total_rate)){
               case 5:
                 total_excellent++;
                 break;
@@ -784,33 +791,54 @@ export class AppComponent {
                 total_poor++;
                 break;
             }
+            switch(Math.round(total_rate2)){
+              case 5:
+                total_excellent2++;
+                break;
+              case 4:
+                total_average2++;
+                break;
+              case 3:
+                total_good2++;
+                break;
+              case 2:
+                total_bad2++;
+                break;
+              case 1:
+                total_poor2++;
+                break;
+            }
 
-            // console.log('index',index);
-            // console.log('arr.length',arr.length);
+            total_final = total_final + total_rate;
+            total_final2 = total_final2 + total_rate2;
+
             if(index == arr.length - 1){ 
-              total_stars = (total_final / users); // ((total_final / users) | 0);
+ 
+            console.log('total_final',(total_final / users));
+            console.log('total_final2',(total_final2 / users));
+            console.log('total_final r',Math.round((total_final / users)));
+            console.log('total_final2 r',Math.round((total_final2 / users)));
+            console.log("========================================="); 
 
-              // console.log('users',users);  
-              // console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
-              // console.log('total_average',total_average,(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
-              // console.log('total_good',total_good,(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
-              // console.log('total_bad',total_bad, (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
-              // console.log('total_poor',total_poor, (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+            console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
+            console.log('total_average',total_average,(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
+            console.log('total_good',total_good,(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
+            console.log('total_bad',total_bad, (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
+            console.log('total_poor',total_poor, (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+            console.log("=========================================");
 
-              total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
-              total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);
-              total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0);
-              total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0);
-              total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0);
-              
+        //   total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+        //   total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+        //   total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+        //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+        //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+
+            si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
+            di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
+            console.log('si di',si,di);
             }
         });
-      }
-      // if(index1 == arr1.length - 1){                      
-      //   self.updatedataset(key,{
-      //     totalStars: total_stars
-      //   })
-      // }
+      } 
     });
     return {
       'total_users':users,
@@ -858,9 +886,7 @@ export const snapshotToArray = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      // console.log("data " , item);
-      // console.log("data 2 " , childSnapshot.val());
+      item.key = childSnapshot.key; 
       returnArr.push(item);
   });
   return returnArr;
