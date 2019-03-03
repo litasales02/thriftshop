@@ -730,7 +730,7 @@ export class AppComponent {
         //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
         //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
             
-            total_stars = total_final; 
+            // total_stars = total_final; 
 
             
             console.log("total_excellentp",total_excellentp);
@@ -745,6 +745,10 @@ export class AppComponent {
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
             console.log('si di',si.toFixed(2),di.toFixed(2));
+
+            
+            total_stars = (si * 100) / 20; 
+
             }
         });
     }
@@ -895,7 +899,7 @@ export class AppComponent {
         //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
         //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
             
-            total_stars = total_final; 
+            // total_stars = total_final; 
 
             
             console.log("total_excellentp",total_excellentp);
@@ -910,6 +914,8 @@ export class AppComponent {
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
             console.log('si di',si.toFixed(2),di.toFixed(2));
+            
+            total_stars = (si * 100) / 20; 
             }
         });
       } 
