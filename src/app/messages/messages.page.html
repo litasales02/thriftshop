@@ -11,15 +11,30 @@
 
 <ion-content>
     <ion-list no-lines *ngFor="let datas of util.usermessage">
-      <ion-item no-lines (click)="routes(datas.key)"  > 
-        <ion-avatar slot="start">
-          <img [src]="datas.profileimg" />
-        </ion-avatar>
-        <ion-label>
-          <h2>{{datas.firstname}} {{datas.lastname}}</h2>
-          <h3>{{datas.utype}}</h3>
-          <p></p>
-        </ion-label>
-      </ion-item>
+        <div [ngSwitch]="datas.key" >
+            <div *ngSwitchCase="'admin'" >  
+              <ion-item no-lines (click)="routes(datas.key)"  >                 
+                <ion-avatar slot="start">
+                  <img src="../../assets/logo.png" />
+                </ion-avatar>
+                <ion-label>
+                  <h2>Message for Admin</h2>  
+                  <p></p>
+                </ion-label>          
+              </ion-item>
+            </div>
+            <div *ngSwitchDefault >
+              <ion-item no-lines (click)="routes(datas.key)"  > 
+                <ion-avatar slot="start">
+                  <img [src]="datas.profileimg" />
+                </ion-avatar>
+                <ion-label>
+                  <h2>{{datas.firstname}} {{datas.lastname}}</h2>
+                  <h3>{{datas.utype}}</h3>
+                  <p></p>
+                </ion-label>
+              </ion-item>
+            </div>
+        </div>
     </ion-list>
 </ion-content>

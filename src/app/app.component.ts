@@ -105,7 +105,7 @@ export class AppComponent {
       }
 
      }).catch((error) => {
-       console.log('Error getting location', error);
+      //  console.log('Error getting location', error);
      });
      this.watch = this.geolocation.watchPosition();
       this.watch.subscribe((data) => { 
@@ -371,7 +371,7 @@ export class AppComponent {
     let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
     newInfo.on('child_changed',childSnapshot => {  
       if(this.messagechange == null){
-        console.log("load new data");
+        // console.log("load new data");
       }
       var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
@@ -529,22 +529,40 @@ export class AppComponent {
     this.storedata.forEach(element => {
       if(element.key == self.userid){
         if(typeof(element.messages) != 'undefined'){  
-          Object.entries(element.messages).forEach(element2 => { 
-            self.getstorebyid(element2[0],function(rdata){ 
-              let msges = [];              
-              let item = rdata[0];
-              Object.entries(element2[1]).forEach(msg=>{ 
-                let mgss = msg[1];
-                mgss.key = msg[0];
-                msges.push(mgss);
-              });
-              item.messages = msges;
-              item.key = element2[0]; 
-              self.usermessage.push(item);
-            })
+          Object.entries(element.messages).forEach(element2 => {            
+            if(element2[0] == 'admin'){
+                let msges = [];              
+                let item = {
+                  key: 'admin',
+                  messages: []
+                };
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+            } else {
+              self.getstorebyid(element2[0],function(rdata){ 
+                // console.log(rdata);
+                let msges = [];              
+                let item = rdata[0];
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+              })
+            }
           }); 
         }
       }
+      // console.log(self.usermessage);
     }); 
   }
   async load_messages2(callback){ 
@@ -554,9 +572,13 @@ export class AppComponent {
       if(element.key == self.userid){
         if(typeof(element.messages) != 'undefined'){  
           Object.entries(element.messages).forEach(element2 => { 
-            self.getstorebyid(element2[0],function(rdata){ 
+
+            if(element2[0] == 'admin'){
               let msges = [];              
-              let item = rdata[0];
+              let item = {
+                key: 'admin',
+                messages: []
+              };
               Object.entries(element2[1]).forEach(msg=>{ 
                 let mgss = msg[1];
                 mgss.key = msg[0];
@@ -565,7 +587,21 @@ export class AppComponent {
               item.messages = msges;
               item.key = element2[0]; 
               self.usermessage.push(item);
-            })
+            } else {
+              self.getstorebyid(element2[0],function(rdata){ 
+                // console.log(rdata);
+                let msges = [];              
+                let item = rdata[0];
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+              })            
+            }
           }); 
         }
       }
@@ -578,18 +614,25 @@ export class AppComponent {
       'send': message,
       'reply': ''
     });
-    let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
-    await newproduct2.set({
-      'send': '',
-      'reply': message
-    });    
-    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
-      // this.usermessage[0].messages.push({
-      //   'send': message,
-      //   'reply': ''
-      // });   
-      console.log("send");
+    if(key == 'admin'){
+      let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
+      await newproduct2.set({
+        'send': '',
+        'reply': message
+      });          
+      this.load_messages();
     }else{
+      let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+      await newproduct2.set({
+        'send': '',
+        'reply': message
+      });       
+    }
+
+    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
+      // console.log("send");
+    }else{
+      // console.log("reload message");
       this.getmessages();
       this.load_messages();
     }
@@ -770,7 +813,7 @@ export class AppComponent {
 
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
-            console.log('si di',si.toFixed(2),di.toFixed(2));
+            // console.log('si di',si.toFixed(2),di.toFixed(2));
 
             
             total_stars = (si * 100) / 20; 
@@ -939,7 +982,7 @@ export class AppComponent {
 
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
-            console.log('si di',si.toFixed(2),di.toFixed(2));
+            // console.log('si di',si.toFixed(2),di.toFixed(2));
             
             total_stars = (si * 100) / 20; 
             }
