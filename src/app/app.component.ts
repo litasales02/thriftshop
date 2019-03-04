@@ -677,16 +677,6 @@ export class AppComponent {
 
             users++;
             total_rate = 0;
-<<<<<<< HEAD
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']); 
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);  
-
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
-            
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
-=======
             total_rate2 = 0;
             total_rate  = total_rate  + self.kanu_evalletters(element2['Q1P1']);
             total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q1P2']);
@@ -694,7 +684,6 @@ export class AppComponent {
             total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q2P2']);
             total_rate  = total_rate  + self.kanu_evalletters(element2['Q3P1']);
             total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q3P2']);
->>>>>>> 009e35440882e96f79417b0bf699a60c31f98409
            
             total_rate = (total_rate / 3);
             total_rate2 = (total_rate2 / 3); 
