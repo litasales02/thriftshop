@@ -35,8 +35,7 @@ export class Messages_panelPage implements OnInit {
           self.util.messagechange = false;
           self.content.scrollToBottom(300);
         }
-      },1000) 
-
+      },1000);
   }
   sendmsg(){ 
     var self = this; 

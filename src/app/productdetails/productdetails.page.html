@@ -39,5 +39,5 @@
         <ion-label>Favorites</ion-label>        
         <ion-label>{{fav}} Users</ion-label>
     </ion-item> 
-    <ion-button class="button button-block button-positive button-large" routerLink="/message/panel/{{util.selecteduserkey}}/products_details" > Send Message</ion-button> 
+    <ion-button class="button button-block button-positive button-large" (click)="routes();" > Send Message</ion-button> 
 </ion-content>

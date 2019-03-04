@@ -370,6 +370,9 @@ export class AppComponent {
   getmessages(){
     let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
     newInfo.on('child_changed',childSnapshot => {  
+      if(this.messagechange == null){
+        console.log("load new data");
+      }
       var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
       childSnapshot.forEach(data => { 
@@ -410,6 +413,23 @@ export class AppComponent {
          }        
       });
     });
+  }
+  async getproductsbyid2(key,callback){ 
+    var self = this;
+    var productdata = []; 
+    this.storedata.forEach(element => {
+      if(typeof(element.product) != 'undefined'){
+        Object.entries(element.product).forEach(function(element2,index,arr){
+          if(element2[0] == key){ 
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0];  
+            item['ukey'] = element.key;  
+            productdata.push(item);
+          }
+        });
+      }
+    });
+    callback(productdata);
   }
   getproductsall(){ 
     this.productdata = [];
@@ -563,10 +583,16 @@ export class AppComponent {
       'send': '',
       'reply': message
     });    
-    this.usermessage[0].messages.push({
-      'send': message,
-      'reply': ''
-    }); 
+    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
+      // this.usermessage[0].messages.push({
+      //   'send': message,
+      //   'reply': ''
+      // });   
+      console.log("send");
+    }else{
+      this.getmessages();
+      this.load_messages();
+    }
     callbacks("done"); 
   } 
   async newdata(value){
