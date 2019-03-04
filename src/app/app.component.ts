@@ -759,14 +759,14 @@ export class AppComponent {
             // total_stars = total_final; 
 
             
-            console.log("total_excellentp",total_excellentp);
-            console.log('total_averagep',total_averagep);
-            console.log('total_goodp',total_goodp);
-            console.log("total_badp",total_badp);
-            console.log("total_poorp",total_poorp);
-            console.log("total_final",total_final);
-            console.log("total_final2",total_final2);
-            console.log("total_stars",total_stars);
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
 
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
@@ -928,14 +928,14 @@ export class AppComponent {
             // total_stars = total_final; 
 
             
-            console.log("total_excellentp",total_excellentp);
-            console.log('total_averagep',total_averagep);
-            console.log('total_goodp',total_goodp);
-            console.log("total_badp",total_badp);
-            console.log("total_poorp",total_poorp);
-            console.log("total_final",total_final);
-            console.log("total_final2",total_final2);
-            console.log("total_stars",total_stars);
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
 
             si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
             di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
