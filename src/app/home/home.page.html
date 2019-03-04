@@ -1,37 +1,46 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+    <ion-buttons slot="start" [ngSwitch]="default_redirect">
+        <ion-menu-button *ngSwitchCase="'home'"></ion-menu-button> 
+        <ion-back-button *ngSwitchDefault defaultHref="{{default_redirect}}"></ion-back-button> 
     </ion-buttons>
     <ion-title>
-      Welcome
+      Product List
     </ion-title>
+    <ion-buttons *ngIf="util.loginStatus==true&&util.userType=='seller'" slot="end">
+      <ion-button  (click)="presentActionSheet()">
+        <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content scrollable="true" class="has-header">
+<ion-content>
   
-  <ion-searchbar position="fixed" animated (ionInput)="getItems($event)"></ion-searchbar>
+<ion-searchbar animated (ionInput)="getItems($event)"></ion-searchbar>
+<ion-item >
+    <ion-button color="primary" (click)="presentActionSheetFilter()" >
+       Filter
+    </ion-button>  
+    <ion-label style="margin-left:10px;">
+      : {{selected}}
+    </ion-label>
+</ion-item>
 
-  <ion-list>
-      <div  *ngFor="let userlists of userlist" >
-        <ion-item *ngIf="userlists.usertype=='seller'&&util.userid!=userlists.key" routerLink="/list/storedetails/{{userlists.key}}/home"> 
-          <ion-avatar slot="start">
-            <img [src]="userlists.userdetails.profileimg!=''?userlists.userdetails.profileimg:'/assets/store.png'" />
-          </ion-avatar>
-          <ion-label>
-            <h2>{{userlists.storename}}</h2>
-            <h3>{{userlists.userdetails.address1}}</h3>
-            <h3>{{userlists.userdetails.firstname}} {{userlists.userdetails.lastname}}</h3>
-            <h3>Contact : {{userlists.userdetails.cellnumber}}</h3>
-            <div ng-if="typeof(rate) != 'undefined'">
-                <img *ngFor="let userlists of  ' '.repeat(userlists.totalStars).split('')" src="/assets/star.png" height="20" width="20" />
-            </div> 
-            <h3>Rate : {{userlists.totalStars!='undefined'?userlists.totalStars.toFixed(1):0}}</h3>
-          </ion-label>
-        </ion-item>
-      </div>
-
+  <ion-list *ngFor="let datas of util.productdata">
+    <ion-item routerLink="/products/details/{{datas.key}}" > 
+      <ion-avatar slot="start">
+        <img [src]="datas.itemimg" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{datas.productname}}</h2>
+        <h3>Type  : {{datas.producttype}}</h3>
+        <h3>unit  : {{datas.unittype}}</h3>
+        <h3>Price : {{datas.price}}</h3>  
+      </ion-label>        
+      <ion-buttons slot="end" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
+        <img [src]="favoritestar(datas.key)" height="50" width="50" /> 
+      </ion-buttons>  
+    </ion-item>
   </ion-list>
-
 </ion-content>

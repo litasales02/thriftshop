@@ -36,6 +36,8 @@ export class AppComponent {
   productdata = [];
   sellergeodata = [];
   productdatafavorite = [];
+  usermessage = [];
+  usermessagepanel = [];
   requirementsdata = {
     'status': 0,
     'idtype':null,
@@ -180,6 +182,7 @@ export class AppComponent {
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
+              self.load_messages();
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
@@ -272,6 +275,21 @@ export class AppComponent {
           // console.log(item);
           self.sellergeodata.push(item);
         }
+      }
+    });
+  }
+  async getstorebyid(key,callback){
+    var self = this;
+    var storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+          if(element.key == key ){
+            let item = element.userdetails;
+            item.utype = element.usertype; 
+            item.key = element.key; 
+            storedata2.push(item);
+          }
+      if(index == arr.length - 1){ 
+        callback(storedata2);
       }
     });
   }
@@ -453,6 +471,85 @@ export class AppComponent {
       }
     });
   }
+  load_messages(){// key sa client kong kinsa ang nka contact
+    console.clear();
+    var self = this;
+    self.usermessage = [];
+    this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.messages) != 'undefined'){ 
+          // console.log(element.messages);
+          Object.entries(element.messages).forEach(element2 => {
+            // console.log(element2[0])  
+            self.getstorebyid(element2[0],function(rdata){
+              // console.log(rdata[0])  
+              let msges = [];              
+              let item = rdata[0];
+              Object.entries(element2[1]).forEach(msg=>{
+                // console.log(msg);
+                let mgss = msg[1];
+                mgss.key = msg[0];
+                msges.push(mgss);
+              });
+              item.messages = msges;
+              item.key = element2[0];
+              // console.log(item)
+              self.usermessage.push(item);
+            })
+          }); 
+        }
+      }
+    });
+  }
+  async load_messages2(callback){// key sa client kong kinsa ang nka contact
+    console.clear();
+    var self = this;
+    self.usermessage = [];
+    await this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.messages) != 'undefined'){ 
+          // console.log(element.messages);
+          Object.entries(element.messages).forEach(element2 => {
+            // console.log(element2[0])  
+            self.getstorebyid(element2[0],function(rdata){
+              // console.log(rdata[0])  
+              let msges = [];              
+              let item = rdata[0];
+              Object.entries(element2[1]).forEach(msg=>{
+                // console.log(msg);
+                let mgss = msg[1];
+                mgss.key = msg[0];
+                msges.push(mgss);
+              });
+              item.messages = msges;
+              item.key = element2[0];
+              // console.log(item)
+              self.usermessage.push(item);
+            })
+          }); 
+        }
+      }
+    });    
+    // console.log(1)
+    callback(true);
+  }
+  async usersendmsg(key,message,callbacks){
+    // console.log(message);
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
+    await newproduct.set({
+      'send': message,
+      'reply': ''
+    });
+    let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+    await newproduct2.set({
+      'send': '',
+      'reply': message
+    });    
+    this.load_messages2(()=>{
+      // console.log(2)
+      callbacks("done");
+    });
+  } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
