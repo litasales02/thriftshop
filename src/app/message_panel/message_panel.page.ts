@@ -11,6 +11,8 @@ import { AppComponent } from '../app.component';
 })
 export class Messages_panelPage implements OnInit {  
   id = "";
+  child = "";
+  parentroute = "messages";
   messagess: "";  
   @ViewChild('content') content:any;
   constructor(
@@ -20,25 +22,36 @@ export class Messages_panelPage implements OnInit {
     private util: AppComponent,
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
-    
+      var self = this;
       this.id = this.activatedRoute.snapshot.paramMap.get('id');
-      console.log(util.usermessage, this.id ); 
-      // setInterval(function(){
-      // },1000) 
+      this.child = this.activatedRoute.snapshot.paramMap.get('child');
+      if(this.child == "products_details"){
+        this.parentroute = "products/details/" + this.util.selecteditem;
+      }else{
+        this.parentroute = "messages";
+      }
+      setInterval(function(){
+        if(self.util.messagechange){
+          self.util.messagechange = false;
+          self.content.scrollToBottom(300);
+        }
+      },1000);
   }
   sendmsg(){ 
-    var self = this;
+    var self = this; 
     if(typeof(this.messagess) != 'undefined' && this.messagess != ''){
-      this.util.usersendmsg(this.id,this.messagess,function(d){
-        self.messagess = "";
-        setTimeout(()=>{
-          self.content.scrollToBottom(300);
-        },2000)
+      this.util.usersendmsg(this.id,this.messagess,function(d){ 
+          try { 
+            self.content.scrollToBottom(300); 
+          }catch(e){
+
+          }
       });
+      self.messagess = "";
     }
   }
   ngOnInit() {
-    this.content.scrollToBottom(300);
+    this.content.scrollToBottom(300); 
   }
 
 }

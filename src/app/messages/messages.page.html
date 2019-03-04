@@ -11,7 +11,7 @@
 
 <ion-content>
     <ion-list no-lines *ngFor="let datas of util.usermessage">
-      <ion-item no-lines  routerLink="/message/panel/{{datas.key}}"> 
+      <ion-item no-lines (click)="routes('datas.key')"  > 
         <ion-avatar slot="start">
           <img [src]="datas.profileimg" />
         </ion-avatar>

@@ -9,7 +9,7 @@ import { AppComponent } from '../app.component';
   styleUrls: ['messages.page.scss']
 })
 export class MessagesPage implements OnInit {
-
+  routerlingks = "";
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -18,12 +18,15 @@ export class MessagesPage implements OnInit {
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
 
-      
-
-
   }
 
   ngOnInit() {
+  }//routerLink="/message/panel/{{datas.key}}/messages"
+  routes(id){
+    console.log('click');
+    
+    this.util.selecteduserkey = id;
+    // this.util.selecteditem = element.key;
+    this.util.menuRouting("/message/panel/" + id + "/messages");
   }
-
 }

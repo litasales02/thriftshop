@@ -65,6 +65,10 @@ export class AppComponent {
   maxExtent = [125.2524,6.9946,125.6589,7.5885];
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
  
+  selecteditem = "";
+  selecteduserkey = "";
+  messagechange = false;
+
   constructor(
     public router: Router,
     private platform: Platform,
@@ -74,9 +78,7 @@ export class AppComponent {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private geolocation: Geolocation,
-    private fm: FirebaseMessaging
-  ) { 
-    
+    private fm: FirebaseMessaging ) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -125,7 +127,7 @@ export class AppComponent {
           self.geoaccurate = true;
         }
       });
-    //   this.fm.logEvent('page_view', {page: "dashboard"})
+    //  this.fm.logEvent('page_view', {page: "dashboard"})
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
   }
@@ -150,6 +152,13 @@ export class AppComponent {
     this.username = '';
     this.fullname = '';
     this.userid = '';
+    // this.storedata = [];
+    // this.storedata2 = [];
+    this.productdata = [];
+    this.sellergeodata = [];
+    this.productdatafavorite = [];
+    this.usermessage = [];
+    this.usermessagepanel = [];
     this.router.navigate(['/home']);
     this.ShowToast('Logging Out Good Bye!');
   }
@@ -182,15 +191,16 @@ export class AppComponent {
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
-              self.load_messages();
+              if (typeof(data.val().requirements) != 'undefined'){ 
+                self.requirementsdata = data.val().requirements; 
+              }
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            if (typeof(data.val().requirements) != 'undefined'){ 
-              self.requirementsdata = data.val().requirements; 
-            }            
-            
+            self.kanoalgo(self.userid);
+            self.getmessages();
+            self.load_messages();
             callback(true);
           } else {
             callback(false);
@@ -247,7 +257,7 @@ export class AppComponent {
     this.router.navigate([link]);
   }
   async getuserlogbyname(username,callback){
-    console.clear();
+    // console.clear();
     var self = this;
     var result = false; 
     this.storedata.forEach(function(element,index,arr){
@@ -283,18 +293,19 @@ export class AppComponent {
     var storedata2 = [];
     this.storedata.forEach(function(element,index,arr){
           if(element.key == key ){
-            let item = element.userdetails;
-            item.utype = element.usertype; 
+            let item = element.userdetails; 
             item.key = element.key; 
+            item.utype = element.usertype; 
             storedata2.push(item);
           }
-      if(index == arr.length - 1){ 
-        callback(storedata2);
-      }
+      // if(index == arr.length - 1){ 
+      //   callback(storedata2);
+      // }
     });
+    callback(storedata2);
   }
   getstorebyname(productname,callback){
-    console.clear();
+    // console.clear();
     var self = this;
     self.storedata2 = [];
     this.storedata.forEach(function(element,index,arr){
@@ -335,9 +346,9 @@ export class AppComponent {
         });
       }
     });
-  }
+  }    
   getproductsbyfilter(filers,productname){
-    console.clear();
+    // console.clear();
     var self = this;
     self.productdata = [];
     // console.log('filtered')
@@ -356,10 +367,26 @@ export class AppComponent {
       }
     });
   }
+  getmessages(){
+    let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
+    newInfo.on('child_changed',childSnapshot => {  
+      if(this.messagechange == null){
+        console.log("load new data");
+      }
+      var total_change = childSnapshot.numChildren(); 
+      var coun_data = 1;
+      childSnapshot.forEach(data => { 
+        if(total_change <= coun_data ){
+          this.usermessage[0].messages.push(data.val());
+          this.messagechange = true;
+        }
+        coun_data++;
+      }); 
+    });
+  }
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
-      // console.log(childSnapshot);
       this.productdata = [];
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
@@ -377,6 +404,7 @@ export class AppComponent {
                 if(element2.key == key){
                   let item = element2.val();
                   item.key = element2.key;  
+                  item.ukey = childs.key;  
                   this.productdata.push(item);
                 }
               });
@@ -385,6 +413,23 @@ export class AppComponent {
          }        
       });
     });
+  }
+  async getproductsbyid2(key,callback){ 
+    var self = this;
+    var productdata = []; 
+    this.storedata.forEach(element => {
+      if(typeof(element.product) != 'undefined'){
+        Object.entries(element.product).forEach(function(element2,index,arr){
+          if(element2[0] == key){ 
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0];  
+            item['ukey'] = element.key;  
+            productdata.push(item);
+          }
+        });
+      }
+    });
+    callback(productdata);
   }
   getproductsall(){ 
     this.productdata = [];
@@ -442,26 +487,33 @@ export class AppComponent {
   loadfavorite(){
     var self = this;
     this.productdatafavorite = [];
-    this.favoritecount = 0;
-    // console.log('this.storedata',this.storedata);
+    this.favoritecount = 0; 
     this.storedata.forEach(function(element ,index1,arr1) {     
-      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){
-        // console.log("element",element);
-        Object.entries(element.favorites).forEach(function(element2,index,arr){  
-          // console.log('element20',element2[0]);  
-          // console.log('element21',element2[1]); 
-          // console.log('arr',arr); 
+      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
           self.favoritecount++;
-          let d = {key : element2[0], pID : element2[1]['key']};
-          // d.key = element2[0];
-          // console.log('d',d);
+          let d = {key : element2[0], pID : element2[1]['key']}; 
           self.productdatafavorite.push(d);
         });
       }
     });
   }
-  load_user_requirements(){
-    console.clear();
+  async loadfavorite2(keys,cb){
+    var self = this;
+    var productdatafavorite = [];
+    var favoritecount = 0; 
+    await this.storedata.forEach(function(element ,index1,arr1) {     
+      if(typeof(element.favorites) != 'undefined' && element.key == keys){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
+          favoritecount++;
+          let d = {key : element2[0], pID : element2[1]['key']}; 
+          productdatafavorite.push(d);
+        });
+      }
+    });
+    cb(favoritecount);
+  }
+  load_user_requirements(){ 
     var self = this;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
@@ -472,69 +524,55 @@ export class AppComponent {
     });
   }
   load_messages(){// key sa client kong kinsa ang nka contact
-    console.clear();
     var self = this;
     self.usermessage = [];
     this.storedata.forEach(element => {
       if(element.key == self.userid){
-        if(typeof(element.messages) != 'undefined'){ 
-          // console.log(element.messages);
-          Object.entries(element.messages).forEach(element2 => {
-            // console.log(element2[0])  
-            self.getstorebyid(element2[0],function(rdata){
-              // console.log(rdata[0])  
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => { 
+            self.getstorebyid(element2[0],function(rdata){ 
               let msges = [];              
               let item = rdata[0];
-              Object.entries(element2[1]).forEach(msg=>{
-                // console.log(msg);
+              Object.entries(element2[1]).forEach(msg=>{ 
                 let mgss = msg[1];
                 mgss.key = msg[0];
                 msges.push(mgss);
               });
               item.messages = msges;
-              item.key = element2[0];
-              // console.log(item)
+              item.key = element2[0]; 
               self.usermessage.push(item);
             })
           }); 
         }
       }
-    });
+    }); 
   }
-  async load_messages2(callback){// key sa client kong kinsa ang nka contact
-    console.clear();
+  async load_messages2(callback){ 
     var self = this;
     self.usermessage = [];
     await this.storedata.forEach(element => {
       if(element.key == self.userid){
-        if(typeof(element.messages) != 'undefined'){ 
-          // console.log(element.messages);
-          Object.entries(element.messages).forEach(element2 => {
-            // console.log(element2[0])  
-            self.getstorebyid(element2[0],function(rdata){
-              // console.log(rdata[0])  
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => { 
+            self.getstorebyid(element2[0],function(rdata){ 
               let msges = [];              
               let item = rdata[0];
-              Object.entries(element2[1]).forEach(msg=>{
-                // console.log(msg);
+              Object.entries(element2[1]).forEach(msg=>{ 
                 let mgss = msg[1];
                 mgss.key = msg[0];
                 msges.push(mgss);
               });
               item.messages = msges;
-              item.key = element2[0];
-              // console.log(item)
+              item.key = element2[0]; 
               self.usermessage.push(item);
             })
           }); 
         }
       }
-    });    
-    // console.log(1)
+    });     
     callback(true);
   }
-  async usersendmsg(key,message,callbacks){
-    // console.log(message);
+  async usersendmsg(key,message,callbacks){ 
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
     await newproduct.set({
       'send': message,
@@ -545,10 +583,17 @@ export class AppComponent {
       'send': '',
       'reply': message
     });    
-    this.load_messages2(()=>{
-      // console.log(2)
-      callbacks("done");
-    });
+    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
+      // this.usermessage[0].messages.push({
+      //   'send': message,
+      //   'reply': ''
+      // });   
+      console.log("send");
+    }else{
+      this.getmessages();
+      this.load_messages();
+    }
+    callbacks("done"); 
   } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
@@ -593,21 +638,33 @@ export class AppComponent {
   }
   kanoalgoset(feedsseller){
     var self = this;
+    var users = 0;
     var total_rate = 0;
-    var total_final = 0;  
+    var total_rate2 = 0;
+    var total_final = 0; 
+    var total_final2 = 0;  
     var total_stars = 0;
+    
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
-    var total_poor = 0;
-    var users = 0;
+    var total_poor = 0; 
+    
+    var total_excellent2 = 0;
+    var total_average2 = 0;
+    var total_good2 = 0;
+    var total_bad2 = 0;
+    var total_poor2 = 0; 
     
     var total_excellentp = 0;
     var total_averagep = 0;
     var total_goodp = 0;
     var total_badp = 0;
     var total_poorp = 0; 
+
+    var si = 0;
+    var di = 0;
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -616,15 +673,11 @@ export class AppComponent {
   // 5.	It is poor = p 
  
       if(typeof(feedsseller) != 'undefined'){
-        Object.values(feedsseller).forEach(function(element2,index,arr){  
-            // console.log('Q1P1',element2['Q1P1']);
-            // console.log('Q1P2',element2['Q1P2']);
-            // console.log('Q2P1',element2['Q2P1']);
-            // console.log('Q2P2',element2['Q2P2']);
-            // console.log('Q3P1',element2['Q3P1']);
-            // console.log('Q3P2',element2['Q3P2']); 
+        Object.values(feedsseller).forEach(function(element2,index,arr){   
+
             users++;
             total_rate = 0;
+<<<<<<< HEAD
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']); 
             total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);  
 
@@ -633,25 +686,19 @@ export class AppComponent {
             
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
             total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
+=======
+            total_rate2 = 0;
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q1P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q1P2']);
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q2P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q2P2']);
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q3P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q3P2']);
+>>>>>>> 009e35440882e96f79417b0bf699a60c31f98409
            
-            total_rate = total_rate / 6;
-            total_final = total_final + total_rate;
-            // console.log('total_rate',total_rate);
-            // Object.keys(element2).forEach(elementkey => {
-            //   // console.log('element2' ,element2[elementkey]);
-            //   if (self.kanu_evalletters(element2[elementkey]) == 5 ){
-            //     total_excellent++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 4 ){
-            //     total_average++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 3 ){
-            //     total_good++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 2 ){
-            //     total_bad++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 1 ){
-            //     total_poor++;
-            //   }
-            // });
-            switch(total_rate | 0){
+            total_rate = (total_rate / 3);
+            total_rate2 = (total_rate2 / 3); 
+            switch(Math.round(total_rate)){
               case 5:
                 total_excellent++;
                 break;
@@ -668,16 +715,77 @@ export class AppComponent {
                 total_poor++;
                 break;
             }
-            
-            if(index == arr.length - 1){ 
-              total_stars = (total_final / arr.length);//((total_final / arr.length) | 0);
+            switch(Math.round(total_rate2)){
+              case 5:
+                total_excellent2++;
+                break;
+              case 4:
+                total_average2++;
+                break;
+              case 3:
+                total_good2++;
+                break;
+              case 2:
+                total_bad2++;
+                break;
+              case 1:
+                total_poor2++;
+                break;
+            }
 
-              total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
-              total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);
-              total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0);
-              total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0);
-              total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0);
-              
+            total_final = total_final + total_rate;
+            total_final2 = total_final2 + total_rate2;
+
+            if(index == arr.length - 1){ 
+ 
+            // console.log('total_final',(total_final / users));
+            // console.log('total_final2',(total_final2 / users));
+            // console.log('total_final r',Math.round((total_final / users)));
+            // console.log('total_final2 r',Math.round((total_final2 / users)));
+
+            total_final = Math.round((total_final / users));
+            total_final2 = Math.round((total_final2 / users));
+            // console.log("========================================="); 
+
+            // console.log('total_excellent',total_excellent,Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
+            // console.log('total_average',total_average,Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
+            // console.log('total_good',total_good,Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
+            // console.log('total_bad',total_bad, Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
+            // console.log('total_poor',total_poor,Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+
+            total_excellentp = Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+            total_averagep   = Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+            total_goodp      = Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+            total_badp       = Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+            total_poorp      = Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+    
+            // console.log("=========================================");
+
+        //   total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+        //   total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+        //   total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+        //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+        //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+            
+            // total_stars = total_final; 
+
+            
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
+
+            si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
+            di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
+            console.log('si di',si.toFixed(2),di.toFixed(2));
+
+            
+            total_stars = (si * 100) / 20; 
+
             }
         });
     }
@@ -693,26 +801,40 @@ export class AppComponent {
       'total_averagep': total_averagep,
       'total_goodp': total_goodp,
       'total_badp': total_badp,
-      'total_poorp': total_poorp
+      'total_poorp': total_poorp,
+      'si': si,
+      'di': di
     }
   }
   kanoalgo(key){
     var self = this;
     var users = 0;
     var total_rate = 0;
-    var total_final = 0;  
+    var total_rate2 = 0;
+    var total_final = 0; 
+    var total_final2 = 0;  
     var total_stars = 0;
+    
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
     var total_poor = 0; 
     
+    var total_excellent2 = 0;
+    var total_average2 = 0;
+    var total_good2 = 0;
+    var total_bad2 = 0;
+    var total_poor2 = 0; 
+    
     var total_excellentp = 0;
     var total_averagep = 0;
     var total_goodp = 0;
     var total_badp = 0;
     var total_poorp = 0; 
+
+    var si = 0;
+    var di = 0;
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -722,35 +844,30 @@ export class AppComponent {
   this.storedata.forEach(function(element ,index1,arr1) {   
       // console.log(element);
       if(typeof(element.feedsseller) != 'undefined' && element.key == key){
-        Object.values(element.feedsseller).forEach(function(element2,index,arr){  
-            // console.log('Q1P1',element2['Q1P1']);
-            // console.log('Q1P2',element2['Q1P2']);
-            // console.log('Q2P1',element2['Q2P1']);
-            // console.log('Q2P2',element2['Q2P2']);
-            // console.log('Q3P1',element2['Q3P1']);
-            // console.log('Q3P2',element2['Q3P2']); 
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){   
             users++;
             total_rate = 0;
-            
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
-            // console.log('Q1P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
-            // console.log('Q1P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
-            // console.log('Q2P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
-            // console.log('Q2P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
-            // console.log('Q3P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
-            // console.log('Q3P2',total_rate);
-           
-            total_rate = total_rate / 6;
-            total_final = total_final + total_rate;
-            // console.log('total_rate',total_rate);
-            // console.log('total_final',total_final);
 
-            switch(total_rate | 0){
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q1P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q1P2']);
+
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q2P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q2P2']);
+            
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q3P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q3P2']);
+          
+
+            total_rate  = (total_rate  / 3);
+            total_rate2 = (total_rate2 / 3);
+ 
+            // console.log('total_rate'   ,total_rate);
+            // console.log('total_rate2'  ,total_rate2);
+            // console.log('total_rate r' ,Math.round(total_rate));
+            // console.log('total_rate2 r',Math.round(total_rate2));
+            // console.log("=========================================");
+
+            switch(Math.round(total_rate)){
               case 5:
                 total_excellent++;
                 break;
@@ -767,33 +884,78 @@ export class AppComponent {
                 total_poor++;
                 break;
             }
+            switch(Math.round(total_rate2)){
+              case 5:
+                total_excellent2++;
+                break;
+              case 4:
+                total_average2++;
+                break;
+              case 3:
+                total_good2++;
+                break;
+              case 2:
+                total_bad2++;
+                break;
+              case 1:
+                total_poor2++;
+                break;
+            }
 
-            // console.log('index',index);
-            // console.log('arr.length',arr.length);
+            total_final = total_final + total_rate;
+            total_final2 = total_final2 + total_rate2;
+
             if(index == arr.length - 1){ 
-              total_stars = (total_final / users); // ((total_final / users) | 0);
+ 
+            // console.log('total_final',(total_final / users));
+            // console.log('total_final2',(total_final2 / users));
+            // console.log('total_final r',Math.round((total_final / users)));
+            // console.log('total_final2 r',Math.round((total_final2 / users)));
 
-              // console.log('users',users);  
-              // console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
-              // console.log('total_average',total_average,(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
-              // console.log('total_good',total_good,(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
-              // console.log('total_bad',total_bad, (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
-              // console.log('total_poor',total_poor, (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+            total_final = Math.round((total_final / users));
+            total_final2 = Math.round((total_final2 / users));
+            // console.log("========================================="); 
 
-              total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
-              total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);
-              total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0);
-              total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0);
-              total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0);
-              
+            // console.log('total_excellent',total_excellent,Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
+            // console.log('total_average',total_average,Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
+            // console.log('total_good',total_good,Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
+            // console.log('total_bad',total_bad, Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
+            // console.log('total_poor',total_poor,Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+
+            total_excellentp = Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+            total_averagep   = Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+            total_goodp      = Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+            total_badp       = Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+            total_poorp      = Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+    
+            // console.log("=========================================");
+
+        //   total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+        //   total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+        //   total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+        //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+        //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+            
+            // total_stars = total_final; 
+
+            
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
+
+            si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
+            di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
+            console.log('si di',si.toFixed(2),di.toFixed(2));
+            
+            total_stars = (si * 100) / 20; 
             }
         });
-      }
-      // if(index1 == arr1.length - 1){                      
-      //   self.updatedataset(key,{
-      //     totalStars: total_stars
-      //   })
-      // }
+      } 
     });
     return {
       'total_users':users,
@@ -807,7 +969,9 @@ export class AppComponent {
       'total_averagep': total_averagep,
       'total_goodp': total_goodp,
       'total_badp': total_badp,
-      'total_poorp': total_poorp
+      'total_poorp': total_poorp,
+      'si': si,
+      'di': di
     }
   }
   kanu_evalletters(val){
@@ -841,9 +1005,7 @@ export const snapshotToArray = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      // console.log("data " , item);
-      // console.log("data 2 " , childSnapshot.val());
+      item.key = childSnapshot.key; 
       returnArr.push(item);
   });
   return returnArr;
@@ -865,6 +1027,16 @@ export const snapshotToArrayproductnested = snapshot => {
       // console.log("data " , childSnapshot);
       // console.log("data 1" , item);
       // console.log("data 2 " , childSnapshot.key);
+      // item.key = childSnapshot.key;
+      returnArr.push(item);
+  });
+  return returnArr;
+};
+export const snapshotToArraymessages = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+    // console.log(childSnapshot);
+      let item = childSnapshot.val();  
       // item.key = childSnapshot.key;
       returnArr.push(item);
   });
