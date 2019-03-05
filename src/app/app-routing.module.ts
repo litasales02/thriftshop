@@ -72,8 +72,16 @@ const routes: Routes = [
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
   },
   {
+    path: 'products/details/:id/:child',
+    loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
+  },
+  {
     path: 'setstoremap',
     loadChildren: './setstoremap/setstoremap.module#SetStoreMapPageModule'
+  },
+  {
+    path: 'storemap/:id',
+    loadChildren: './storemap/storemap.module#StoreMapPageModule'
   }
 ];
 
