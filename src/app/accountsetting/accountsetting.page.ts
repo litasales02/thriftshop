@@ -17,7 +17,7 @@ export class AccountSettingPage implements OnInit {
   validgorvermentidimage = '/assets/store.png';
   storeimage = '/assets/store.png';
   idtype: "";
-
+  storemapstatus = "Not Set"
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     
     this.util.load_user_requirements();
@@ -27,6 +27,7 @@ export class AccountSettingPage implements OnInit {
       this.validgorvermentidstatus = this.util.requirementsdata.govid == null?'None':'Validated'; 
       this.idtype = this.util.requirementsdata.idtype; 
       this.storeimagestatus = this.util.requirementsdata.storeimg == null?'None':'Validated'; 
+      this.storemapstatus = this.util.geodata == 1?'Already Set':'No Set';
   }
   submit(){
     if (typeof(this.storeimg) != 'undefined' && typeof(this.govid) != 'undefined' && typeof(this.idtype) != 'undefined'){

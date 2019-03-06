@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
+import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
@@ -33,7 +34,10 @@ export class AppComponent {
   storedata = [];
   storedata2 = [];
   productdata = [];
+  sellergeodata = [];
   productdatafavorite = [];
+  usermessage = [];
+  usermessagepanel = [];
   requirementsdata = {
     'status': 0,
     'idtype':null,
@@ -47,6 +51,7 @@ export class AppComponent {
   geolong = 0.0;
   setgeolat = 0.0;
   setgeolong = 0.0;
+  geoaccurate = true;
   favoritecount = 0;
   starscss = 'drawerrate hide';
   isMD = this.platform.is('android');
@@ -57,18 +62,23 @@ export class AppComponent {
   usergeolocationlat = 0;
   usergeolocationlng = 0;
   alert: any;
+  maxExtent = [125.2524,6.9946,125.6589,7.5885];
   ref = firebase.database().ref('maindata').orderByChild('userdetails');
  
+  selecteditem = "";
+  selecteduserkey = "";
+  messagechange = false;
+
   constructor(
     public router: Router,
     private platform: Platform,
-    private splashScreen: SplashScreen,
+    private splashScreen: SplashScreen, 
     private statusBar: StatusBar,
     public alertCtrl: AlertController,
     public toastController: ToastController,
     public loadingController: LoadingController,
-    private geolocation: Geolocation
-  ) { 
+    private geolocation: Geolocation,
+    private fm: FirebaseMessaging ) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -76,20 +86,53 @@ export class AppComponent {
     });
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
-      self.usergeolocationlat = resp.coords.latitude;
-      self.usergeolocationlng = resp.coords.longitude;
-      console.log("resp.coords.latitude",resp.coords.latitude)
-      console.log("resp.coords.longitude",resp.coords.longitude) 
+      // self.usergeolocationlat = resp.coords.latitude;
+      // self.usergeolocationlng = resp.coords.longitude;
+      // console.log("resp.coords.latitude",resp.coords.latitude)
+      // console.log("resp.coords.longitude",resp.coords.longitude) 
+      if((resp.coords.latitude == 0 && resp.coords.longitude == 0) ||       
+        ((resp.coords.latitude < 6.9782 || resp.coords.latitude >= 7.5858) &&   
+        (resp.coords.longitude < 125.2579 || resp.coords.longitude >= 125.7056))){
+        self.usergeolocationlat =  7.148419523108726;
+        self.usergeolocationlng =  125.52915832519531;
+        // console.log("resp.coords",11);
+        self.geoaccurate = false;
+      }else{        
+        self.usergeolocationlat = resp.coords.latitude;
+        self.usergeolocationlng = resp.coords.longitude;
+        // console.log("resp.coords",22);
+        self.geoaccurate = true;
+      }
+
      }).catch((error) => {
-       console.log('Error getting location', error);
+      //  console.log('Error getting location', error);
      });
      this.watch = this.geolocation.watchPosition();
       this.watch.subscribe((data) => { 
         self.usergeolocationlat = data.coords.latitude;
         self.usergeolocationlng = data.coords.longitude;
-        console.log("data.coords.latitude",data.coords.latitude);
-        console.log("data.coords.longitude",data.coords.longitude);
+        // console.log("data.coords.latitude",data.coords.latitude);
+        // console.log("data.coords.longitude",data.coords.longitude);
+        if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
+          ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
+          (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
+          self.geoaccurate = false;
+          self.usergeolocationlat =  7.148419523108726;
+          self.usergeolocationlng =  125.52915832519531;    
+          // console.log("data.coords",1);
+        }else{        
+          self.usergeolocationlat = data.coords.latitude;
+          self.usergeolocationlng = data.coords.longitude;
+          // console.log("data.coords",2);
+          self.geoaccurate = true;
+        }
       });
+    //  this.fm.logEvent('page_view', {page: "dashboard"})
+    // .then((res: any) => console.log(res))
+    // .catch((error: any) => console.error(error));
+  }
+  maplimitviewgeo(){
+
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -109,6 +152,13 @@ export class AppComponent {
     this.username = '';
     this.fullname = '';
     this.userid = '';
+    // this.storedata = [];
+    // this.storedata2 = [];
+    this.productdata = [];
+    this.sellergeodata = [];
+    this.productdatafavorite = [];
+    this.usermessage = [];
+    this.usermessagepanel = [];
     this.router.navigate(['/home']);
     this.ShowToast('Logging Out Good Bye!');
   }
@@ -141,14 +191,16 @@ export class AppComponent {
                 totalStars: self.kanoevaluation.total_stars
               });            
               self.loadfavorite();
+              if (typeof(data.val().requirements) != 'undefined'){ 
+                self.requirementsdata = data.val().requirements; 
+              }
             } else {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            if (typeof(data.val().requirements) != 'undefined'){ 
-              self.requirementsdata = data.val().requirements; 
-            }            
-            
+            self.kanoalgo(self.userid);
+            self.getmessages();
+            self.load_messages();
             callback(true);
           } else {
             callback(false);
@@ -177,18 +229,83 @@ export class AppComponent {
     });
     await this.alert.present();
   }
+  async markeralerts(title,header,buttons) { 
+    this.alert = await this.alertCtrl.create({
+      header: title,
+      subHeader: header,
+      buttons: buttons
+    });
+    await this.alert.present();
+    // {
+    //   text: 'Cancel',
+    //   role: 'cancel',
+    //   cssClass: 'secondary',
+    //   handler: (blah) => {
+    //     console.log('Confirm Cancel: blah');
+    //   }
+    // }
+  }
   async ShowToast(message,timeout = 2000) {
     const toast = await this.toastController.create({
       message: message,
-      duration: timeout
+      duration: timeout,
+      position: 'bottom'
     });
     toast.present();
   }
   async menuRouting(link){
     this.router.navigate([link]);
   }
+  async getuserlogbyname(username,callback){
+    // console.clear();
+    var self = this;
+    var result = false; 
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.usertype) != 'undefined'){ 
+        if(element.username == username){
+          result = true;
+        }
+      }
+    });
+    callback(await result)
+  }
+  mapdata(item){
+    var self = this;
+    self.sellergeodata = [];
+    self.sellergeodata.push(item);
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.geodata) != 'undefined'){ 
+        // console.log(element.geodata.status);
+        if(element.usertype == 'seller' && element.geodata.status == 1 && element.key != self.userid){ 
+          let item = element.geodata;
+          item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
+          item.key = element.key; 
+          item.sellers = 1; 
+          item.title = "Store :" + element.storename;
+          // console.log(item);
+          self.sellergeodata.push(item);
+        }
+      }
+    });
+  }
+  async getstorebyid(key,callback){
+    var self = this;
+    var storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+          if(element.key == key ){
+            let item = element.userdetails; 
+            item.key = element.key; 
+            item.utype = element.usertype; 
+            storedata2.push(item);
+          }
+      // if(index == arr.length - 1){ 
+      //   callback(storedata2);
+      // }
+    });
+    callback(storedata2);
+  }
   getstorebyname(productname,callback){
-    console.clear();
+    // console.clear();
     var self = this;
     self.storedata2 = [];
     this.storedata.forEach(function(element,index,arr){
@@ -229,9 +346,9 @@ export class AppComponent {
         });
       }
     });
-  }
+  }    
   getproductsbyfilter(filers,productname){
-    console.clear();
+    // console.clear();
     var self = this;
     self.productdata = [];
     // console.log('filtered')
@@ -250,10 +367,26 @@ export class AppComponent {
       }
     });
   }
+  getmessages(){
+    let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
+    newInfo.on('child_changed',childSnapshot => {  
+      if(this.messagechange == null){
+        // console.log("load new data");
+      }
+      var total_change = childSnapshot.numChildren(); 
+      var coun_data = 1;
+      childSnapshot.forEach(data => { 
+        if(total_change <= coun_data ){
+          this.usermessage[0].messages.push(data.val());
+          this.messagechange = true;
+        }
+        coun_data++;
+      }); 
+    });
+  }
   getproducts(key){
     let newInfo = firebase.database().ref('maindata/'+key).child('product').orderByKey();
     newInfo.on('value',childSnapshot => { 
-      // console.log(childSnapshot);
       this.productdata = [];
       this.productdata = snapshotToArrayproduct(childSnapshot);
     });
@@ -271,6 +404,7 @@ export class AppComponent {
                 if(element2.key == key){
                   let item = element2.val();
                   item.key = element2.key;  
+                  item.ukey = childs.key;  
                   this.productdata.push(item);
                 }
               });
@@ -279,6 +413,23 @@ export class AppComponent {
          }        
       });
     });
+  }
+  async getproductsbyid2(key,callback){ 
+    var self = this;
+    var productdata = []; 
+    this.storedata.forEach(element => {
+      if(typeof(element.product) != 'undefined'){
+        Object.entries(element.product).forEach(function(element2,index,arr){
+          if(element2[0] == key){ 
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0];  
+            item['ukey'] = element.key;  
+            productdata.push(item);
+          }
+        });
+      }
+    });
+    callback(productdata);
   }
   getproductsall(){ 
     this.productdata = [];
@@ -336,26 +487,33 @@ export class AppComponent {
   loadfavorite(){
     var self = this;
     this.productdatafavorite = [];
-    this.favoritecount = 0;
-    // console.log('this.storedata',this.storedata);
+    this.favoritecount = 0; 
     this.storedata.forEach(function(element ,index1,arr1) {     
-      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){
-        // console.log("element",element);
-        Object.entries(element.favorites).forEach(function(element2,index,arr){  
-          // console.log('element20',element2[0]);  
-          // console.log('element21',element2[1]); 
-          // console.log('arr',arr); 
+      if(typeof(element.favorites) != 'undefined' && element.key == self.userid){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
           self.favoritecount++;
-          let d = {key : element2[0], pID : element2[1]['key']};
-          // d.key = element2[0];
-          // console.log('d',d);
+          let d = {key : element2[0], pID : element2[1]['key']}; 
           self.productdatafavorite.push(d);
         });
       }
     });
   }
-  load_user_requirements(){
-    console.clear();
+  async loadfavorite2(keys,cb){
+    var self = this;
+    var productdatafavorite = [];
+    var favoritecount = 0; 
+    await this.storedata.forEach(function(element ,index1,arr1) {     
+      if(typeof(element.favorites) != 'undefined' && element.key == keys){ 
+        Object.entries(element.favorites).forEach(function(element2,index,arr){   
+          favoritecount++;
+          let d = {key : element2[0], pID : element2[1]['key']}; 
+          productdatafavorite.push(d);
+        });
+      }
+    });
+    cb(favoritecount);
+  }
+  load_user_requirements(){ 
     var self = this;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
@@ -365,6 +523,121 @@ export class AppComponent {
       }
     });
   }
+  load_messages(){// key sa client kong kinsa ang nka contact
+    var self = this;
+    self.usermessage = [];
+    this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => {            
+            if(element2[0] == 'admin'){
+                let msges = [];              
+                let item = {
+                  key: 'admin',
+                  messages: []
+                };
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+            } else {
+              self.getstorebyid(element2[0],function(rdata){ 
+                // console.log(rdata);
+                let msges = [];              
+                let item = rdata[0];
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+              })
+            }
+          }); 
+        }
+      }
+      // console.log(self.usermessage);
+    }); 
+  }
+  async load_messages2(callback){ 
+    var self = this;
+    self.usermessage = [];
+    await this.storedata.forEach(element => {
+      if(element.key == self.userid){
+        if(typeof(element.messages) != 'undefined'){  
+          Object.entries(element.messages).forEach(element2 => { 
+
+            if(element2[0] == 'admin'){
+              let msges = [];              
+              let item = {
+                key: 'admin',
+                messages: []
+              };
+              Object.entries(element2[1]).forEach(msg=>{ 
+                let mgss = msg[1];
+                mgss.key = msg[0];
+                msges.push(mgss);
+              });
+              item.messages = msges;
+              item.key = element2[0]; 
+              self.usermessage.push(item);
+            } else {
+              self.getstorebyid(element2[0],function(rdata){ 
+                // console.log(rdata);
+                let msges = [];              
+                let item = rdata[0];
+                Object.entries(element2[1]).forEach(msg=>{ 
+                  let mgss = msg[1];
+                  mgss.key = msg[0];
+                  msges.push(mgss);
+                });
+                item.messages = msges;
+                item.key = element2[0]; 
+                self.usermessage.push(item);
+              })            
+            }
+          }); 
+        }
+      }
+    });     
+    callback(true);
+  }
+  async usersendmsg(key,message,callbacks){ 
+    let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
+    await newproduct.set({
+      'send': message,
+      'reply': ''
+    });
+    if(key == 'admin'){
+      let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
+      await newproduct2.set({
+        'send': '',
+        'reply': message
+      });          
+      this.load_messages();
+    }else{
+      let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+      await newproduct2.set({
+        'send': '',
+        'reply': message
+      });       
+    }
+
+    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
+      // console.log("send");
+    }else{
+      // console.log("reload message");
+      this.getmessages();
+      this.load_messages();
+    }
+    callbacks("done"); 
+  } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
@@ -408,21 +681,33 @@ export class AppComponent {
   }
   kanoalgoset(feedsseller){
     var self = this;
+    var users = 0;
     var total_rate = 0;
-    var total_final = 0;  
+    var total_rate2 = 0;
+    var total_final = 0; 
+    var total_final2 = 0;  
     var total_stars = 0;
+    
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
-    var total_poor = 0;
-    var users = 0;
+    var total_poor = 0; 
+    
+    var total_excellent2 = 0;
+    var total_average2 = 0;
+    var total_good2 = 0;
+    var total_bad2 = 0;
+    var total_poor2 = 0; 
     
     var total_excellentp = 0;
     var total_averagep = 0;
     var total_goodp = 0;
     var total_badp = 0;
     var total_poorp = 0; 
+
+    var si = 0;
+    var di = 0;
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -431,40 +716,21 @@ export class AppComponent {
   // 5.	It is poor = p 
  
       if(typeof(feedsseller) != 'undefined'){
-        Object.values(feedsseller).forEach(function(element2,index,arr){  
-            // console.log('Q1P1',element2['Q1P1']);
-            // console.log('Q1P2',element2['Q1P2']);
-            // console.log('Q2P1',element2['Q2P1']);
-            // console.log('Q2P2',element2['Q2P2']);
-            // console.log('Q3P1',element2['Q3P1']);
-            // console.log('Q3P2',element2['Q3P2']); 
-            total_rate = 0;
+        Object.values(feedsseller).forEach(function(element2,index,arr){   
+
             users++;
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
+            total_rate = 0;
+            total_rate2 = 0;
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q1P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q1P2']);
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q2P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q2P2']);
+            total_rate  = total_rate  + self.kanu_evalletters(element2['Q3P1']);
+            total_rate2 = total_rate2 + self.kanu_evalletters(element2['Q3P2']);
            
-            total_rate = total_rate / 5;
-            total_final = total_final + total_rate;
-            // console.log('total_rate',total_rate);
-            // Object.keys(element2).forEach(elementkey => {
-            //   // console.log('element2' ,element2[elementkey]);
-            //   if (self.kanu_evalletters(element2[elementkey]) == 5 ){
-            //     total_excellent++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 4 ){
-            //     total_average++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 3 ){
-            //     total_good++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 2 ){
-            //     total_bad++;
-            //   } else if(self.kanu_evalletters(element2[elementkey]) == 1 ){
-            //     total_poor++;
-            //   }
-            // });
-            switch(total_rate){
+            total_rate = (total_rate / 3);
+            total_rate2 = (total_rate2 / 3); 
+            switch(Math.round(total_rate)){
               case 5:
                 total_excellent++;
                 break;
@@ -481,16 +747,77 @@ export class AppComponent {
                 total_poor++;
                 break;
             }
-            
-            if(index == arr.length - 1){ 
-              total_stars = (total_final / arr.length);//((total_final / arr.length) | 0);
+            switch(Math.round(total_rate2)){
+              case 5:
+                total_excellent2++;
+                break;
+              case 4:
+                total_average2++;
+                break;
+              case 3:
+                total_good2++;
+                break;
+              case 2:
+                total_bad2++;
+                break;
+              case 1:
+                total_poor2++;
+                break;
+            }
 
-              total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
-              total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);
-              total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0);
-              total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0);
-              total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0);
-              
+            total_final = total_final + total_rate;
+            total_final2 = total_final2 + total_rate2;
+
+            if(index == arr.length - 1){ 
+ 
+            // console.log('total_final',(total_final / users));
+            // console.log('total_final2',(total_final2 / users));
+            // console.log('total_final r',Math.round((total_final / users)));
+            // console.log('total_final2 r',Math.round((total_final2 / users)));
+
+            total_final = Math.round((total_final / users));
+            total_final2 = Math.round((total_final2 / users));
+            // console.log("========================================="); 
+
+            // console.log('total_excellent',total_excellent,Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
+            // console.log('total_average',total_average,Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
+            // console.log('total_good',total_good,Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
+            // console.log('total_bad',total_bad, Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
+            // console.log('total_poor',total_poor,Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+
+            total_excellentp = Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+            total_averagep   = Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+            total_goodp      = Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+            total_badp       = Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+            total_poorp      = Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+    
+            // console.log("=========================================");
+
+        //   total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+        //   total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+        //   total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+        //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+        //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+            
+            // total_stars = total_final; 
+
+            
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
+
+            si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
+            di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
+            // console.log('si di',si.toFixed(2),di.toFixed(2));
+
+            
+            total_stars = (si * 100) / 20; 
+
             }
         });
     }
@@ -506,26 +833,40 @@ export class AppComponent {
       'total_averagep': total_averagep,
       'total_goodp': total_goodp,
       'total_badp': total_badp,
-      'total_poorp': total_poorp
+      'total_poorp': total_poorp,
+      'si': si,
+      'di': di
     }
   }
   kanoalgo(key){
     var self = this;
     var users = 0;
     var total_rate = 0;
-    var total_final = 0;  
+    var total_rate2 = 0;
+    var total_final = 0; 
+    var total_final2 = 0;  
     var total_stars = 0;
+    
     var total_excellent = 0;
     var total_average = 0;
     var total_good = 0;
     var total_bad = 0;
     var total_poor = 0; 
     
+    var total_excellent2 = 0;
+    var total_average2 = 0;
+    var total_good2 = 0;
+    var total_bad2 = 0;
+    var total_poor2 = 0; 
+    
     var total_excellentp = 0;
     var total_averagep = 0;
     var total_goodp = 0;
     var total_badp = 0;
     var total_poorp = 0; 
+
+    var si = 0;
+    var di = 0;
   // -LXAsHXXhdBTaTXxh3Xp
   // 1.	It is excellent = e
   // 2.	It is good = g
@@ -535,35 +876,30 @@ export class AppComponent {
   this.storedata.forEach(function(element ,index1,arr1) {   
       // console.log(element);
       if(typeof(element.feedsseller) != 'undefined' && element.key == key){
-        Object.values(element.feedsseller).forEach(function(element2,index,arr){  
-            // console.log('Q1P1',element2['Q1P1']);
-            // console.log('Q1P2',element2['Q1P2']);
-            // console.log('Q2P1',element2['Q2P1']);
-            // console.log('Q2P2',element2['Q2P2']);
-            // console.log('Q3P1',element2['Q3P1']);
-            // console.log('Q3P2',element2['Q3P2']); 
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){   
             users++;
             total_rate = 0;
-            
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P1']);
-            // console.log('Q1P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q1P2']);
-            // console.log('Q1P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P1']);
-            // console.log('Q2P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q2P2']);
-            // console.log('Q2P2',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P1']);
-            // console.log('Q3P1',total_rate);
-            total_rate = total_rate + self.kanu_evalletters(element2['Q3P2']);
-            // console.log('Q3P2',total_rate);
-           
-            total_rate = total_rate / 6;
-            total_final = total_final + total_rate;
-            // console.log('total_rate',total_rate);
-            // console.log('total_final',total_final);
 
-            switch(total_rate | 0){
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q1P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q1P2']);
+
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q2P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q2P2']);
+            
+            total_rate  = total_rate   +  self.kanu_evalletters(element2['Q3P1']);
+            total_rate2 = total_rate2  +  self.kanu_evalletters(element2['Q3P2']);
+          
+
+            total_rate  = (total_rate  / 3);
+            total_rate2 = (total_rate2 / 3);
+ 
+            // console.log('total_rate'   ,total_rate);
+            // console.log('total_rate2'  ,total_rate2);
+            // console.log('total_rate r' ,Math.round(total_rate));
+            // console.log('total_rate2 r',Math.round(total_rate2));
+            // console.log("=========================================");
+
+            switch(Math.round(total_rate)){
               case 5:
                 total_excellent++;
                 break;
@@ -580,33 +916,78 @@ export class AppComponent {
                 total_poor++;
                 break;
             }
+            switch(Math.round(total_rate2)){
+              case 5:
+                total_excellent2++;
+                break;
+              case 4:
+                total_average2++;
+                break;
+              case 3:
+                total_good2++;
+                break;
+              case 2:
+                total_bad2++;
+                break;
+              case 1:
+                total_poor2++;
+                break;
+            }
 
-            // console.log('index',index);
-            // console.log('arr.length',arr.length);
+            total_final = total_final + total_rate;
+            total_final2 = total_final2 + total_rate2;
+
             if(index == arr.length - 1){ 
-              total_stars = ((total_final / users) | 0);
+ 
+            // console.log('total_final',(total_final / users));
+            // console.log('total_final2',(total_final2 / users));
+            // console.log('total_final r',Math.round((total_final / users)));
+            // console.log('total_final2 r',Math.round((total_final2 / users)));
 
-              // console.log('users',users);  
-              // console.log('total_excellent',total_excellent,(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
-              // console.log('total_average',total_average,(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
-              // console.log('total_good',total_good,(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
-              // console.log('total_bad',total_bad, (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
-              // console.log('total_poor',total_poor, (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+            total_final = Math.round((total_final / users));
+            total_final2 = Math.round((total_final2 / users));
+            // console.log("========================================="); 
 
-              total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0);
-              total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0);
-              total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0);
-              total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0);
-              total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0);
-              
+            // console.log('total_excellent',total_excellent,Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0));  
+            // console.log('total_average',total_average,Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0));  
+            // console.log('total_good',total_good,Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0));  
+            // console.log('total_bad',total_bad, Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0));  
+            // console.log('total_poor',total_poor,Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0));  
+
+            total_excellentp = Math.round(isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+            total_averagep   = Math.round(isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+            total_goodp      = Math.round(isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+            total_badp       = Math.round(isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+            total_poorp      = Math.round(isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+    
+            // console.log("=========================================");
+
+        //   total_excellentp = (isFinite((100 / total_excellent) * users)?((100 / users) * total_excellent):0); // p
+        //   total_averagep = (isFinite((100 / users) * total_average)?((100 / users) * total_average):0); // m
+        //   total_goodp = (isFinite((100 / users) * total_good)?((100 / users) * total_good):0); // a
+        //   total_badp = (isFinite((100 / users) * total_bad)?((100 / users) * total_bad):0); // o
+        //   total_poorp = (isFinite((100 / users) * total_poor )?((100 / users) * total_poor):0); //  i
+            
+            // total_stars = total_final; 
+
+            
+            // console.log("total_excellentp",total_excellentp);
+            // console.log('total_averagep',total_averagep);
+            // console.log('total_goodp',total_goodp);
+            // console.log("total_badp",total_badp);
+            // console.log("total_poorp",total_poorp);
+            // console.log("total_final",total_final);
+            // console.log("total_final2",total_final2);
+            // console.log("total_stars",total_stars);
+
+            si = (total_good + total_bad) / (total_good + total_bad + total_average + total_poor);
+            di = (total_bad2 + total_average2) / (total_goodp + total_bad2 + total_average2 + total_poor2);
+            // console.log('si di',si.toFixed(2),di.toFixed(2));
+            
+            total_stars = (si * 100) / 20; 
             }
         });
-      }
-      // if(index1 == arr1.length - 1){                      
-      //   self.updatedataset(key,{
-      //     totalStars: total_stars
-      //   })
-      // }
+      } 
     });
     return {
       'total_users':users,
@@ -620,7 +1001,9 @@ export class AppComponent {
       'total_averagep': total_averagep,
       'total_goodp': total_goodp,
       'total_badp': total_badp,
-      'total_poorp': total_poorp
+      'total_poorp': total_poorp,
+      'si': si,
+      'di': di
     }
   }
   kanu_evalletters(val){
@@ -641,8 +1024,8 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       Environment.setEnv({ 
-        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc',
-        'API_KEY_FOR_BROWSER_DEBUG': 'AIzaSyDShqVJ5Zee58OPrsgqYTRz3vBCaHzQtXc'
+        'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI',
+        'API_KEY_FOR_BROWSER_DEBUG': ''
       });
       this.statusBar.styleDefault();
       this.splashScreen.hide();
@@ -654,9 +1037,7 @@ export const snapshotToArray = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
       let item = childSnapshot.val();
-      item.key = childSnapshot.key;
-      // console.log("data " , item);
-      // console.log("data 2 " , childSnapshot.val());
+      item.key = childSnapshot.key; 
       returnArr.push(item);
   });
   return returnArr;
@@ -678,6 +1059,16 @@ export const snapshotToArrayproductnested = snapshot => {
       // console.log("data " , childSnapshot);
       // console.log("data 1" , item);
       // console.log("data 2 " , childSnapshot.key);
+      // item.key = childSnapshot.key;
+      returnArr.push(item);
+  });
+  return returnArr;
+};
+export const snapshotToArraymessages = snapshot => {
+  let returnArr = [];
+  snapshot.forEach(childSnapshot => {
+    // console.log(childSnapshot);
+      let item = childSnapshot.val();  
       // item.key = childSnapshot.key;
       returnArr.push(item);
   });

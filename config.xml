@@ -94,10 +94,11 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-googlemaps" spec="https://github.com/mapsplugin/cordova-plugin-googlemaps#multiple_maps">
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyCVWrE1ZJgH8cK2BznEaY-AMZ9nNVaNy60" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA83FAk" />
     </plugin>
     <plugin name="cordova-plugin-firebase-messaging" spec="1.2.1" />
-    <plugin name="cordova-plugin-firebase" spec="2.0.5" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
+    <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
     <engine name="browser" spec="5.0.4" />
+    <engine name="android" spec="7.1.4" />
 </widget>

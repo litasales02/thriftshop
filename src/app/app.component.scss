@@ -1,3 +1,9 @@
+body {
+    background: url('../assets/back.jpg');
+    background-repeat: no-repeat;
+    background-size:cover;
+    --background: #fff url('../assets/back.jpg') no-repeat center center / cover;
+}
 .drawertitle{
     // height: 300px;
     padding: 10px;

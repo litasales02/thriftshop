@@ -29,51 +29,60 @@ export class RegisterSellersPage implements OnInit {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
   ngOnInit() {}
   submitdata(){
-    if (typeof(this.sellerstorename) != 'undefined' && 
-    typeof(this.selleraddress1) != 'undefined' && 
-    typeof(this.selleraddress2) != 'undefined' && 
-    typeof(this.sellerfirstname) != 'undefined'  && 
-    typeof(this.sellerlastname) != 'undefined'  && 
-    typeof(this.sellermiddlename) != 'undefined' && 
-    typeof(this.sellerusername) != 'undefined' && 
-    typeof(this.sellerpassword) != 'undefined' ){
-      if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) != 'undefined' && this.sellerrepassword == this.sellerpassword){
-        this.util.newdata({
-          'userdetails': { 
-            'address1': this.selleraddress1!=""?this.selleraddress1:'none', 
-            'address2': this.selleraddress2!=""?this.selleraddress2:'none', 
-            'firstname': this.sellerfirstname!=""?this.sellerfirstname:'none', 
-            'lastname': this.sellerlastname!=""?this.sellerlastname:'none', 
-            'middlename': this.sellermiddlename!=""?this.sellermiddlename:'none',
-            'cellnumber': this.cellnumber!=""?this.cellnumber:'none',
-            'telnumber': typeof(this.telnumber) != 'undefined'?this.telnumber:'none',
-            'email': typeof(this.emails) != 'undefined'?this.emails:'none',
-            "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
-          },
-          'usertype': 'seller',
-          'username': this.sellerusername!=""?this.sellerusername:'none', 
-          'password': this.sellerpassword!=""?this.sellerpassword:'none',
-          'storename': this.sellerstorename!=""?this.sellerstorename:'none',
-          'requirements' : { 
-            'status': 0,
-            'govid': 'None',
-            'storeimg':'None'
-          },
-          'geodata': {
-            'status': 1,
-            'lat': '0.0',
-            'lng': '0.0'
+    var x = 0;  
+    var self = this;
+    this.util.getuserlogbyname(this.sellerusername,function(result){
+      if(result){        
+        self.util.alerts("Sorry","Username is already used",['Ok']); 
+      } else {
+         if (typeof(self.sellerstorename) != 'undefined' && 
+            typeof(self.selleraddress1) != 'undefined' && 
+            typeof(self.selleraddress2) != 'undefined' && 
+            typeof(self.sellerfirstname) != 'undefined'  && 
+            typeof(self.sellerlastname) != 'undefined'  && 
+            typeof(self.sellermiddlename) != 'undefined' && 
+            typeof(self.sellerusername) != 'undefined' && 
+            typeof(self.sellerpassword) != 'undefined' ){
+          if (typeof(self.sellerpassword) != 'undefined' && typeof(self.sellerrepassword) != 'undefined' && self.sellerrepassword == self.sellerpassword){
+            self.util.newdata({
+              'userdetails': { 
+                'address1': self.selleraddress1!=""?self.selleraddress1:'none', 
+                'address2': self.selleraddress2!=""?self.selleraddress2:'none', 
+                'firstname': self.sellerfirstname!=""?self.sellerfirstname:'none', 
+                'lastname': self.sellerlastname!=""?self.sellerlastname:'none', 
+                'middlename': self.sellermiddlename!=""?self.sellermiddlename:'none',
+                'cellnumber': self.cellnumber!=""?self.cellnumber:'none',
+                'telnumber': typeof(self.telnumber) != 'undefined'?self.telnumber:'none',
+                'email': typeof(self.emails) != 'undefined'?self.emails:'none',
+                "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
+              },
+              'usertype': 'seller',
+              'username': self.sellerusername!=""?self.sellerusername:'none', 
+              'password': self.sellerpassword!=""?self.sellerpassword:'none',
+              'storename': self.sellerstorename!=""?self.sellerstorename:'none',
+              'requirements' : { 
+                'status': 0,
+                'govid': 'None',
+                'storeimg':'None'
+              },
+              'geodata': {
+                'status': 1,
+                'lat': '0.0',
+                'lng': '0.0'
+              }
+            });
+            self.navigate();
+          } else if (typeof(self.sellerpassword) != 'undefined' && typeof(self.sellerrepassword) && (self.sellerrepassword.length < 6 || self.sellerpassword.length < 6 )) {
+            self.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
+          }else {
+            self.util.alerts("Add New","User password did not equal",['Ok']);
           }
-        });
-        this.navigate();
-      } else if (typeof(this.sellerpassword) != 'undefined' && typeof(this.sellerrepassword) && (this.sellerrepassword.length < 6 || this.sellerpassword.length < 6 )) {
-        this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
-      }else {
-        this.util.alerts("Add New","User password did not equal",['Ok']);
+        } else {
+        }
       }
-    } else {    
-      this.util.alerts("Add New","Please fill all text required",['Ok']);
-    }
+    });
+    
+   
   }
   navigate() {
     this.router.navigate(['/home']);

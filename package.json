@@ -12,6 +12,7 @@
     "e2e": "ng e2e",
     "ionics": "ionic serve  -p 8000",
     "cordovas": "ionic cordova run browser -p 8000",
+    "cordovasl": "ionic cordova run browser -p 8000 -l",
     "cordovasandroid": "ionic cordova run android"
   },
   "private": true,
@@ -24,7 +25,8 @@
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
     "@ionic-native/core": "^5.0.0-beta.22",
-    "@ionic-native/firebase": "^5.0.0-beta.23",
+    "@ionic-native/firebase": "^5.2.0",
+    "@ionic-native/firebase-messaging": "^5.2.0",
     "@ionic-native/geolocation": "^5.1.0",
     "@ionic-native/google-maps": "^5.0.0-beta.25",
     "@ionic-native/splash-screen": "5.0.0-beta.21",
@@ -34,16 +36,19 @@
     "angular-progress-bar": "^1.0.9",
     "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
+    "cordova-plugin-advanced-http": "2.0.4",
     "cordova-plugin-device": "^2.0.2",
-    "cordova-plugin-firebase": "2.0.5",
-    "cordova-plugin-firebase-messaging": "1.2.1",
-    "cordova-plugin-geolocation": "4.0.1",
+    "cordova-plugin-firebase": "^2.0.5",
+    "cordova-plugin-firebase-messaging": "^1.2.1",
+    "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps",
     "cordova-plugin-ionic-keyboard": "^2.1.3",
-    "cordova-plugin-ionic-webview": "^2.3.1",
+    "cordova-plugin-ionic-webview": "^2.4.0",
     "cordova-plugin-splashscreen": "^5.0.2",
     "cordova-plugin-statusbar": "^2.4.2",
     "cordova-plugin-whitelist": "^1.3.3",
+    "cordova-support-android-plugin": "^1.0.1",
+    "cordova-support-google-services": "^1.2.1",
     "core-js": "^2.6.1",
     "firebase": "^5.7.3",
     "rxjs": "~6.3.3",
@@ -83,8 +88,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64",
-        "API_KEY_FOR_IOS": "AIzaSyCVWrE1ZJgH8cK2BznEaY-AMZ9nNVaNy60"
+        "API_KEY_FOR_ANDROID": "AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI",
+        "API_KEY_FOR_IOS": "AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA83FAk"
       },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
@@ -97,7 +102,8 @@
       "cordova-plugin-geolocation": {}
     },
     "platforms": [
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }

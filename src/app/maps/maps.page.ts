@@ -1,22 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AppComponent } from '../app.component'
-import {
-  ToastController,
-  Platform,
-  LoadingController
-} from '@ionic/angular';
+import { AppComponent } from '../app.component' 
 import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
   Marker,
   GoogleMapsAnimation,
-  MyLocation
+  MyLocation,
+  LatLngBounds,
+  GeocoderRequest,
+  VisibleRegion,
+  LatLng, 
 } from '@ionic-native/google-maps';
 
- 
+ declare var google;
 @Component({
   selector: 'app-list',
   templateUrl: 'maps.page.html',
@@ -28,9 +27,97 @@ export class MapsPage implements OnInit {
   lat = 7.148419523108726;
   lng = 125.52915832519531;
   markerdata = []
-  markermyposition = null;
-  loadMap() {
+  markermyposition:any;
+  tracking = false;
+  trackingdata = {};
+  trackinglat = 7.148419523108726;
+  trackinglng = 125.52915832519531;
+  directionsService = new google.maps.DirectionsService;
+  directionsDisplay = new google.maps.DirectionsRenderer;
+  searchtxt: "";
+  constructor(
+    public router: Router, 
+    public alertCtrl: AlertController,
+    private util: AppComponent) {  
+    if(!this.util.geoaccurate){
+      this.util.ShowToast("Your Phone Location is not Accurate.\nyou notice your location is not same.");
+    }
+    this.lat = this.util.usergeolocationlat;
+    this.lng = this.util.usergeolocationlng;  
+    this.directionsDisplay.setMap(this.map);   
+  }
+  reset(){
+    
     var self = this;
+    self.trackingdata = {
+      key: '',
+      title: '',
+      position: {
+        lat: 0.0,
+        lng: 0.0
+      },
+    }
+    try {
+      this.map.clear();
+    }catch(er){
+
+    }
+    this.markermyposition = this.map.addMarkerClusterSync({
+      title: 'Your Here!',
+      markers: self.util.sellergeodata,
+      animation: 'DROP',
+      boundsDraw: true,
+      icons: [
+          {min: 2000, max: 100000, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
+      ]
+    }); 
+    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
+      if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
+        self.util.markeralerts(data[1].get("title"),'Do you want to track to your location?',[
+          {
+            text:  "Yes", 
+            cssClass: 'Do you want to track to your location?',
+            handler: (blah) => { 
+              // console.log(data[1].get('key'));
+              self.tracking = true;
+              self.trackingdata = {
+                key: data[1].get('key'),
+                title: data[1].get('title'),
+                position: data[1].get('position'),
+              };
+              self.trackinglat = data[0].lat;
+              self.trackinglng = data[0].lng;
+              var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
+              console.log(geodata);
+              this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
+              // self.trackings([0,0] ,[0,0]);
+            }
+          }, {
+            text: 'Cancel'
+          }
+
+        ])       
+      }
+
+    });
+  }
+  loadMap() { 
+    var davao_bound = {
+      north: 7.5858,
+      south: 6.9810,
+      west: 125.2579,
+      east: 125.7056,
+    };
+    if((this.util.usergeolocationlat == 0 && this.util.usergeolocationlng == 0) ||      
+      ((this.util.usergeolocationlat < 7.5858 || this.util.usergeolocationlat > 6.9782) &&   
+      (this.util.usergeolocationlng < 125.25792 || this.util.usergeolocationlng > 125.7056))){
+      this.lat =  7.148419523108726;
+      this.lng =  125.52915832519531;
+      console.log("data.coords",1);
+    }else{
+      console.log("data.coords",2);
+    }
+    var self = this; 
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
@@ -39,63 +126,72 @@ export class MapsPage implements OnInit {
         },
         zoom: 12,
         tilt: 30
-      }
-    });
-    
-    this.map.on(GoogleMapsEvent.MAP_CLICK).subscribe(
-        (data) => {
-          console.log("Click MAP",data);
-          console.log("Click MAP",data[0].lat);
-          self.lat = data[0].lat;
-          self.lng = data[0].lng;
-          this.map.clear();
-          self.markermyposition = this.map.addMarkerSync({
-            title: 'Your Here!',
-            icon: 'red',
-            animation: 'DROP',
-            position: {
-              lat: self.lat,
-              lng: self.lng
-            }
-          }); 
-        }
-    );
-    this.markermyposition = this.map.addMarkerSync({
+      },
+        maxZoom: 12,
+    }); 
+    this.util.mapdata({
       title: 'Your Here!',
-      icon: 'blue',
-      animation: 'DROP',
+      icon: 'red', 
       position: {
-        lat: this.lat,
-        lng: this.lng
+      lat: self.lat,
+      lng: self.lng
+      }
+    }); 
+    this.reset();
+  } 
+  trackings(start:any,end:any){ 
+    this.directionsService.route({
+      origin: start,
+      destination: end,
+      travelMode: 'DRIVING'
+    }, (response, status) => {
+      if (status === 'OK') {
+        this.directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
       }
     });
-    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe(() => {
-
+  }
+  trackingsplace(start,end){ 
+    this.directionsService.route({
+      origin: start,
+      destination: end,
+      travelMode: 'DRIVING'
+    }, (response, status) => {
+      console.log(response);
+      console.log(status);
+      if (status === 'OK') {        
+        this.map.clear();
+        this.directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
     });
-
   }
-  constructor(
-    public router: Router, 
-    public alertCtrl: AlertController,
-    private util: AppComponent) { 
-    this.lat = this.util.usergeolocationlat;
-    this.lng = this.util.usergeolocationlng;
-    var inter = setInterval(()=>{
-      console.log("this.lat",this.lat);
-      console.log("this.lng",this.lng);
-      // this.markermyposition.setPosition([this.lat,this.lng]);
-    },5000);
+  search(ev){
+    // console.log(ev.key);
+    if(ev.key == 'Enter' && ev.target.value != ''){
+      console.log(ev.target.value);
+    }
   }
-
-  async ngOnInit() {
-    // Since ngOnInit() is executed before `deviceready` event,
-    // you have to wait the event.
-    // await this.platform.ready();
+  mapsearch(search){
+    var self = this;
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address': search}, function(results, status) {
+      if (status === 'OK') {
+        this.map.setCenter(results[0].geometry.location);
+        self.markermyposition.clear();
+        self.markermyposition = new google.maps.Marker({
+          map: self.map,
+          position: results[0].geometry.location
+        });
+      } else {
+        alert('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+  async ngOnInit() { 
     await this.loadMap();
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
-  
+
 }

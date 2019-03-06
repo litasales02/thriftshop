@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, ActionSheetController, PopoverController } from '@ionic/angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { AppComponent } from '../app.component'; 
 
 @Component({
   selector: 'app-list',
@@ -6,34 +9,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['messages.page.scss']
 })
 export class MessagesPage implements OnInit {
-  private selectedItem: any;
-  private icons = [
-    'flask',
-    'wifi',
-    'beer',
-    'football',
-    'basketball',
-    'paper-plane',
-    'american-football',
-    'boat',
-    'bluetooth',
-    'build'
-  ];
-  public items: Array<{ title: string; note: string; icon: string }> = [];
-  constructor() {
-    for (let i = 1; i < 11; i++) {
-      this.items.push({
-        title: 'Item ' + i,
-        note: 'This is item #' + i,
-        icon: this.icons[Math.floor(Math.random() * this.icons.length)]
-      });
-    }
+  routerlingks = "";
+  constructor(
+    public activatedRoute: ActivatedRoute, 
+    public router: Router, 
+    public alertCtrl: AlertController,
+    private util: AppComponent,
+    public actionSheetController: ActionSheetController,
+    public popoverController: PopoverController) {
+
   }
 
   ngOnInit() {
+  }//routerLink="/message/panel/{{datas.key}}/messages"
+  routes(id){
+    console.log('click');
+    
+    this.util.selecteduserkey = id;
+    // this.util.selecteditem = element.key;
+    this.util.menuRouting("/message/panel/" + id + "/messages");
   }
-  // add back when alpha.4 is out
-  // navigate(item) {
-  //   this.router.navigate(['/list', JSON.stringify(item)]);
-  // }
 }

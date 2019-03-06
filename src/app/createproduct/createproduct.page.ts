@@ -14,6 +14,7 @@ export class CreateProductPage implements OnInit {
   price: "";
   producttype: ""; 
   qty:"";
+  description: "";
   productimage = '/assets/store.png';
   iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
@@ -28,7 +29,8 @@ export class CreateProductPage implements OnInit {
         typeof(this.price) != 'undefined' &&
         typeof(this.producttype) != 'undefined' &&
         typeof(this.unittype) != 'undefined' &&
-        typeof(this.qty) != 'undefined'){
+        typeof(this.qty) != 'undefined' &&
+        typeof(this.description) != 'undefined'){
       if (this.productname != "" && this.price != ""){
         this.util.updatenewproduct({
           'productname': this.productname,
@@ -36,7 +38,8 @@ export class CreateProductPage implements OnInit {
           'price': this.price,
           'qty': this.qty,
           'producttype': this.producttype,
-          'itemimg':this.iamgefile
+          'itemimg':this.iamgefile,
+          'description': this.description
         });
         this.util.alerts("New Product","Product Added",['Ok']);
         this.util.menuRouting('/home');

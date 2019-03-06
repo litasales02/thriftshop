@@ -14,7 +14,7 @@ export class ListProduct_FavoritePage implements OnInit {
   child: string = "";
   default_redirect: string = "home";
   data = null;
-  star = '/assets/unstar.png';
+  star = '/assets/unhart.png';
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -71,9 +71,9 @@ export class ListProduct_FavoritePage implements OnInit {
   favoritestar(key){ 
     var result = this.util.getfravorites(key);
     if(result){
-      return "/assets/star.png";
+      return "/assets/hart.png";
     }else{      
-      return "/assets/unstar.png";
+      return "/assets/unhart.png";
     } 
   }
   owneritem(key){

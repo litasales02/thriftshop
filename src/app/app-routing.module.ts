@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
   {
+    path: 'message/panel/:id/:child',
+    loadChildren: './message_panel/message_panel.module#Messages_panelPageModule'
+  },
+  {
     path: 'register',
     loadChildren: './registration_select/registration_select.module#Registration_SelectPageModule'
   },
@@ -68,8 +72,16 @@ const routes: Routes = [
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
   },
   {
+    path: 'products/details/:id/:child',
+    loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
+  },
+  {
     path: 'setstoremap',
     loadChildren: './setstoremap/setstoremap.module#SetStoreMapPageModule'
+  },
+  {
+    path: 'storemap/:id',
+    loadChildren: './storemap/storemap.module#StoreMapPageModule'
   }
 ];
 

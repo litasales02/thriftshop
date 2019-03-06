@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="{{parentroute}}"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>
+      Messages
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content  #content >
+    <ion-list class="mglist"  lines="none" *ngFor="let datas of util.usermessage">
+      <div *ngIf="id==datas.key" >
+        <div  *ngFor="let datas2 of datas.messages" > 
+          <div  *ngIf="datas2.send=='';then first else seconds "></div>
+          
+          <ng-template lines="none" #first> 
+            <ion-item lines="none">  
+              <ion-label slot="start" class="messagepopsend" style="white-space: normal;">
+                {{datas2.reply}} 
+              </ion-label>
+            </ion-item>
+          </ng-template>
+
+          <ng-template lines="none" #seconds> 
+            <ion-item lines="none"> 
+              <ion-label  class="messagepopreply" slot="end" style="text-align:right;white-space: normal;"> 
+                 {{datas2.send}} 
+              </ion-label> 
+            </ion-item>
+          </ng-template>
+
+        </div>
+      </div>
+    </ion-list>
+
+</ion-content>
+<ion-footer>
+    <ion-item class="mgtxtarea" >
+      <ion-textarea [(ngModel)]="messagess" aria-placeholder="Type Message here"></ion-textarea>
+      <ion-button class="button button-block button-positive button-large" slot="end" (click)="sendmsg()" style="width:50px" slot="end" >Send</ion-button> 
+    </ion-item>
+</ion-footer>

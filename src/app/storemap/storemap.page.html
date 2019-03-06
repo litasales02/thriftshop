@@ -1,15 +1,14 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
+      <ion-back-button defaultHref="accountsetting"></ion-back-button> 
     </ion-buttons>
     <ion-title>
-    Map
+    Store location
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-searchbar ([ngModel])="searchtxt"  placeholder="Search Store" (keyup.enter)="search($event)" show-cancel="true" ></ion-searchbar >
+<ion-content> 
   <div id="map_canvas"> </div> 
 </ion-content>
