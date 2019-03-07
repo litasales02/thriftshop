@@ -153,7 +153,7 @@ export class AppComponent {
     this.fullname = '';
     this.userid = '';
     // this.storedata = [];
-    // this.storedata2 = [];
+    this.storedata2 = [];
     this.productdata = [];
     this.sellergeodata = [];
     this.productdatafavorite = [];
@@ -437,23 +437,16 @@ export class AppComponent {
     this.storedata.forEach(element => {
 
       // var d = element.val();  
-      console.log(element);
-      console.log(element.rstatus);
-      console.log(element.usertype);
+      // console.log(element);
+      // console.log(element.rstatus);
+      // console.log(element.usertype);
       if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){
         
         Object.entries(element.product).forEach(function(element2,index,arr){
-
-          //if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
-            // console.log(element2[1]['productname']);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0]; 
-            // item.push(element2[1]);
-            console.log(item);
+            // console.log(item);
             self.productdata.push(item);
-          //}
-
-
         });
       }
 
@@ -1089,7 +1082,7 @@ export const snapshotToArray = snapshot => {
     } else {
       item.rtatus = 0;
     }
-    console.log(item);
+    // console.log(item);
     returnArr.push(item);
   });
   return returnArr;

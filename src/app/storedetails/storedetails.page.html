@@ -6,6 +6,9 @@
     <ion-title>
         Details
     </ion-title>
+    <ion-buttons slot="end" class="love" color="primary"  (click)="myfaorite($event,id)"  >
+        <img [src]="favoritestar(id)" height="50" width="50" /> 
+    </ion-buttons>  
   </ion-toolbar>
 </ion-header>
 
