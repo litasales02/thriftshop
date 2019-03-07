@@ -27,8 +27,8 @@
     </ion-label>
 </ion-item>
 
-  <ion-list *ngFor="let datas of util.productdata">
-    <ion-item routerLink="/products/details/{{datas.key}}/home" > 
+  <ion-list *ngFor="let datas of util.productdata"> 
+    <ion-item  routerLink="/products/details/{{datas.key}}/home" > 
       <ion-avatar slot="start">
         <img [src]="datas.itemimg" />
       </ion-avatar>

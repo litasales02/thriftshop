@@ -355,7 +355,7 @@ export class AppComponent {
     this.storedata.forEach(element => {
       if(typeof(element.product) != 'undefined'){
         Object.entries(element.product).forEach(function(element2,index,arr){
-          if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+          if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
             // console.log(element2[1]['productname']);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0]; 
@@ -432,24 +432,65 @@ export class AppComponent {
     callback(productdata);
   }
   getproductsall(){ 
+    var self = this;
     this.productdata = [];
-    let newInfo = firebase.database().ref('maindata').orderByKey();
-    newInfo.on('value',childSnapshot => {
-      childSnapshot.forEach(childs => {
-        var d = childs.val();  
-        if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && d.requirements.status == 1){        
-          childs.forEach(element => {  
-            if (element.key == "product") {
-              element.forEach(element2 => {
-                let item = element2.val();
-                item.key = element2.key; 
-                this.productdata.push(item);
-              });
-            }
-          });
-         }        
-      });
-    });
+    this.storedata.forEach(element => {
+
+      // var d = element.val();  
+      console.log(element);
+      console.log(element.rstatus);
+      console.log(element.usertype);
+      if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){
+        
+        Object.entries(element.product).forEach(function(element2,index,arr){
+
+          //if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+            // console.log(element2[1]['productname']);
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0]; 
+            // item.push(element2[1]);
+            console.log(item);
+            self.productdata.push(item);
+          //}
+
+
+        });
+      }
+
+
+      // element.forEach(childs => {
+      //   var d = childs.val();  
+      //   if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
+      //     childs.forEach(element => {  
+      //       if (element.key == "product") {
+      //         element.forEach(element2 => {
+      //           let item = element2.val();
+      //           item.key = element2.key;  
+      //           this.productdata.push(item);
+      //         });
+      //       }
+      //     });
+      //    }         
+      // });
+    })
+    // this.productdata = [];
+    // let newInfo = firebase.database().ref('maindata').orderByKey();
+    // newInfo.on('value',childSnapshot => {
+    //   childSnapshot.forEach(childs => {
+    //     var d = childs.val();  
+    //     if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
+    //       childs.forEach(element => {  
+    //         if (element.key == "product") {
+    //           element.forEach(element2 => {
+    //             let item = element2.val();
+    //             item.key = element2.key;  
+    //             this.productdata.push(item);
+    //           });
+    //         }
+    //       });
+    //      }        
+    //   });
+    // });
     // console.log(this.productdata);
   }
   getproductsallcant(){ 
@@ -1036,9 +1077,20 @@ export class AppComponent {
 export const snapshotToArray = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
-      let item = childSnapshot.val();
-      item.key = childSnapshot.key; 
-      returnArr.push(item);
+    var dataval = childSnapshot.val();
+    var itms = [];
+    if(typeof(dataval.requirements) != 'undefined'){
+      itms = Object.entries(dataval.requirements); 
+    }
+    let item = childSnapshot.val();
+    item.key = childSnapshot.key; 
+    if(dataval.usertype == 'seller'  && itms != null && dataval.requirements.status == 1 && dataval.requirements.govid != ""){ 
+      item.rstatus = 1;
+    } else {
+      item.rtatus = 0;
+    }
+    console.log(item);
+    returnArr.push(item);
   });
   return returnArr;
 };
