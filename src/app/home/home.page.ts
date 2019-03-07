@@ -26,23 +26,22 @@ export class HomePage {
     public actionSheetController: ActionSheetController,
     public popoverController: PopoverController) {
       try {
-        this.id = this.activatedRoute.snapshot.paramMap.get('id');
-        this.child = this.activatedRoute.snapshot.paramMap.get('child');
-        var child = "";
-        if (this.child == "storedetailshome"){
-          child = "list/storedetails/" + this.id + "/home";
-          this.list_redirect = "/products/details";
-          this.util.getproducts(this.id);
-        } else if (this.child == "myproduct"){
-          child = "list/storedetails/" + this.id + "/home";
-          this.list_redirect = "/products/details";
-          this.util.getproducts(this.id);
-        } else {
-          child = "home";
-          this.list_redirect = "/products/details";
-          this.util.getproductsall();
-        }
-        this.default_redirect = child;
+        // this.id = this.activatedRoute.snapshot.paramMap.get('id');
+        // this.child = this.activatedRoute.snapshot.paramMap.get('child');
+        // var child = "";
+        // if (this.child == "storedetailshome"){
+        //   child = "list/storedetails/" + this.id + "/home";
+        //   this.list_redirect = "/products/details";
+        //   this.util.getproducts(this.id);
+        // } else if (this.child == "myproduct"){
+        //   child = "list/storedetails/" + this.id + "/home";
+        //   this.list_redirect = "/products/details";
+        //   this.util.getproducts(this.id);
+        // } else {
+        //   child = "home";
+        //   this.list_redirect = "/products/details";
+        // }
+        this.default_redirect = 'home';
       }catch(er){
         this.default_redirect = "home"; 
       }
@@ -61,6 +60,7 @@ export class HomePage {
     }
   }
   ngOnInit() {
+    this.util.getproductsall();
   } 
   myfaorite(event,key){
     event.stopPropagation();
