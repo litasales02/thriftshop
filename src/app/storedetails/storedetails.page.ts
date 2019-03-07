@@ -64,20 +64,5 @@ export class StoreDetailsPage implements OnInit {
 
   }
 
-  myfaorite(event,key){
-    event.stopPropagation();
-    this.util.updatefavorateproduct(key);
-  }
-  favoriteselected(key){  
-    return this.util.getfravorites(key);
-  }
-  favoritestar(key){ 
-    var result = this.util.getfravorites(key);
-    if(result){
-      return "/assets/hart.png";
-    }else{      
-      return "/assets/unhart.png";
-    } 
-  }
  
 }

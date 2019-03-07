@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
@@ -22,7 +22,7 @@ firebase.initializeApp(configfirebase);
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   drawerTitle: string = "Hi Guest!";
   loginStatus: boolean = false;
   registrationstatus = 0;
@@ -78,12 +78,16 @@ export class AppComponent {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private geolocation: Geolocation,
-    private fm: FirebaseMessaging ) {
+    private fm: FirebaseMessaging,
+    public navCtrl: NavController) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
     });
+    // if(!this.loginStatus){
+      
+    // }
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
       // self.usergeolocationlat = resp.coords.latitude;
@@ -131,8 +135,16 @@ export class AppComponent {
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
   }
+  ngOnInit(){
+    this.logstatus();
+  }
   maplimitviewgeo(){
-
+  }
+  logstatus(){
+    console.log(this.router.url);
+    if(!this.loginStatus && this.router.url != '/login'){
+      this.menuRouting('login');
+    }
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
