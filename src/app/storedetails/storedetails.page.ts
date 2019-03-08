@@ -25,6 +25,7 @@ export class StoreDetailsPage implements OnInit {
   rate = 0.0;
   kanoevaluation = {total_stars:0};
   btndirectrate = '/login';
+  star = '/assets/unhart.png'; 
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -62,5 +63,6 @@ export class StoreDetailsPage implements OnInit {
   ngOnInit() {
 
   }
+
  
 }

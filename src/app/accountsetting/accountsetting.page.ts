@@ -23,10 +23,10 @@ export class AccountSettingPage implements OnInit {
     this.util.load_user_requirements();
       // console.log(this.util.requirementsdata);
       this.idtype = this.util.requirementsdata.idtype;
-      this.acountstatus = this.util.requirementsdata.status == 0?'In-Active':'Active';
-      this.validgorvermentidstatus = this.util.requirementsdata.govid == null?'None':'Validated'; 
+      this.acountstatus = this.util.requirementsdata.status==0&&this.util.requirementsdata.govid==''?'In-Active':'Active';
+      this.validgorvermentidstatus = this.util.requirementsdata.govid == ""?'None':'Validated'; 
       this.idtype = this.util.requirementsdata.idtype; 
-      this.storeimagestatus = this.util.requirementsdata.storeimg == null?'None':'Validated'; 
+      this.storeimagestatus = this.util.requirementsdata.storeimg == "null"?'None':'Validated'; 
       this.storemapstatus = this.util.geodata == 1?'Already Set':'No Set';
   }
   submit(){

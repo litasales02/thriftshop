@@ -16,7 +16,7 @@ export class LoginPage implements OnInit {
   seennot = "eye-off";
   typtexts = "password";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
-       
+    // this.util.logstatus();
   }
   async submitlogin(){
     var self = this; 

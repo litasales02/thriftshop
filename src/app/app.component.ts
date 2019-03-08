@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Platform } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
@@ -8,6 +8,8 @@ import { AlertController, ToastController, LoadingController   } from '@ionic/an
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+
+import { ol } from "ol-ext";
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -22,7 +24,7 @@ firebase.initializeApp(configfirebase);
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   drawerTitle: string = "Hi Guest!";
   loginStatus: boolean = false;
   registrationstatus = 0;
@@ -78,12 +80,16 @@ export class AppComponent {
     public toastController: ToastController,
     public loadingController: LoadingController,
     private geolocation: Geolocation,
-    private fm: FirebaseMessaging ) {
+    private fm: FirebaseMessaging,
+    public navCtrl: NavController) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
     });
+    // if(!this.loginStatus){
+      
+    // }
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
       // self.usergeolocationlat = resp.coords.latitude;
@@ -131,8 +137,22 @@ export class AppComponent {
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
   }
+  ngOnInit(){
+    this.logstatus();
+  }
   maplimitviewgeo(){
-
+  }
+  maprouting(){
+    // var graph = new ol.source.Vector({
+    //   url: '../data/ROUTE120.geojson',
+    //   format: new ol.format.GeoJSON()
+    // });
+  }
+  logstatus(){
+    // console.log(this.router.url);
+    // if(!this.loginStatus && this.router.url != '/login'){
+    //   this.menuRouting('login');
+    // }
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -153,7 +173,7 @@ export class AppComponent {
     this.fullname = '';
     this.userid = '';
     // this.storedata = [];
-    // this.storedata2 = [];
+    this.storedata2 = [];
     this.productdata = [];
     this.sellergeodata = [];
     this.productdatafavorite = [];
@@ -355,7 +375,7 @@ export class AppComponent {
     this.storedata.forEach(element => {
       if(typeof(element.product) != 'undefined'){
         Object.entries(element.product).forEach(function(element2,index,arr){
-          if(element2[1]['productname'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+          if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
             // console.log(element2[1]['productname']);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0]; 
@@ -432,24 +452,58 @@ export class AppComponent {
     callback(productdata);
   }
   getproductsall(){ 
+    var self = this;
     this.productdata = [];
-    let newInfo = firebase.database().ref('maindata').orderByKey();
-    newInfo.on('value',childSnapshot => {
-      childSnapshot.forEach(childs => {
-        var d = childs.val();  
-        if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && d.requirements.status == 1){        
-          childs.forEach(element => {  
-            if (element.key == "product") {
-              element.forEach(element2 => {
-                let item = element2.val();
-                item.key = element2.key; 
-                this.productdata.push(item);
-              });
-            }
-          });
-         }        
-      });
-    });
+    this.storedata.forEach(element => {
+
+      // var d = element.val();  
+      // console.log(element);
+      // console.log(element.rstatus);
+      // console.log(element.usertype);
+      if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){
+        
+        Object.entries(element.product).forEach(function(element2,index,arr){
+            let item = Object.assign({}, element2)[1];
+            item['key'] = Object.assign({}, element2)[0]; 
+            // console.log(item);
+            self.productdata.push(item);
+        });
+      }
+
+
+      // element.forEach(childs => {
+      //   var d = childs.val();  
+      //   if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
+      //     childs.forEach(element => {  
+      //       if (element.key == "product") {
+      //         element.forEach(element2 => {
+      //           let item = element2.val();
+      //           item.key = element2.key;  
+      //           this.productdata.push(item);
+      //         });
+      //       }
+      //     });
+      //    }         
+      // });
+    })
+    // this.productdata = [];
+    // let newInfo = firebase.database().ref('maindata').orderByKey();
+    // newInfo.on('value',childSnapshot => {
+    //   childSnapshot.forEach(childs => {
+    //     var d = childs.val();  
+    //     if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
+    //       childs.forEach(element => {  
+    //         if (element.key == "product") {
+    //           element.forEach(element2 => {
+    //             let item = element2.val();
+    //             item.key = element2.key;  
+    //             this.productdata.push(item);
+    //           });
+    //         }
+    //       });
+    //      }        
+    //   });
+    // });
     // console.log(this.productdata);
   }
   getproductsallcant(){ 
@@ -1036,9 +1090,20 @@ export class AppComponent {
 export const snapshotToArray = snapshot => {
   let returnArr = [];
   snapshot.forEach(childSnapshot => {
-      let item = childSnapshot.val();
-      item.key = childSnapshot.key; 
-      returnArr.push(item);
+    var dataval = childSnapshot.val();
+    var itms = [];
+    if(typeof(dataval.requirements) != 'undefined'){
+      itms = Object.entries(dataval.requirements); 
+    }
+    let item = childSnapshot.val();
+    item.key = childSnapshot.key; 
+    if(dataval.usertype == 'seller'  && itms != null && dataval.requirements.status == 1 && dataval.requirements.govid != ""){ 
+      item.rstatus = 1;
+    } else {
+      item.rtatus = 0;
+    }
+    // console.log(item);
+    returnArr.push(item);
   });
   return returnArr;
 };
