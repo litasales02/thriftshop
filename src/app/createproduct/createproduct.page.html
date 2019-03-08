@@ -53,6 +53,10 @@
         </ion-select>
     </ion-item>   
     <ion-item> 
+        <ion-label  position="floating">QTY</ion-label>
+        <ion-input required type="number" [(ngModel)]="qty" placeholder="0"></ion-input>
+    </ion-item> 
+    <ion-item> 
         <ion-label>Unit Type</ion-label>
         <ion-select [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
             <ion-select-option value="Kilo"  >Kilo</ion-select-option>
@@ -60,10 +64,6 @@
             <ion-select-option value="Set"   >Set</ion-select-option> 
             <ion-select-option value="Bundle">Bundle</ion-select-option> 
         </ion-select>
-    </ion-item> 
-    <ion-item> 
-        <ion-label  position="floating">QTY</ion-label>
-        <ion-input required type="number" [(ngModel)]="qty" placeholder="Price 0.00"></ion-input>
     </ion-item> 
     <ion-item> 
         <ion-label  position="floating">Price</ion-label>

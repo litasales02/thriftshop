@@ -98,13 +98,6 @@
     </plugin>
     <plugin name="cordova-plugin-firebase-messaging" spec="1.2.1" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
-    <plugin name="cordova-plugin-googlemaps" spec="git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps">
-        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA83FAk" />
-        <variable name="PLAY_SERVICES_VERSION" value="15.0.1" />
-        <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
-    </plugin>
-    <plugin name="cordova-plugin-firebase-messaging" spec="^1.2.1" />
     <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
