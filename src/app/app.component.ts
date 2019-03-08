@@ -9,6 +9,8 @@ import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
+import { ol } from "ol-ext";
+
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
   authDomain: 'thriffshop.firebaseapp.com',
@@ -140,11 +142,17 @@ export class AppComponent implements OnInit {
   }
   maplimitviewgeo(){
   }
+  maprouting(){
+    // var graph = new ol.source.Vector({
+    //   url: '../data/ROUTE120.geojson',
+    //   format: new ol.format.GeoJSON()
+    // });
+  }
   logstatus(){
-    console.log(this.router.url);
-    if(!this.loginStatus && this.router.url != '/login'){
-      this.menuRouting('login');
-    }
+    // console.log(this.router.url);
+    // if(!this.loginStatus && this.router.url != '/login'){
+    //   this.menuRouting('login');
+    // }
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({

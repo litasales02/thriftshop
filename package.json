@@ -51,6 +51,7 @@
     "cordova-support-google-services": "^1.2.1",
     "core-js": "^2.6.1",
     "firebase": "^5.7.3",
+    "ol-ext": "^3.1.2",
     "rxjs": "~6.3.3",
     "webpack-dev-server": "^3.1.14",
     "zone.js": "~0.8.26"
@@ -88,8 +89,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI",
-        "API_KEY_FOR_IOS": "AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA83FAk"
+        "API_KEY_FOR_ANDROID": "AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64",
+        "API_KEY_FOR_IOS": "AIzaSyCVWrE1ZJgH8cK2BznEaY-AMZ9nNVaNy60"
       },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
