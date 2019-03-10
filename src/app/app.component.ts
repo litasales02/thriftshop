@@ -8,6 +8,7 @@ import { AlertController, ToastController, LoadingController   } from '@ionic/an
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
 // import {md5} from 'node_modules'
 // var md5 = require('md5');
