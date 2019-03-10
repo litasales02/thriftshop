@@ -35,8 +35,8 @@ export class SetStoreMapPage implements OnInit {
     this.map = GoogleMaps.create('map_canvas', {
       camera: {
         target: {
-          lat: this.lat,
-          lng: this.lng
+          lat: self.util.usergeolocationlat,
+          lng: self.util.usergeolocationlng
         },
         zoom: 18,
         tilt: 30

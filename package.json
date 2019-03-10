@@ -53,6 +53,7 @@
     "firebase": "^5.7.3",
     "ol-ext": "^3.1.2",
     "rxjs": "~6.3.3",
+    "ts-md5": "^1.2.4",
     "webpack-dev-server": "^3.1.14",
     "zone.js": "~0.8.26"
   },

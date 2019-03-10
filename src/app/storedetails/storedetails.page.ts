@@ -64,5 +64,7 @@ export class StoreDetailsPage implements OnInit {
 
   }
 
- 
+  loadmymap(){
+    this.util.menuRouting('storemap/' + this.id);    
+  }
 }

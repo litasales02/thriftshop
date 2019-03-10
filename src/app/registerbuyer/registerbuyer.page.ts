@@ -54,7 +54,7 @@ export class RegisterBuyerPage implements OnInit {
               },
               'usertype': 'buyer',
               'username': self.buyerusername, 
-              'password': self.buyerpassword,
+              'password': self.util.md5function(self.buyerpassword),
               'stores':[]});
               self.navigate();              
               loading.dismiss();

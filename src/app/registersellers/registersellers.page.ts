@@ -58,7 +58,7 @@ export class RegisterSellersPage implements OnInit {
               },
               'usertype': 'seller',
               'username': self.sellerusername!=""?self.sellerusername:'none', 
-              'password': self.sellerpassword!=""?self.sellerpassword:'none',
+              'password': self.util.md5function(self.sellerpassword),
               'storename': self.sellerstorename!=""?self.sellerstorename:'none',
               'requirements' : { 
                 'status': 0,
