@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu>
+  <ion-split-pane >
+    <ion-menu swipeEnabled="loginStatus">
       <ion-header>
         <ion-toolbar class="drawertitle"  [ngSwitch]="loginStatus" color="medium" >
           <ion-avatar class="avatar_logo">
@@ -15,7 +15,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-split-pane when="md"></ion-split-pane>
+        <ion-split-pane when="md" ></ion-split-pane>
         <ion-list>
           <ion-menu-toggle  [ngSwitch]="loginStatus" auto-hide="false">
               <ion-item [routerDirection]="'root'"  line="none"  [routerLink]="'/home'">

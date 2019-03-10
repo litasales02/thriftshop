@@ -42,8 +42,7 @@ export class RegisterSellersPageUpdate implements OnInit {
       self.cellnumber = self.userdata['cellnumber'];
       self.telnumber = self.userdata['telnumber'];
       self.emails = self.userdata['email'];
-
-
+      self.productimage = self.userdata['profileimg'];
 
     });
   }
@@ -72,26 +71,44 @@ export class RegisterSellersPageUpdate implements OnInit {
           'email': typeof(self.emails) != 'undefined'?self.emails:'none'
         }
       });
-      self.navigate();
+      // self.navigate();
+      self.util.alerts("General","User Details Updated",['Ok']);
     } else {
-      self.util.alerts("Update User","Please fill all required text",['Ok']);
+      self.util.alerts("General","Please fill all required text",['Ok']);
     }
   }
   navigate() {
     this.router.navigate(['/home']);
   }
-  fileChange(event){ 
+  fileChange(event){
+    var self = this; 
     if(event.target.files && event.target.files[0]){
       let reader = new FileReader();
 
       reader.onload = (event:any) => {
         this.productimage = event.target.result;        
         this.iamgefile = event.target.result;
+        self.util.profileimg = event.target.result;
       }
       reader.readAsDataURL(event.target.files[0]);
     }
       // let fileList: FileList = event.target.files;  
       // let file: File = fileList[0];
       // this.iamgefile = file;
+    setTimeout(function(){
+      self.updateimage();
+    },1200);
   }
+
+  updateimage(){
+    var self = this;
+    self.util.updateuserdata({
+      'userdetails': { 
+        "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
+      }
+    });
+    // self.navigate();
+    self.util.alerts("General","Profle Image is Updated",['Ok']);
+  }
+
 }

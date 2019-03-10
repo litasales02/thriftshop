@@ -36,6 +36,7 @@ export class RegisterBuyerUpdatePage implements OnInit {
 
       self.cellnumber = self.userdata['cellnumber']; 
       self.emails = self.userdata['email'];
+      self.productimage = self.userdata['profileimg'];
 
 
 
@@ -44,29 +45,22 @@ export class RegisterBuyerUpdatePage implements OnInit {
   ngOnInit() {}
   submitdata(){
     var self = this;
-    this.util.getuserlogbyname(this.buyerusername,function(result){
-      if(result){        
-        self.util.alerts("Sorry","Username is already used",['Ok']); 
-      } else {
-        if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  ){
-          this.util.newdata({
-            'userdetails': {  
-              'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
-              'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
-              'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
-              'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
-              'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
-              'email':typeof(this.emails) != 'undefined'? this.emails:'none',
-            }
-          });
-          this.navigate();
-        } else {    
-          this.erroralert();
-        }        
-      }
-    });
-
-    
+    if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  ){
+      this.util.updateuserdata({
+        'userdetails': {  
+          'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
+          'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
+          'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
+          'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
+          'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
+          'email':typeof(this.emails) != 'undefined'? this.emails:'none',
+        }
+      });
+      // this.navigate();
+      self.util.alerts("General","User Details Updated",['Ok']);
+    } else {    
+      this.erroralert();
+    }    
   }
   async erroralert() { 
     const alert = await this.alertCtrl.create({
@@ -89,17 +83,32 @@ export class RegisterBuyerUpdatePage implements OnInit {
     this.router.navigate(['/home']);
   }
   fileChange(event){ 
+    var self = this;
     if(event.target.files && event.target.files[0]){
       let reader = new FileReader();
 
       reader.onload = (event:any) => {
         this.productimage = event.target.result;        
         this.iamgefile = event.target.result;
+        self.util.profileimg = event.target.result;
       }
       reader.readAsDataURL(event.target.files[0]);
     }
       // let fileList: FileList = event.target.files;  
       // let file: File = fileList[0];
       // this.iamgefile = file;
+      setTimeout(function(){
+        self.updateimage();
+      },1200);
+  }
+  updateimage(){
+    var self = this;
+    self.util.updateuserdata({
+      'userdetails': { 
+        "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
+      }
+    });
+    // self.navigate();
+    self.util.alerts("General","Profle Image is Updated",['Ok']);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Platform, NavController } from '@ionic/angular';
+import { Platform, NavController, MenuController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
@@ -9,7 +9,7 @@ import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-import { ol } from "ol-ext";
+// import { ol } from "ol-ext";
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -81,7 +81,8 @@ export class AppComponent implements OnInit {
     public loadingController: LoadingController,
     private geolocation: Geolocation,
     private fm: FirebaseMessaging,
-    public navCtrl: NavController) {
+    public navCtrl: NavController,
+    public menuCtrl: MenuController ) {
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -137,6 +138,12 @@ export class AppComponent implements OnInit {
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
   }
+  menudisabled(){
+    this.menuCtrl.enable(false);
+  }
+  menuenable(){
+    this.menuCtrl.enable(true);
+  }
   ngOnInit(){
     this.logstatus();
   }
@@ -149,8 +156,9 @@ export class AppComponent implements OnInit {
     // });
   }
   logstatus(){
-    console.log(this.router.url);
+    // console.log(this.router.url);
     if(!this.loginStatus && this.router.url != '/login'){
+      this.menudisabled();
       this.menuRouting('login');
     }
   }

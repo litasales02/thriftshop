@@ -1,0 +1,78 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="home"></ion-back-button> 
+    </ion-buttons>
+    <ion-title>
+        New Product
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item style="text-align: center"> 
+        <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
+            <img [src]="productimage" class="center_image avatar_logo" />
+        </ion-avatar>
+    </ion-item> 
+    <ion-item> 
+        <input type="file" value="" (change)="fileChange($event)">
+    </ion-item> 
+    <ion-item> 
+        <ion-label  position="floating">Product Name</ion-label>
+        <ion-input required type="text" [(ngModel)]="productname" placeholder="Product Name"></ion-input>
+    </ion-item> 
+    <ion-item> 
+        <ion-label>Product Type</ion-label>
+        <ion-select [(ngModel)]="producttype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="tshirt">T-Shirt</ion-select-option>
+            <ion-select-option value="pants">Pants</ion-select-option>
+            <ion-select-option value="shortpants">short Pants</ion-select-option>
+            <ion-select-option value="longpants">Long Pants</ion-select-option>
+            <ion-select-option value="underwares">Underwares</ion-select-option> 
+            <ion-select-option value="bags">Bags</ion-select-option> 
+            <ion-select-option value="shoes">Shoes</ion-select-option> 
+            <ion-select-option value="mentshirt">Men T-Shirt</ion-select-option> 
+            <ion-select-option value="usdress">US Dress</ion-select-option> 
+            <ion-select-option value="skinnyjeans">Skinny Jeans</ion-select-option> 
+            <ion-select-option value="mixshorts">Mix Shorts</ion-select-option> 
+            <ion-select-option value="kidsware">Kids Wear</ion-select-option> 
+            <ion-select-option value="sexyshorts">Sexy Short</ion-select-option> 
+            <ion-select-option value="lts">LTS</ion-select-option> 
+            <ion-select-option value="mixblouse">Mix Blouse</ion-select-option> 
+            <ion-select-option value="punda">Punda</ion-select-option> 
+            <ion-select-option value="caprijeans">CAPRI Jeans</ion-select-option> 
+            <ion-select-option value="originalshorts">Original Shorts</ion-select-option> 
+            <ion-select-option value="pajama">Pajama</ion-select-option> 
+            <ion-select-option value="cottonskirts">Cotton Skirts</ion-select-option> 
+            <ion-select-option value="denimskirt">Denim Skirt</ion-select-option> 
+            <ion-select-option value="bedsheet">Bedsheets</ion-select-option> 
+            <ion-select-option value="windbreaker">Windbreaker</ion-select-option> 
+            <ion-select-option value="jumpermix">Jumper Mix</ion-select-option> 
+            <ion-select-option value="koreandress">Korean Dress</ion-select-option> 
+        </ion-select>
+    </ion-item>   
+    <ion-item> 
+        <ion-label  position="floating">QTY</ion-label>
+        <ion-input required type="number" [(ngModel)]="qty" placeholder="0"></ion-input>
+    </ion-item> 
+    <ion-item> 
+        <ion-label>Unit Type</ion-label>
+        <ion-select [(ngModel)]="unittype" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="Kilo"  >Kilo</ion-select-option>
+            <ion-select-option value="Item"  >Item</ion-select-option>
+            <ion-select-option value="Set"   >Set</ion-select-option> 
+            <ion-select-option value="Bundle">Bundle</ion-select-option> 
+        </ion-select>
+    </ion-item> 
+    <ion-item> 
+        <ion-label  position="floating">Price</ion-label>
+        <ion-input required type="number" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
+    </ion-item> 
+    <ion-item> 
+        <ion-label  position="floating">Description</ion-label>
+        <ion-input required type="text" [(ngModel)]="description" placeholder="Type here"></ion-input>
+    </ion-item> 
+    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
+    
+</ion-content>
