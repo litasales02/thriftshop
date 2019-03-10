@@ -12,6 +12,7 @@ export class ProductDetailsPage implements OnInit {
   id: string = "";
   child: string = "";
   directlocation = "/product/list/all/home"
+  storename = "";
   productname= "";
   unittype= "";
   price = "0.00";
@@ -52,6 +53,7 @@ export class ProductDetailsPage implements OnInit {
           self.selecteduserkey = element.ukey;
           self.util.selecteditem = element.key;
           self.description = element.description;
+          self.storename = element.storename;
           // console.log(self.util.selecteduserkey);
           // console.log(self.util.selecteditem);
           self.routerlingks = "/message/panel/"+self.util.selecteduserkey+"/products_details";

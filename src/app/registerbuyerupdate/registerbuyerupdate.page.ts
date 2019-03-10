@@ -46,15 +46,13 @@ export class RegisterBuyerUpdatePage implements OnInit {
   submitdata(){
     var self = this;
     if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  ){
-      this.util.updateuserdata({
-        'userdetails': {  
-          'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
-          'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
-          'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
-          'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
-          'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
-          'email':typeof(this.emails) != 'undefined'? this.emails:'none',
-        }
+      this.util.updateuserdatadetails({
+        'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
+        'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
+        'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
+        'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
+        'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
+        'email':typeof(this.emails) != 'undefined'? this.emails:'none'
       });
       // this.navigate();
       self.util.alerts("General","User Details Updated",['Ok']);
@@ -99,16 +97,14 @@ export class RegisterBuyerUpdatePage implements OnInit {
       // this.iamgefile = file;
       setTimeout(function(){
         self.updateimage();
-      },1200);
+      },700);
   }
   updateimage(){
     var self = this;
-    self.util.updateuserdata({
-      'userdetails': { 
-        "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
-      }
+    self.util.updateuserdatadetails({
+      "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
     });
     // self.navigate();
-    self.util.alerts("General","Profle Image is Updated",['Ok']);
+    self.util.alerts("General","Item Image is Updated",['Ok']);
   }
 }
