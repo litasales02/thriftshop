@@ -18,9 +18,9 @@ export class CreateProductPage implements OnInit {
   productimage = '/assets/store.png';
   iamgefile="";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
-    if (this.util.userid == ''){
+    if (this.util.loginStatus && this.util.userid == ''){
       this.util.menuRouting('/login');
-    } else if( this.util.userid != '' && this.util.requirementsdata.status == 1) {   
+    } else if(this.util.loginStatus &&  this.util.userid != '' && this.util.registrationstatus == 0) {   
       this.util.alerts('Hi','Please update your requirements first before you create products.',['ok']);   
       this.util.menuRouting('/home');
     }

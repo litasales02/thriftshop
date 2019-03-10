@@ -16,7 +16,7 @@
         </ion-avatar>
     </ion-item> 
     <ion-item> 
-        <input type="file" value="" (change)="fileChange($event)">
+        <input type="file" value=""  [(ngModel)]="itemimagess"  (change)="fileChange($event)">
     </ion-item> 
     <ion-item> 
         <ion-label  position="floating">Product Name</ion-label>
@@ -73,6 +73,6 @@
         <ion-label  position="floating">Description</ion-label>
         <ion-input required type="text" [(ngModel)]="description" placeholder="Type here"></ion-input>
     </ion-item> 
-    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Submit</ion-button> 
+    <ion-button class="button button-block button-positive button-large" (click)="submit();" >Update</ion-button> 
     
 </ion-content>

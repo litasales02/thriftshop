@@ -209,7 +209,14 @@ export class AppComponent implements OnInit {
             self.profileimg = data.val().userdetails.profileimg;
             self.userType =  data.val().usertype;
             if(data.val().usertype == 'seller'){
-              self.geodata =  data.val().geodata.status;
+              self.drawerTitle = data.val().storename;
+              self.geodata =  data.val().geodata.status; 
+              self.requirementsdata = {
+                'status': data.val().requirements.status,
+                'idtype':data.val().requirements.idtype,
+                'govid': data.val().requirements.govid,
+                'storeimg': data.val().requirements.storeimg
+              };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
@@ -468,6 +475,7 @@ export class AppComponent implements OnInit {
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];  
             item['ukey'] = element.key;  
+            item['storename'] = element.storename;  
             productdata.push(item);
           }
         });
@@ -723,6 +731,9 @@ export class AppComponent implements OnInit {
   async updateuserdata(value){
     firebase.database().ref('maindata/'+this.userid).update(value); 
   }
+  async updateuserdatadetails(value){
+    firebase.database().ref('maindata/'+this.userid + "/userdetails").update(value); 
+  }
   async updatedata(value){
     await firebase.database().ref('maindata/'+this.userid).update(value);
   }
@@ -734,7 +745,12 @@ export class AppComponent implements OnInit {
     await newproduct.set(value);
   } 
   async updateproduct(prodid,value){
+    // console.log(value);
     firebase.database().ref('maindata/'+ this.userid + '/product/' + prodid).update(value); 
+  } 
+  async updateproductchild(prodid,fields,value){
+    // console.log(value);
+    firebase.database().ref('maindata/'+ this.userid + '/product/' + prodid + "/" + fields).update(value); 
   } 
   async updaterequirements(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/requirements');

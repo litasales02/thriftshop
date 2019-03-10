@@ -19,10 +19,18 @@ export class LoginPage implements OnInit {
     // this.util.logstatus();
     this.util.menudisabled();
   }
-  async submitlogin(){
+  async submitlogin(){ 
     var self = this; 
     this.isDisabled = true;
-    if( typeof(this.txtusername) != 'undefined' && typeof(this.txtpassword) != 'undefined' ){      
+    // this.util.presentLoadingWithOptions();
+    const loading = await this.util.loadingController.create({
+      spinner: null, 
+      message: 'Please wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    if( typeof(this.txtusername) != 'undefined' && typeof(this.txtpassword) != 'undefined' ){     
+      await loading.present(); 
       if (this.txtusername != "" && this.txtpassword != "") { 
         await this.util.login(this.txtusername,this.txtpassword,function(returns){
           if (returns){
@@ -31,18 +39,22 @@ export class LoginPage implements OnInit {
             if(self.util.requirementsdata.status == 0 && self.count == 1 && self.util.userType == "seller"){
               self.util.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);
             }
+            loading.dismiss();
             self.util.menuenable();
             self.navigate();
           } else {
+            loading.dismiss();
             self.alerts('Login','Invalid Username or password.',['ok']);
             self.isDisabled = false;
           } 
         }); 
       } else {
+        loading.dismiss();
         self.alerts('Login','Please fill all textbox.',['ok']); 
         self.isDisabled = false;
       }
     } else {
+      loading.dismiss();
       self.alerts('Login','Invalid Username or password.',['ok']); 
       self.isDisabled = false;
     }

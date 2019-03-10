@@ -15,6 +15,7 @@ export class UpdateProductPage implements OnInit {
   producttype: ""; 
   qty:"";
   description: "";
+  itemimagess: "";
   productimage = '/assets/store.png';
   iamgefile="";
   keyprodid = "";
@@ -24,11 +25,14 @@ export class UpdateProductPage implements OnInit {
 
     this.util.getproductsbyid2(this.keyprodid,(element)=>{ 
       element.forEach(element => {
-        this.productimage = element.itemimg;
-        this.productname = element.productname;
-        this.unittype = element.unittype;
-        this.price = element.price;
-        this.producttype = element.producttype;
+        self.productimage = element.itemimg;
+        self.productname = element.productname;
+        self.unittype = element.unittype;
+        self.qty = element.qty;
+        self.price = element.price;
+        self.productimage = element.itemimg;
+        self.iamgefile  = element.itemimg;
+        self.producttype = element.producttype;
         self.util.selecteduserkey = element.ukey;
         self.util.selecteditem = element.key;
         self.description = element.description;
@@ -51,7 +55,6 @@ export class UpdateProductPage implements OnInit {
           'price': this.price,
           'qty': this.qty,
           'producttype': this.producttype,
-          'itemimg':this.iamgefile,
           'description': this.description
         });
         this.util.alerts("Update Product","Product Added",['Ok']);
@@ -74,10 +77,18 @@ export class UpdateProductPage implements OnInit {
       }
       reader.readAsDataURL(event.target.files[0]);
 
-      this.util.updateproduct(self.keyprodid ,{ 
-        'itemimg':self.iamgefile, 
-      });
+      setTimeout(function(){
+        self.updateimage();
+      },1500)
 
     } 
+  }
+  updateimage(){
+    var self = this;
+    self.util.updateproduct(this.keyprodid ,{
+        "itemimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
+    });
+    // self.navigate();
+    // self.util.alerts("General","Profle Image is Updated",['Ok']);
   }
 }

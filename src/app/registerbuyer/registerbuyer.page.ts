@@ -30,30 +30,30 @@ export class RegisterBuyerPage implements OnInit {
       if(result){        
         self.util.alerts("Sorry","Username is already used",['Ok']); 
       } else {
-        if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  && typeof(this.buyerusername) != 'undefined'  && typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' ){
-          if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
-            this.util.newdata({
+        if (typeof(self.buyeraddress) != 'undefined' && typeof(self.buyerfirstname) != 'undefined' && typeof(self.buyerlastname) != 'undefined' && typeof(self.buyermiddlename) != 'undefined'  && typeof(self.buyerusername) != 'undefined'  && typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerrepass) != 'undefined' ){
+          if (typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerrepass) != 'undefined' && self.buyerpassword == self.buyerrepass){
+            self.util.newdata({
               'userdetails': {  
-                'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
-                'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
-                'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
-                'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
-                'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
-                'email':typeof(this.emails) != 'undefined'? this.emails:'none',
-                "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
+                'address': typeof(self.buyeraddress) != 'undefined'?self.buyeraddress:'none',
+                'firstname': typeof(self.buyerfirstname) != 'undefined'?self.buyerfirstname:'none', 
+                'lastname': typeof(self.buyerlastname) != 'undefined'?self.buyerlastname:'none', 
+                'middlename': typeof(self.buyermiddlename) != 'undefined'?self.buyermiddlename:'none',
+                'cellnumber': typeof(self.cellnumber) != 'undefined'?self.cellnumber:'none', 
+                'email':typeof(self.emails) != 'undefined'? self.emails:'none',
+                "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
               },
               'usertype': 'buyer',
-              'username': this.buyerusername, 
-              'password': this.buyerpassword,
+              'username': self.buyerusername, 
+              'password': self.buyerpassword,
               'stores':[]});
-            this.navigate();
-          } else if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerusername) && (this.buyerpassword.length < 6 || this.buyerusername.length < 6 )) {
-            this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
+              self.navigate();
+          } else if (typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerusername) && (self.buyerpassword.length < 6 || self.buyerusername.length < 6 )) {
+            self.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
           }else {
-            this.util.alerts("Add New","User password did not equal",['Ok']);
+            self.util.alerts("Add New","User password did not equal",['Ok']);
           }
         } else {    
-          this.erroralert();
+          self.erroralert();
         }        
       }
     });

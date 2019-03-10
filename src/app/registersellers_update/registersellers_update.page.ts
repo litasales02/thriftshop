@@ -59,17 +59,15 @@ export class RegisterSellersPageUpdate implements OnInit {
       typeof(self.sellerfirstname) != 'undefined'  && 
       typeof(self.sellerlastname) != 'undefined'  && 
       typeof(self.sellermiddlename) != 'undefined'){
-        self.util.updateuserdata({
-        'userdetails': { 
-          'address1': self.selleraddress1!=""?self.selleraddress1:'none', 
-          'address2': self.selleraddress2!=""?self.selleraddress2:'none', 
-          'firstname': self.sellerfirstname!=""?self.sellerfirstname:'none', 
-          'lastname': self.sellerlastname!=""?self.sellerlastname:'none', 
-          'middlename': self.sellermiddlename!=""?self.sellermiddlename:'none',
-          'cellnumber': self.cellnumber!=""?self.cellnumber:'none',
-          'telnumber': typeof(self.telnumber) != 'undefined'?self.telnumber:'none',
-          'email': typeof(self.emails) != 'undefined'?self.emails:'none'
-        }
+        self.util.updateuserdatadetails({
+        'address1': self.selleraddress1!=""?self.selleraddress1:'none', 
+        'address2': self.selleraddress2!=""?self.selleraddress2:'none', 
+        'firstname': self.sellerfirstname!=""?self.sellerfirstname:'none', 
+        'lastname': self.sellerlastname!=""?self.sellerlastname:'none', 
+        'middlename': self.sellermiddlename!=""?self.sellermiddlename:'none',
+        'cellnumber': self.cellnumber!=""?self.cellnumber:'none',
+        'telnumber': typeof(self.telnumber) != 'undefined'?self.telnumber:'none',
+        'email': typeof(self.emails) != 'undefined'?self.emails:'none'
       });
       // self.navigate();
       self.util.alerts("General","User Details Updated",['Ok']);
@@ -102,10 +100,8 @@ export class RegisterSellersPageUpdate implements OnInit {
 
   updateimage(){
     var self = this;
-    self.util.updateuserdata({
-      'userdetails': { 
-        "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
-      }
+    self.util.updateuserdatadetails({
+      "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
     });
     // self.navigate();
     self.util.alerts("General","Profle Image is Updated",['Ok']);
