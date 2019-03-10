@@ -20,6 +20,7 @@ export class LoginPage implements OnInit {
     this.util.menudisabled();
   }
   async submitlogin(){ 
+    console.log(this.util.md5function(this.txtusername));
     var self = this; 
     this.isDisabled = true;
     // this.util.presentLoadingWithOptions();

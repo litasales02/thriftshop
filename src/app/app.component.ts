@@ -8,7 +8,9 @@ import { AlertController, ToastController, LoadingController   } from '@ionic/an
 import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-
+import {Md5} from 'ts-md5/dist/md5';
+// import {md5} from 'node_modules'
+// var md5 = require('md5');
 // import { ol } from "ol-ext";
 
 const configfirebase = {
@@ -83,6 +85,7 @@ export class AppComponent implements OnInit {
     private fm: FirebaseMessaging,
     public navCtrl: NavController,
     public menuCtrl: MenuController ) {
+    //  console.log(Md5.hashStr('pikaadmin'));
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -137,6 +140,9 @@ export class AppComponent implements OnInit {
     //  this.fm.logEvent('page_view', {page: "dashboard"})
     // .then((res: any) => console.log(res))
     // .catch((error: any) => console.error(error));
+  }
+  md5function(str){
+    return Md5.hashStr(str);
   }
   menudisabled(){
     this.menuCtrl.enable(false);
@@ -202,7 +208,7 @@ export class AppComponent implements OnInit {
       let data = childs.val();
       if (data) {
         childs.forEach(function(data){
-          if ( data.val().password === password ){
+          if ( data.val().password === Md5.hashStr(password)){
             self.userid = data.key;
             self.drawerTitle = data.val().userdetails.firstname;
             self.loginStatus = true;
