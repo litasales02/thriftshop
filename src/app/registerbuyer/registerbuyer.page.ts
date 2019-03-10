@@ -22,12 +22,22 @@ export class RegisterBuyerPage implements OnInit {
   emails: "";  
   productimage = '/assets/store.png';
   iamgefile="";
-  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
+  
+  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+  }
   ngOnInit() {}
-  submitdata(){
+  async submitdata(){
     var self = this;
+    const loading = await this.util.loadingController.create({
+      spinner: null, 
+      message: 'Submitting your registration.\nPlease wait...',
+      translucent: true,
+      cssClass: 'custom-class custom-loading'
+    });
+    loading.present();
     this.util.getuserlogbyname(this.buyerusername,function(result){
-      if(result){        
+      if(result){    
+        loading.dismiss();
         self.util.alerts("Sorry","Username is already used",['Ok']); 
       } else {
         if (typeof(self.buyeraddress) != 'undefined' && typeof(self.buyerfirstname) != 'undefined' && typeof(self.buyerlastname) != 'undefined' && typeof(self.buyermiddlename) != 'undefined'  && typeof(self.buyerusername) != 'undefined'  && typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerrepass) != 'undefined' ){
@@ -46,13 +56,18 @@ export class RegisterBuyerPage implements OnInit {
               'username': self.buyerusername, 
               'password': self.buyerpassword,
               'stores':[]});
-              self.navigate();
+              self.navigate();              
+              loading.dismiss();
           } else if (typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerusername) && (self.buyerpassword.length < 6 || self.buyerusername.length < 6 )) {
+            loading.dismiss();
             self.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
-          }else {
+          }else {            
+            loading.dismiss();
             self.util.alerts("Add New","User password did not equal",['Ok']);
           }
-        } else {    
+        } else {   
+          
+          loading.dismiss(); 
           self.erroralert();
         }        
       }
@@ -78,7 +93,7 @@ export class RegisterBuyerPage implements OnInit {
     await alert.present();
   }
   navigate() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
   }
   fileChange(event){ 
     if(event.target.files && event.target.files[0]){
