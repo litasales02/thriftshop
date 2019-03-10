@@ -17,7 +17,7 @@
         <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
             <img [src]="productimage" class="center_image avatar_logo" />
         </ion-avatar>
-        <ion-button class="button button-block button-positive button-large" *ngIf="selecteduserkey==util.userid" routerLink="/products/edit/{{id}}" >Edit</ion-button>
+        <ion-button slot="end" style="width: 50px;" class="button button-block button-positive button-large" *ngIf="selecteduserkey==util.userid" routerLink="/products/edit/{{id}}" >Edit</ion-button>
     </ion-item>  
     <ion-item> 
             <ion-label>Product By</ion-label> 
