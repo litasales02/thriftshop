@@ -37,13 +37,14 @@ export class MapsPage implements OnInit {
   searchtxt: "";
   constructor(
     public router: Router, 
-    public alertCtrl: AlertController,
+    public alertCtrl: AlertController, 
     private util: AppComponent) {  
     if(!this.util.geoaccurate){
       this.util.ShowToast("Your Phone Location is not Accurate.\nyou notice your location is not same.");
     }
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;  
+    
     this.directionsDisplay.setMap(this.map);   
   }
   reset(){
@@ -108,6 +109,7 @@ export class MapsPage implements OnInit {
       west: 125.2579,
       east: 125.7056,
     };
+  
     if((this.util.usergeolocationlat == 0 && this.util.usergeolocationlng == 0) ||      
       ((this.util.usergeolocationlat < 7.5858 || this.util.usergeolocationlat > 6.9782) &&   
       (this.util.usergeolocationlng < 125.25792 || this.util.usergeolocationlng > 125.7056))){
@@ -128,7 +130,8 @@ export class MapsPage implements OnInit {
         tilt: 30
       },
         maxZoom: 12,
-    }); 
+    });  
+ 
     this.util.mapdata({
       title: 'Your Here!',
       icon: 'red', 

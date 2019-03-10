@@ -17,6 +17,7 @@ export class LoginPage implements OnInit {
   typtexts = "password";
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     // this.util.logstatus();
+    this.util.menudisabled();
   }
   async submitlogin(){
     var self = this; 
@@ -30,6 +31,7 @@ export class LoginPage implements OnInit {
             if(self.util.requirementsdata.status == 0 && self.count == 1 && self.util.userType == "seller"){
               self.util.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);
             }
+            self.util.menuenable();
             self.navigate();
           } else {
             self.alerts('Login','Invalid Username or password.',['ok']);

@@ -44,6 +44,10 @@ const routes: Routes = [
     loadChildren: './registerbuyer/registerbuyer.module#RegisterBuyerPageModule'
   },
   {
+    path: 'register/buyer/update',
+    loadChildren: './registerbuyerupdate/registerbuyerupdate.module#RegisterBuyerUpdatePageModule'
+  },
+  {
     path: 'register/seller',
     loadChildren: './registersellers/registersellers.module#RegisterSellersPageModule'
   },
@@ -54,6 +58,14 @@ const routes: Routes = [
   {
     path: 'accountsetting',
     loadChildren: './accountsetting/accountsetting.module#AccountSettingPageModule'
+  },
+  {
+    path: 'accountsettingbuyer',
+    loadChildren: './accountsettingbuyer/accountsettingbuyer.module#AccountSettingBuyerPageModule'
+  },
+  {
+    path: 'accountsettinggeneralseller',
+    loadChildren: './registersellers_update/registersellers_update.module#RegisterSellersPageUpdateModule'
   },
   {
     path: 'createproduct',
@@ -70,6 +82,10 @@ const routes: Routes = [
   {
     path: 'products/details/:id',
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
+  },
+  {
+    path: 'products/edit/:id',
+    loadChildren: './updateproduct/updateproduct.module#UpdateProductPageModule'
   },
   {
     path: 'products/details/:id/:child',

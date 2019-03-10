@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu>
+  <ion-split-pane >
+    <ion-menu swipeEnabled="loginStatus">
       <ion-header>
         <ion-toolbar class="drawertitle"  [ngSwitch]="loginStatus" color="medium" >
           <ion-avatar class="avatar_logo">
@@ -15,40 +15,40 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-split-pane when="md"></ion-split-pane>
+        <ion-split-pane when="md" ></ion-split-pane>
         <ion-list>
           <ion-menu-toggle  [ngSwitch]="loginStatus" auto-hide="false">
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/home'">
+              <ion-item [routerDirection]="'root'"  line="none"  [routerLink]="'/home'">
                 <ion-icon slot="start" [name]="'home'"></ion-icon>
                 <ion-label>
                   Home
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/maps'">
+              <ion-item [routerDirection]="'root'" line="none"   [routerLink]="'/maps'">
                 <ion-icon slot="start" [name]="'map'"></ion-icon>
                 <ion-label>
                   Maps
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/list'">
+              <ion-item [routerDirection]="'root'" line="none"   [routerLink]="'/list'">
                 <ion-icon slot="start" [name]="'list'"></ion-icon>
                 <ion-label>
                   Shop List
                 </ion-label>
               </ion-item> 
-              <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/messages'">
+              <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="true"  [routerLink]="'/messages'">
                 <ion-icon slot="start" [name]="'chatboxes'"></ion-icon>
                 <ion-label>
                   Messages
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'"  [routerLink]="'/product/list/all/home'">
+              <ion-item [routerDirection]="'root'"   line="none"  [routerLink]="'/product/list/all/home'">
                 <ion-icon slot="start" [name]="'list'"></ion-icon>
                 <ion-label>
                   Products
                 </ion-label>
               </ion-item>
-              <ion-item [routerDirection]="'root'" *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
+              <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="true"  [routerLink]="'/favorites/products'">
                 <ion-icon slot="start" [name]="'bookmarks'"></ion-icon>
                 <ion-label>
                   Favorites
@@ -56,34 +56,45 @@
                 <ion-badge slot="end" color="primary">{{favoritecount}}</ion-badge>
               </ion-item>
                 <div *ngIf="userType=='seller'" >
-                  <ion-item [routerDirection]="'root'" *ngSwitchCase="true"   [routerLink]="'/createproduct'">
+                  <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="true"   [routerLink]="'/createproduct'">
                     <ion-icon slot="start" [name]="'add'"></ion-icon>
                     <ion-label>
                       Create Product
                     </ion-label>
                   </ion-item>
                   
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
-                  <ion-icon slot="start" [name]="'cog'"></ion-icon>
-                  <ion-label>
-                    Settings
-                  </ion-label>
-                  <ion-icon slot="end" [name]="'alert'" *ngIf="requirementsdata.status==0||geodata==0||requirementsdata.govid==''" style="color:red;"></ion-icon>
-                </ion-item>
+                  <ion-item [routerDirection]="'root'"  line="none"   *ngSwitchCase="true"   [routerLink]="'/accountsetting'">
+                    <ion-icon slot="start" [name]="'cog'"></ion-icon>
+                    <ion-label>
+                      Settings
+                    </ion-label>
+                    <ion-icon slot="end" [name]="'alert'"  line="none" *ngIf="requirementsdata.status==0||geodata==0||requirementsdata.govid==''" style="color:red;"></ion-icon>
+                  </ion-item>
+
+
+
                 </div>
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/register'">
+                <div *ngIf="userType=='buyer'" >
+                  <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="true"   [routerLink]="'/register/buyer/update'">
+                    <ion-icon slot="start" [name]="'cog'"></ion-icon>
+                    <ion-label>
+                      Settings
+                    </ion-label>
+                  </ion-item>
+                </div>
+                <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="false"  [routerLink]="'/register'">
                   <ion-icon slot="start" [name]="'person-add'"></ion-icon>
                   <ion-label>
                     Register
                   </ion-label>
                 </ion-item>
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="true" (click)="logout();">
+                <ion-item [routerDirection]="'root'"  line="none"  *ngSwitchCase="true" (click)="logout();">
                   <ion-icon slot="start" [name]="'log-out'"></ion-icon>
                   <ion-label>
                     Logout
                   </ion-label>
                 </ion-item>
-                <ion-item [routerDirection]="'root'"  *ngSwitchCase="false"  [routerLink]="'/login'">
+                <ion-item [routerDirection]="'root'"  line="none"   *ngSwitchCase="false"  [routerLink]="'/login'">
                   <ion-icon slot="start" [name]="'log-in'"></ion-icon>
                   <ion-label>
                     Login
