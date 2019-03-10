@@ -92,44 +92,44 @@ export class AppComponent implements OnInit {
     // }
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
-      // self.usergeolocationlat = resp.coords.latitude;
-      // self.usergeolocationlng = resp.coords.longitude;
-      // console.log("resp.coords.latitude",resp.coords.latitude)
-      // console.log("resp.coords.longitude",resp.coords.longitude) 
+      self.usergeolocationlat = resp.coords.latitude;
+      self.usergeolocationlng = resp.coords.longitude;
+      console.log("resp.coords.latitude",resp.coords.latitude)
+      console.log("resp.coords.longitude",resp.coords.longitude) 
       if((resp.coords.latitude == 0 && resp.coords.longitude == 0) ||       
         ((resp.coords.latitude < 6.9782 || resp.coords.latitude >= 7.5858) &&   
         (resp.coords.longitude < 125.2579 || resp.coords.longitude >= 125.7056))){
         self.usergeolocationlat =  7.148419523108726;
         self.usergeolocationlng =  125.52915832519531;
-        // console.log("resp.coords",11);
+        console.log("resp.coords",11);
         self.geoaccurate = false;
       }else{        
         self.usergeolocationlat = resp.coords.latitude;
         self.usergeolocationlng = resp.coords.longitude;
-        // console.log("resp.coords",22);
+        console.log("resp.coords",22);
         self.geoaccurate = true;
       }
 
      }).catch((error) => {
-      //  console.log('Error getting location', error);
+       console.log('Error getting location', error);
      });
      this.watch = this.geolocation.watchPosition();
       this.watch.subscribe((data) => { 
         self.usergeolocationlat = data.coords.latitude;
         self.usergeolocationlng = data.coords.longitude;
-        // console.log("data.coords.latitude",data.coords.latitude);
-        // console.log("data.coords.longitude",data.coords.longitude);
+        console.log("data.coords.latitude",data.coords.latitude);
+        console.log("data.coords.longitude",data.coords.longitude);
         if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
           ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
           (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
           self.geoaccurate = false;
           self.usergeolocationlat =  7.148419523108726;
           self.usergeolocationlng =  125.52915832519531;    
-          // console.log("data.coords",1);
+          console.log("data.coords",1);
         }else{        
           self.usergeolocationlat = data.coords.latitude;
           self.usergeolocationlng = data.coords.longitude;
-          // console.log("data.coords",2);
+          console.log("data.coords",2);
           self.geoaccurate = true;
         }
       });
@@ -149,10 +149,10 @@ export class AppComponent implements OnInit {
     // });
   }
   logstatus(){
-    // console.log(this.router.url);
-    // if(!this.loginStatus && this.router.url != '/login'){
-    //   this.menuRouting('login');
-    // }
+    console.log(this.router.url);
+    if(!this.loginStatus && this.router.url != '/login'){
+      this.menuRouting('login');
+    }
   }
   async presentLoadingWithOptions() {
     const loading = await this.loadingController.create({
@@ -179,7 +179,7 @@ export class AppComponent implements OnInit {
     this.productdatafavorite = [];
     this.usermessage = [];
     this.usermessagepanel = [];
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
     this.ShowToast('Logging Out Good Bye!');
   }
   async login(username,password ,callback){
@@ -323,6 +323,21 @@ export class AppComponent implements OnInit {
       // }
     });
     callback(storedata2);
+  }
+  async getstoreGeoid(key,callback){
+
+    var storedata2 = [];
+    await this.storedata.forEach(function(element){
+      if( element.key == key ){
+        let item = element.geodata;
+        item.key = element.key;
+        item.utype = element.usertype;
+        console.log(item);
+        storedata2.push(item);
+      }
+    });
+    callback(storedata2);
+
   }
   getstorebyname(productname,callback){
     // console.clear();
@@ -695,6 +710,9 @@ export class AppComponent implements OnInit {
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
+  }
+  async updateuserdata(value){
+    firebase.database().ref('maindata/'+this.userid).update(value); 
   }
   async updatedata(value){
     await firebase.database().ref('maindata/'+this.userid).update(value);
