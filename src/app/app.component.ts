@@ -90,7 +90,8 @@ export class AppComponent implements OnInit {
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
-      this.calculateAllDistancesStores();
+      // this.calculateAllDistancesStores();
+      this.splashScreen.hide();
     });
     // if(!this.loginStatus){
       
@@ -1185,7 +1186,7 @@ export class AppComponent implements OnInit {
         'API_KEY_FOR_BROWSER_DEBUG': ''
       });
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      // this.splashScreen.hide();
     });    
     // firebase.initializeApp(configfirebase);
   }
