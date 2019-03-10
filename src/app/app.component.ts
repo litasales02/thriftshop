@@ -316,6 +316,7 @@ export class AppComponent implements OnInit {
             let item = element.userdetails; 
             item.key = element.key; 
             item.utype = element.usertype; 
+            item.storename = element.storename;
             storedata2.push(item);
           }
       // if(index == arr.length - 1){ 

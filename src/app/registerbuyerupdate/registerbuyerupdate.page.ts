@@ -22,7 +22,25 @@ export class RegisterBuyerUpdatePage implements OnInit {
   emails: "";  
   productimage = '/assets/store.png';
   iamgefile="";
-  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {}
+  userdata = null;
+  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+    var self = this;
+    this.util.getstorebyid(this.util.userid,function(data){ 
+      self.userdata = Object.values(data)[0];
+      console.log( self.userdata);
+ 
+      self.buyeraddress = self.userdata['address']; 
+      self.buyerfirstname = self.userdata['firstname'];
+      self.buyerlastname = self.userdata['lastname'];
+      self.buyermiddlename = self.userdata['middlename'];
+
+      self.cellnumber = self.userdata['cellnumber']; 
+      self.emails = self.userdata['email'];
+
+
+
+    });
+  }
   ngOnInit() {}
   submitdata(){
     var self = this;
@@ -30,28 +48,18 @@ export class RegisterBuyerUpdatePage implements OnInit {
       if(result){        
         self.util.alerts("Sorry","Username is already used",['Ok']); 
       } else {
-        if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  && typeof(this.buyerusername) != 'undefined'  && typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' ){
-          if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerrepass) != 'undefined' && this.buyerpassword == this.buyerrepass){
-            this.util.newdata({
-              'userdetails': {  
-                'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
-                'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
-                'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
-                'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
-                'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
-                'email':typeof(this.emails) != 'undefined'? this.emails:'none',
-                "profileimg": typeof(this.iamgefile) != 'undefined'?this.iamgefile:'none'
-              },
-              'usertype': 'buyer',
-              'username': this.buyerusername, 
-              'password': this.buyerpassword,
-              'stores':[]});
-            this.navigate();
-          } else if (typeof(this.buyerpassword) != 'undefined' && typeof(this.buyerusername) && (this.buyerpassword.length < 6 || this.buyerusername.length < 6 )) {
-            this.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
-          }else {
-            this.util.alerts("Add New","User password did not equal",['Ok']);
-          }
+        if (typeof(this.buyeraddress) != 'undefined' && typeof(this.buyerfirstname) != 'undefined' && typeof(this.buyerlastname) != 'undefined' && typeof(this.buyermiddlename) != 'undefined'  ){
+          this.util.newdata({
+            'userdetails': {  
+              'address': typeof(this.buyeraddress) != 'undefined'?this.buyeraddress:'none',
+              'firstname': typeof(this.buyerfirstname) != 'undefined'?this.buyerfirstname:'none', 
+              'lastname': typeof(this.buyerlastname) != 'undefined'?this.buyerlastname:'none', 
+              'middlename': typeof(this.buyermiddlename) != 'undefined'?this.buyermiddlename:'none',
+              'cellnumber': typeof(this.cellnumber) != 'undefined'?this.cellnumber:'none', 
+              'email':typeof(this.emails) != 'undefined'? this.emails:'none',
+            }
+          });
+          this.navigate();
         } else {    
           this.erroralert();
         }        

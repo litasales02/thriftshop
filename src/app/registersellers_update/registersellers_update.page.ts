@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component'; 
+import { NullTemplateVisitor } from '@angular/compiler';
 
 
 @Component({
@@ -19,13 +20,31 @@ export class RegisterSellersPageUpdate implements OnInit {
   sellermiddlename: "";
 
   cellnumber: "";
-  telnumber: "";
+  telnumber: NullTemplateVisitor
   emails: "";
   productimage = '/assets/store.png';
-  iamgefile="";
+  iamgefile=""; 
+  userdata = null;
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+    var self = this;
     this.util.getstorebyid(this.util.userid,function(data){
-      console.log(data);
+      
+      self.userdata = Object.values(data)[0];
+      console.log( self.userdata);
+
+      self.sellerstorename = self.userdata['storename'];
+      self.selleraddress1 = self.userdata['address1'];
+      self.selleraddress2 = self.userdata['address2'];
+      self.sellerfirstname = self.userdata['firstname'];
+      self.sellerlastname = self.userdata['lastname'];
+      self.sellermiddlename = self.userdata['middlename'];
+
+      self.cellnumber = self.userdata['cellnumber'];
+      self.telnumber = self.userdata['telnumber'];
+      self.emails = self.userdata['email'];
+
+
+
     });
   }
   ngOnInit() {
@@ -50,11 +69,12 @@ export class RegisterSellersPageUpdate implements OnInit {
           'middlename': self.sellermiddlename!=""?self.sellermiddlename:'none',
           'cellnumber': self.cellnumber!=""?self.cellnumber:'none',
           'telnumber': typeof(self.telnumber) != 'undefined'?self.telnumber:'none',
-          'email': typeof(self.emails) != 'undefined'?self.emails:'none',
-          "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
+          'email': typeof(self.emails) != 'undefined'?self.emails:'none'
         }
       });
       self.navigate();
+    } else {
+      self.util.alerts("Update User","Please fill all required text",['Ok']);
     }
   }
   navigate() {
