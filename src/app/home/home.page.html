@@ -30,7 +30,7 @@
     <ion-slide *ngFor="let datas of util.productdata" >        
       <ion-item  class="items" routerLink="/products/details/{{datas.key}}/home" > 
         <ion-avatar slot="start" class="itemsproduct">
-          <img [src]="datas.itemimg" />
+          <img [src]="datas.itemimg!=''?datas.itemimg:'../../assets/logo.png'" />
         </ion-avatar>
         <!-- <ion-label>
           <h2>{{datas.productname}}</h2>

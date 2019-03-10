@@ -90,6 +90,7 @@ export class AppComponent implements OnInit {
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp);
+      this.calculateAllDistancesStores();
     });
     // if(!this.loginStatus){
       
@@ -143,6 +144,47 @@ export class AppComponent implements OnInit {
   }
   md5function(str){
     return Md5.hashStr(str);
+  }
+  calculateAllDistancesStores(){
+    var self = this;
+    var sellergeodata = []; 
+    this.storedata.forEach(function(element,index,arr){
+      if(typeof(element.geodata) != 'undefined'){ 
+        // console.log(element.geodata.status);
+        if(element.usertype == 'seller' && element.geodata.status == 1 ){ //&& element.key != self.userid
+
+
+          if(element.geodata.lat != 0 && element.geodata.lng != 0){
+            var totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+            let item = element.geodata;
+            item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
+            item.key = element.key; 
+            item.sellers = 1; 
+            item.totaldistance = totaldistance; 
+            item.title = "Store :" + element.storename;
+            // console.log(item);
+            sellergeodata.push(item);
+          }
+
+        }
+      }
+    });
+  }
+  distance2coor(lat1,lon1,lat2,lon2){
+    var R = 6371; // Radius of the earth in km
+    var dLat = this.deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = this.deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    return d;
+  }
+  deg2rad(deg) {
+    return deg * (Math.PI/180)
   }
   menudisabled(){
     this.menuCtrl.enable(false);
@@ -493,16 +535,21 @@ export class AppComponent implements OnInit {
     var self = this;
     this.productdata = [];
     this.storedata.forEach(element => {
-
       // var d = element.val();  
       // console.log(element);
       // console.log(element.rstatus);
       // console.log(element.usertype);
-      if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){
-        
-        Object.entries(element.product).forEach(function(element2,index,arr){
+      var totaldistance = 0.0;
+      if(typeof(element.geodata) != 'undefined'){ 
+        if(element.geodata.lat != 0 && element.geodata.lng != 0){
+          totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+        }
+      }
+      if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){        
+        Object.entries(element.product).forEach(function(element2){
             let item = Object.assign({}, element2)[1];
-            item['key'] = Object.assign({}, element2)[0]; 
+            item['key'] = Object.assign({}, element2)[0];
+            item['totaldistance'] = totaldistance; 
             // console.log(item);
             self.productdata.push(item);
         });
@@ -524,6 +571,10 @@ export class AppComponent implements OnInit {
       //    }         
       // });
     })
+    self.productdata.sort((a,b)=>{
+      return  parseFloat(b.totaldistance) - parseFloat(a.totaldistance); 
+    });
+    console.log(self.productdata);
     // this.productdata = [];
     // let newInfo = firebase.database().ref('maindata').orderByKey();
     // newInfo.on('value',childSnapshot => {
