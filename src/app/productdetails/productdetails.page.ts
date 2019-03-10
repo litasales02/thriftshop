@@ -22,6 +22,7 @@ export class ProductDetailsPage implements OnInit {
   fav = 0;
   routerlingks = "";
   star = '/assets/unhart.png';
+  selecteduserkey = "";
   constructor(
     public activatedRoute: ActivatedRoute, 
     public router: Router, 
@@ -36,6 +37,7 @@ export class ProductDetailsPage implements OnInit {
       if(this.child == "home"){
         this.directlocation = "/home";
       }
+      // this.util.userid
       // this.util.getproductsbyid(this.id);
       // console.log(this.util.productdata);
       this.util.getproductsbyid2(this.id,(element)=>{
@@ -47,6 +49,7 @@ export class ProductDetailsPage implements OnInit {
           this.price = element.price;
           this.producttype = element.producttype;
           self.util.selecteduserkey = element.ukey;
+          self.selecteduserkey = element.ukey;
           self.util.selecteditem = element.key;
           self.description = element.description;
           // console.log(self.util.selecteduserkey);

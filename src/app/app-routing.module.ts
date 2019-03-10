@@ -84,6 +84,10 @@ const routes: Routes = [
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
   },
   {
+    path: 'products/edit/:id',
+    loadChildren: './updateproduct/updateproduct.module#UpdateProductPageModule'
+  },
+  {
     path: 'products/details/:id/:child',
     loadChildren: './productdetails/productdetails.module#ProductDetailsPageModule'
   },

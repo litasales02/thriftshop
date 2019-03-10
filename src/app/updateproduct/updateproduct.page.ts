@@ -17,13 +17,23 @@ export class UpdateProductPage implements OnInit {
   description: "";
   productimage = '/assets/store.png';
   iamgefile="";
-  constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
-    if (this.util.userid == ''){
-      this.util.menuRouting('/login');
-    } else if( this.util.userid != '' && this.util.requirementsdata.status == 1) {   
-      this.util.alerts('Hi','Please update your requirements first before you create products.',['ok']);   
-      this.util.menuRouting('/home');
-    }
+  keyprodid = "";
+  constructor(public activatedRoute: ActivatedRoute, public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
+    var self = this;
+    this.keyprodid = this.activatedRoute.snapshot.paramMap.get('id');
+
+    this.util.getproductsbyid2(this.keyprodid,(element)=>{ 
+      element.forEach(element => {
+        this.productimage = element.itemimg;
+        this.productname = element.productname;
+        this.unittype = element.unittype;
+        this.price = element.price;
+        this.producttype = element.producttype;
+        self.util.selecteduserkey = element.ukey;
+        self.util.selecteditem = element.key;
+        self.description = element.description;
+      });
+    });
   }
   ngOnInit() {
   }
@@ -35,7 +45,7 @@ export class UpdateProductPage implements OnInit {
         typeof(this.qty) != 'undefined' &&
         typeof(this.description) != 'undefined'){
       if (this.productname != "" && this.price != ""){
-        this.util.updatenewproduct({
+        this.util.updateproduct(this.keyprodid ,{
           'productname': this.productname,
           'unittype': this.unittype,
           'price': this.price,
@@ -44,16 +54,17 @@ export class UpdateProductPage implements OnInit {
           'itemimg':this.iamgefile,
           'description': this.description
         });
-        this.util.alerts("New Product","Product Added",['Ok']);
+        this.util.alerts("Update Product","Product Added",['Ok']);
         this.util.menuRouting('/home');
       } else {
-        this.util.alerts("Add New","Please fill required text",['Ok']);
+        this.util.alerts("Update","Please fill required text",['Ok']);
       }
     }else {
-      this.util.alerts("Add New","Please fill required text",['Ok']);
+      this.util.alerts("Update","Please fill required text",['Ok']);
     }
   }
   fileChange(event){ 
+    var self = this;
     if(event.target.files && event.target.files[0]){
       let reader = new FileReader();
 
@@ -62,9 +73,11 @@ export class UpdateProductPage implements OnInit {
         this.iamgefile = event.target.result;
       }
       reader.readAsDataURL(event.target.files[0]);
-    }
-      // let fileList: FileList = event.target.files;  
-      // let file: File = fileList[0];
-      // this.iamgefile = file;
+
+      this.util.updateproduct(self.keyprodid ,{ 
+        'itemimg':self.iamgefile, 
+      });
+
+    } 
   }
 }

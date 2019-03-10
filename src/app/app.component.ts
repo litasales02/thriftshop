@@ -733,6 +733,9 @@ export class AppComponent implements OnInit {
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/product').push();
     await newproduct.set(value);
   } 
+  async updateproduct(prodid,value){
+    firebase.database().ref('maindata/'+ this.userid + '/product/' + prodid).update(value); 
+  } 
   async updaterequirements(value){
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/requirements');
     await newproduct.update(value);
