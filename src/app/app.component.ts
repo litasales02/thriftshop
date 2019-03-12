@@ -12,9 +12,17 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
 // import {md5} from 'node_modules'
 // var md5 = require('md5');
-import {ol} from "ol";
-import  "ol-ext";
-import  "openlayers-ext";
+// import "ol";
+// import  "ol-ext";
+// import * as ol from 'ol';
+
+import OlMap from 'ol/Map';
+import OlXYZ from 'ol/source/XYZ';
+import Olsource from 'ol/source/Vector';
+import OlTileLayer from 'ol/layer/Tile';
+import OlView from 'ol/View';
+import Olgraph from 'ol';
+
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -24,6 +32,7 @@ const configfirebase = {
   storageBucket: 'thriffshop.appspot.com'
 };
 firebase.initializeApp(configfirebase); 
+declare var ol;
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -76,6 +85,11 @@ export class AppComponent implements OnInit {
   selecteduserkey = "";
   messagechange = false;
 
+  map: OlMap;
+  source: Olsource;
+  layer: OlTileLayer;
+  view: OlView;
+  // dijkstra: Olgraph;
   constructor(
     public router: Router,
     private platform: Platform,
@@ -104,19 +118,19 @@ export class AppComponent implements OnInit {
     this.geolocation.getCurrentPosition().then((resp) => {
       self.usergeolocationlat = resp.coords.latitude;
       self.usergeolocationlng = resp.coords.longitude;
-      console.log("resp.coords.latitude",resp.coords.latitude)
-      console.log("resp.coords.longitude",resp.coords.longitude) 
+      // console.log("resp.coords.latitude",resp.coords.latitude)
+      // console.log("resp.coords.longitude",resp.coords.longitude) 
       if((resp.coords.latitude == 0 && resp.coords.longitude == 0) ||       
         ((resp.coords.latitude < 6.9782 || resp.coords.latitude >= 7.5858) &&   
         (resp.coords.longitude < 125.2579 || resp.coords.longitude >= 125.7056))){
         self.usergeolocationlat =  7.148419523108726;
         self.usergeolocationlng =  125.52915832519531;
-        console.log("resp.coords",11);
+        // console.log("resp.coords",11);
         self.geoaccurate = false;
       }else{        
         self.usergeolocationlat = resp.coords.latitude;
         self.usergeolocationlng = resp.coords.longitude;
-        console.log("resp.coords",22);
+        // console.log("resp.coords",22);
         self.geoaccurate = true;
       }
 
@@ -127,19 +141,19 @@ export class AppComponent implements OnInit {
       this.watch.subscribe((data) => { 
         self.usergeolocationlat = data.coords.latitude;
         self.usergeolocationlng = data.coords.longitude;
-        console.log("data.coords.latitude",data.coords.latitude);
-        console.log("data.coords.longitude",data.coords.longitude);
+        // console.log("data.coords.latitude",data.coords.latitude);
+        // console.log("data.coords.longitude",data.coords.longitude);
         if((data.coords.latitude == 0 && data.coords.longitude == 0) ||       
           ((data.coords.latitude <= 6.9782 || data.coords.latitude >=  7.5858) &&   
           (data.coords.longitude <= 125.2579 || data.coords.longitude >= 125.7056))){
           self.geoaccurate = false;
           self.usergeolocationlat =  7.148419523108726;
           self.usergeolocationlng =  125.52915832519531;    
-          console.log("data.coords",1);
+          // console.log("data.coords",1);
         }else{        
           self.usergeolocationlat = data.coords.latitude;
           self.usergeolocationlng = data.coords.longitude;
-          console.log("data.coords",2);
+          // console.log("data.coords",2);
           self.geoaccurate = true;
         }
       });
@@ -193,13 +207,18 @@ export class AppComponent implements OnInit {
   }
   async dijkstrafunction(start:any,end:any,callback){
     console.log("dijkstrafunction");
-    var graph = new ol.source.Vector({
+    this.source = new Olsource({
       url: '/assets/davao.geojson',
       format: new ol.format.GeoJSON()
-    });
-
+    })
+    // let graph = new ol.source.Vector({
+    //   url: '/assets/davao.geojson',
+    //   format: new ol.format.GeoJSON()
+    // });
+    
+    // this.dijkstra = new Olgraph.
     var dijkstra = new ol.graph.Dijskra({
-      source: graph
+      source: this.source
     });
 
     // // dijkstra.on('calculating', function(e) {
