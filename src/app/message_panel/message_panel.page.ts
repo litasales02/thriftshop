@@ -41,7 +41,7 @@ export class Messages_panelPage implements OnInit {
     var self = this; 
     if(typeof(this.messagess) != 'undefined' && this.messagess != ''){
       this.util.usersendmsg(this.id,this.messagess,function(d){ 
-          try { 
+          try {
             self.content.scrollToBottom(300); 
           }catch(e){
 

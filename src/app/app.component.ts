@@ -12,7 +12,9 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
 // import {md5} from 'node_modules'
 // var md5 = require('md5');
-// import { ol } from "ol-ext";
+import {ol} from "ol";
+import  "ol-ext";
+import  "openlayers-ext";
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -87,6 +89,7 @@ export class AppComponent implements OnInit {
     public navCtrl: NavController,
     public menuCtrl: MenuController ) {
     //  console.log(Md5.hashStr('pikaadmin'));
+
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -187,6 +190,59 @@ export class AppComponent implements OnInit {
   }
   deg2rad(deg) {
     return deg * (Math.PI/180)
+  }
+  async dijkstrafunction(start:any,end:any,callback){
+    console.log("dijkstrafunction");
+    var graph = new ol.source.Vector({
+      url: '/assets/davao.geojson',
+      format: new ol.format.GeoJSON()
+    });
+
+    var dijkstra = new ol.graph.Dijskra({
+      source: graph
+    });
+
+    // // dijkstra.on('calculating', function(e) {
+    // //   // if ($('#path').prop('checked')) {
+    // //     var route = dijkstra.getBestWay();
+    // //   //   result.clear();
+    // //   //   result.addFeatures(route);
+    // //     callback(route)
+    // //   // }
+    // // });
+    // dijkstra.getLength = function(geom) {
+    //   if (geom.getGeometry) {
+    //     //? return geom.get('km')*1000;
+    //     geom = geom.getGeometry();
+    //   }
+    //   return ol.sphere.getLength(geom)
+    // }
+    dijkstra.on('finish', function(e) {
+      // $('#warning').hide();
+      // result.clear();
+      if (!e.route.length) {
+        // $("#notfound").show();
+      } else {
+        // $("#result").show();
+        console.log(e)
+        var t = (e.distance/1000).toFixed(2) + 'km';
+        // Weighted distance
+        // if ($("#speed").prop('checked')) {
+        //   var h = e.wDistance/1000;
+        //   var mn = Math.round((e.wDistance%1000)/1000*60);
+        //   if (mn < 10) mn = '0'+mn;
+        //   t += '<br/>' + h.toFixed(0) + 'h ' + mn + 'mn';
+        // }
+        // $("#result span").html(t);
+      }
+      // result.addFeatures(e.route);
+      start = end;
+      // popStart.show(start);
+      // popEnd.hide();
+    });
+    dijkstra.path(start,end);
+
+
   }
   menudisabled(){
     this.menuCtrl.enable(false);
@@ -469,7 +525,7 @@ export class AppComponent implements OnInit {
     });
   }
   getmessages(){
-    let newInfo = firebase.database().ref('maindata/'+this.userid ).child('messages').orderByKey();
+    let newInfo = firebase.database().ref('maindata/'+this.userid +"/messages").orderByKey();//.child('')
     newInfo.on('child_changed',childSnapshot => {  
       if(this.messagechange == null){
         // console.log("load new data");
@@ -480,6 +536,7 @@ export class AppComponent implements OnInit {
         if(total_change <= coun_data ){
           this.usermessage[0].messages.push(data.val());
           this.messagechange = true;
+          console.log(this.usermessage[0]);
         }
         coun_data++;
       }); 
