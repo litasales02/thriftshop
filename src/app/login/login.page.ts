@@ -18,9 +18,12 @@ export class LoginPage implements OnInit {
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent) {
     // this.util.logstatus();
     this.util.menudisabled();
+    this.util.dijkstrafunction([7.138419523108726,125.53915832519531],[0,0],(data)=>{
+      console.log(data);
+    })
   }
   async submitlogin(){ 
-    console.log(this.util.md5function(this.txtusername));
+    // console.log(this.util.md5function(this.txtusername));
     var self = this; 
     this.isDisabled = true;
     // this.util.presentLoadingWithOptions();

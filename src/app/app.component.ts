@@ -12,7 +12,9 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
 // import {md5} from 'node_modules'
 // var md5 = require('md5');
-import { ol } from "ol-ext";
+import {ol} from "ol";
+import  "ol-ext";
+import  "openlayers-ext";
 
 const configfirebase = {
   apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
@@ -87,9 +89,7 @@ export class AppComponent implements OnInit {
     public navCtrl: NavController,
     public menuCtrl: MenuController ) {
     //  console.log(Md5.hashStr('pikaadmin'));
-    this.dijkstrafunction([7.138419523108726,125.53915832519531],[0,0],(data)=>{
-      console.log(data);
-    })
+
     var self = this;
     this.ref.on('value',resp =>{
       this.storedata = [];
@@ -192,6 +192,7 @@ export class AppComponent implements OnInit {
     return deg * (Math.PI/180)
   }
   async dijkstrafunction(start:any,end:any,callback){
+    console.log("dijkstrafunction");
     var graph = new ol.source.Vector({
       url: '/assets/davao.geojson',
       format: new ol.format.GeoJSON()
@@ -200,7 +201,7 @@ export class AppComponent implements OnInit {
     var dijkstra = new ol.graph.Dijskra({
       source: graph
     });
-    
+
     // // dijkstra.on('calculating', function(e) {
     // //   // if ($('#path').prop('checked')) {
     // //     var route = dijkstra.getBestWay();
@@ -216,30 +217,30 @@ export class AppComponent implements OnInit {
     //   }
     //   return ol.sphere.getLength(geom)
     // }
-    // dijkstra.on('finish', function(e) {
-    //   // $('#warning').hide();
-    //   // result.clear();
-    //   if (!e.route.length) {
-    //     // $("#notfound").show();
-    //   } else {
-    //     // $("#result").show();
-    //     console.log(e)
-    //     var t = (e.distance/1000).toFixed(2) + 'km';
-    //     // Weighted distance
-    //     // if ($("#speed").prop('checked')) {
-    //     //   var h = e.wDistance/1000;
-    //     //   var mn = Math.round((e.wDistance%1000)/1000*60);
-    //     //   if (mn < 10) mn = '0'+mn;
-    //     //   t += '<br/>' + h.toFixed(0) + 'h ' + mn + 'mn';
-    //     // }
-    //     // $("#result span").html(t);
-    //   }
-    //   // result.addFeatures(e.route);
-    //   start = end;
-    //   // popStart.show(start);
-    //   // popEnd.hide();
-    // });
-    // dijkstra.path(start,end);
+    dijkstra.on('finish', function(e) {
+      // $('#warning').hide();
+      // result.clear();
+      if (!e.route.length) {
+        // $("#notfound").show();
+      } else {
+        // $("#result").show();
+        console.log(e)
+        var t = (e.distance/1000).toFixed(2) + 'km';
+        // Weighted distance
+        // if ($("#speed").prop('checked')) {
+        //   var h = e.wDistance/1000;
+        //   var mn = Math.round((e.wDistance%1000)/1000*60);
+        //   if (mn < 10) mn = '0'+mn;
+        //   t += '<br/>' + h.toFixed(0) + 'h ' + mn + 'mn';
+        // }
+        // $("#result span").html(t);
+      }
+      // result.addFeatures(e.route);
+      start = end;
+      // popStart.show(start);
+      // popEnd.hide();
+    });
+    dijkstra.path(start,end);
 
 
   }
