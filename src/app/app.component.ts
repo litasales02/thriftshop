@@ -191,7 +191,7 @@ export class AppComponent implements OnInit {
   deg2rad(deg) {
     return deg * (Math.PI/180)
   }
-  dijkstrafunction(start:any,end:any,callback){
+  async dijkstrafunction(start:any,end:any,callback){
     var graph = new ol.source.Vector({
       url: '/assets/davao.geojson',
       format: new ol.format.GeoJSON()
@@ -200,7 +200,7 @@ export class AppComponent implements OnInit {
     var dijkstra = new ol.graph.Dijskra({
       source: graph
     });
-
+    
     // // dijkstra.on('calculating', function(e) {
     // //   // if ($('#path').prop('checked')) {
     // //     var route = dijkstra.getBestWay();
