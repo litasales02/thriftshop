@@ -10,18 +10,17 @@ import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
-// import {md5} from 'node_modules'
-// var md5 = require('md5');
-// import "ol";
-// import  "ol-ext";
-// import * as ol from 'ol';
 
-import OlMap from 'ol/Map';
-import OlXYZ from 'ol/source/XYZ';
-import Olsource from 'ol/source/Vector';
-import OlTileLayer from 'ol/layer/Tile';
-import OlView from 'ol/View';
-import Olgraph from 'ol';
+// import Ol from 'ol';
+// import OlMap from 'ol/Map';
+// import OlXYZ from 'ol/source/XYZ';
+// import Olsource from 'ol/source/Vector';
+// import OlTileLayer from 'ol/layer/Tile';
+// import OlView from 'ol/View';
+// import OlFormat from 'ol/format';
+// import Olgraph from 'openlayers-ext';
+
+// import "node_modules/ol-ext/dist/ol-ext.js";
 
 
 const configfirebase = {
@@ -85,10 +84,10 @@ export class AppComponent implements OnInit {
   selecteduserkey = "";
   messagechange = false;
 
-  map: OlMap;
-  source: Olsource;
-  layer: OlTileLayer;
-  view: OlView;
+  // map: OlMap;
+  // source: Olsource;
+  // layer: OlTileLayer;
+  // view: OlView;
   // dijkstra: Olgraph;
   constructor(
     public router: Router,
@@ -206,21 +205,29 @@ export class AppComponent implements OnInit {
     return deg * (Math.PI/180)
   }
   async dijkstrafunction(start:any,end:any,callback){
-    console.log("dijkstrafunction");
-    this.source = new Olsource({
-      url: '/assets/davao.geojson',
+    console.log("dijkstrafunction"); 
+
+    var graph = new ol.source.Vector({
+      url: 'http://tile.osm.org/{z}/{x}/{y}.png',
       format: new ol.format.GeoJSON()
-    })
-    // let graph = new ol.source.Vector({
-    //   url: '/assets/davao.geojson',
-    //   format: new ol.format.GeoJSON()
-    // });
-    
-    // this.dijkstra = new Olgraph.
-    var dijkstra = new ol.graph.Dijskra({
-      source: this.source
+    });
+     
+    var dijskra = new ol.graph.Dijskra({
+      source: graph
     });
 
+    let listenerKey = graph.on('change', function() {
+      if (graph.getState() == 'ready') {
+        console.log('ready');
+        ol.Observable.unByKey(listenerKey);
+        dijskra.path(start,end);
+      }else {
+        
+        console.log('ready');
+      }
+    });
+    
+    dijskra.path(start,end);
     // // dijkstra.on('calculating', function(e) {
     // //   // if ($('#path').prop('checked')) {
     // //     var route = dijkstra.getBestWay();
@@ -236,7 +243,9 @@ export class AppComponent implements OnInit {
     //   }
     //   return ol.sphere.getLength(geom)
     // }
-    dijkstra.on('finish', function(e) {
+
+
+    dijskra.on('finish', function(e) {
       // $('#warning').hide();
       // result.clear();
       if (!e.route.length) {
@@ -259,7 +268,6 @@ export class AppComponent implements OnInit {
       // popStart.show(start);
       // popEnd.hide();
     });
-    dijkstra.path(start,end);
 
 
   }
@@ -556,6 +564,7 @@ export class AppComponent implements OnInit {
           this.usermessage[0].messages.push(data.val());
           this.messagechange = true;
           console.log(this.usermessage[0]);
+          console.log(data.val());
         }
         coun_data++;
       }); 
@@ -652,7 +661,7 @@ export class AppComponent implements OnInit {
     self.productdata.sort((a,b)=>{
       return  parseFloat(b.totaldistance) - parseFloat(a.totaldistance); 
     });
-    console.log(self.productdata);
+    // console.log(self.productdata);
     // this.productdata = [];
     // let newInfo = firebase.database().ref('maindata').orderByKey();
     // newInfo.on('value',childSnapshot => {
