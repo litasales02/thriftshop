@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, NavController, MenuController } from '@ionic/angular';
+// import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
@@ -90,6 +91,7 @@ export class AppComponent implements OnInit {
   // view: OlView;
   // dijkstra: Olgraph;
   constructor(
+    // private push: Push,
     public router: Router,
     private platform: Platform,
     private splashScreen: SplashScreen, 
@@ -110,9 +112,18 @@ export class AppComponent implements OnInit {
       // this.calculateAllDistancesStores();
       this.splashScreen.hide();
     });
-    // if(!this.loginStatus){
-      
-    // }
+    
+    // this.push.hasPermission()
+    // .then((res: any) => {
+  
+    //   if (res.isEnabled) {
+    //     console.log('We have permission to send push notifications');
+    //   } else {
+    //     console.log('We do not have permission to send push notifications');
+    //   }
+  
+    // });
+
     this.initializeApp(); 
     this.geolocation.getCurrentPosition().then((resp) => {
       self.usergeolocationlat = resp.coords.latitude;
@@ -227,7 +238,7 @@ export class AppComponent implements OnInit {
       }
     });
     
-    dijskra.path(start,end);
+    // dijskra.path(start,end);
     // // dijkstra.on('calculating', function(e) {
     // //   // if ($('#path').prop('checked')) {
     // //     var route = dijkstra.getBestWay();
@@ -357,7 +368,7 @@ export class AppComponent implements OnInit {
               self.rates = self.kanoevaluation.total_stars;
               self.updatedataset(data.key,{
                 totalStars: self.kanoevaluation.total_stars
-              });            
+              });
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
                 self.requirementsdata = data.val().requirements; 
@@ -554,17 +565,17 @@ export class AppComponent implements OnInit {
   getmessages(){
     let newInfo = firebase.database().ref('maindata/'+this.userid +"/messages").orderByKey();//.child('')
     newInfo.on('child_changed',childSnapshot => {  
-      if(this.messagechange == null){
-        // console.log("load new data");
-      }
       var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
       childSnapshot.forEach(data => { 
         if(total_change <= coun_data ){
-          this.usermessage[0].messages.push(data.val());
-          this.messagechange = true;
-          console.log(this.usermessage[0]);
-          console.log(data.val());
+          let item = data.val(); 
+            for(var x = 0; x < this.usermessage.length;x++){
+              if(this.usermessage[x].key == childSnapshot.key){
+                this.usermessage[x].messages.push(item);
+              } 
+            } 
+          this.messagechange = true; 
         }
         coun_data++;
       }); 

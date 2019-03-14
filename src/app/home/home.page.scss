@@ -3,12 +3,21 @@
     width: 50px;
 }
 .items {
-    height: 100%;
+    height: auto;
     width: 100%;
+    display: inline-block;
+}
+.avat{
     text-align: center;
+}
+.items-details {
+    padding-left: 1px;
+    height: auto;
+    width: auto;
+    text-align: left;
     display: inline-block;
 }
 .itemsproduct {
-    height: 100%;
+    height: 300px;
     width: 100%;
 }
