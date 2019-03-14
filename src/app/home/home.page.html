@@ -29,16 +29,16 @@
   <ion-slides pager="true" options="flip"> 
     <ion-slide *ngFor="let datas of util.productdata" >        
       <div  class="items" routerLink="/products/details/{{datas.key}}/home" > 
-        <ion-avatar class="itemsproduct avat">
+        <ion-avatar class="itemsproduct ">
           <img [src]="datas.itemimg!=''?datas.itemimg:'../../assets/logo.png'" />
         </ion-avatar>
         <div class="items-details">
-          <ion-item slot="start">
-            <h1>aaaa{{datas.productname}}</h1><br />
-            <p>Type      : {{datas.producttype}}</p> <br />
-            <p>Item Per  : {{datas.unittype}}</p> <br />
-            <p>Price     : {{datas.price}}</p>  <br />
-          </ion-item>        
+          <ion-label slot="start">
+            <h1>aaaa{{datas.productname}}</h1> 
+            <h3>Type      : {{datas.producttype}}</h3> 
+            <h3>Item Per  : {{datas.unittype}}</h3> 
+            <h3>Price     : {{datas.price}}</h3>  
+          </ion-label>        
           <ion-buttons slot="end" class="love hide" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
             <img [src]="favoritestar(datas.key)" height="50" width="50" /> 
           </ion-buttons>          

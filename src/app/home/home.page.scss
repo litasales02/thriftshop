@@ -4,18 +4,17 @@
 }
 .items {
     height: auto;
-    width: 100%;
-    display: inline-block;
+    width: 100%; 
 }
 .avat{
     text-align: center;
+    display: inline-block;
 }
 .items-details {
     padding-left: 1px;
     height: auto;
     width: auto;
-    text-align: left;
-    display: inline-block;
+    text-align: left; 
 }
 .itemsproduct {
     height: 300px;
