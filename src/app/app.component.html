@@ -40,8 +40,8 @@
                 <ion-icon slot="start" [name]="'chatboxes'"></ion-icon>
                 <ion-label>
                   Messages
-                </ion-label>                
-                <ion-icon slot="end" [name]="'alert'"  line="none" *ngIf="newmessagecount>0" style="color:red;">{{newmessagecount}}</ion-icon>
+                </ion-label>       
+                <ion-badge slot="end" line="none"  style="color:red;" color="primary" *ngIf="newmessagecount>0">{{newmessagecount}}</ion-badge>   
               </ion-item>
               <ion-item [routerDirection]="'root'"   line="none"  [routerLink]="'/product/list/all/home'">
                 <ion-icon slot="start" [name]="'list'"></ion-icon>

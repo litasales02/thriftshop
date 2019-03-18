@@ -381,7 +381,7 @@ export class AppComponent implements OnInit {
               };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
-              self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
+              self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
               self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
               
               self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
@@ -787,50 +787,85 @@ export class AppComponent implements OnInit {
   load_messages(){// key sa client kong kinsa ang nka contact
     var self = this;
     self.usermessage = [];
+    self.newmessagecount = 0;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
         if(typeof(element.messages) != 'undefined'){  
-          Object.entries(element.messages).forEach(element2 => {            
-            if(element2[0] == 'admin'){
+          Object.entries(element.messages).forEach(element2 => {
+            if(element2[0] == 'admin'){              
+                let messagecount = 0;
                 let msges = [];              
                 let item = {
                   key: 'admin',
-                  messages: []
+                  messages: [],
+                  newmessagecount: 0
                 };
-                Object.entries(element2[1]).forEach(msg=>{ 
+                Object.entries(element2[1]).forEach(msg=>{   
                   let mgss = msg[1];
-                  mgss.key = msg[0];
-                  msges.push(mgss);                  
-                  if(mgss.status){
-                    self.newmessagecount++;
+                  mgss.key = msg[0];             
+                  if(typeof(mgss.status)=='undefined' || mgss.status == 0){
+                    self.newmessagecount++; 
+                    messagecount++;
+                    mgss.status = 0;
                   }
+                  msges.push(mgss);     
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
+                item.newmessagecount = messagecount; 
                 self.usermessage.push(item);
             } else {
-              self.getstorebyid(element2[0],function(rdata){ 
-                // console.log(rdata);
+              self.getstorebyid(element2[0],function(rdata){  
+                let messagecount = 0;
                 let msges = [];              
                 let item = rdata[0];
                 Object.entries(element2[1]).forEach(msg=>{ 
                   let mgss = msg[1];
-                  mgss.key = msg[0];
-                  msges.push(mgss);                                   
-                  if(mgss.status){
+                  mgss.key = msg[0];                      
+                  if(typeof(mgss.status)=='undefined' || mgss.status == 0){
                     self.newmessagecount++;
+                    messagecount++;
+                    mgss.status = 0;
                   }
+                  msges.push(mgss);             
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
+                item.newmessagecount = messagecount; 
                 self.usermessage.push(item);
               })
             }
           }); 
         }
       }
-      // console.log(self.usermessage);
+      console.log(self.usermessage);
     }); 
+  }
+  updatemessageitems(key){
+    var self = this;
+    var updatedUserData = {}; 
+    Object.entries(self.usermessage).forEach(element => { 
+      if(key == element[1].key){
+        Object.values(element[1].messages).forEach(function(entries,index,arr){
+          updatedUserData['maindata/'+ self.userid + '/messages/' + element[1].key + '/' + entries['key']] = {
+            reply: entries['key'],
+            send: entries['send'],
+            status: 1
+          }
+          if(index == arr.length - 1){ 
+            firebase.database().ref().update(updatedUserData,function(error){
+              if (error) {
+                console.log("Error updating data:", error);
+              }else{
+                self.load_messages();
+              }
+            })
+          }
+        });        
+      } else {
+        console.log( element[1] );
+      }
+    });
   }
   async load_messages2(callback){ 
     var self = this;
@@ -879,23 +914,30 @@ export class AppComponent implements OnInit {
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
     await newproduct.set({
       'send': message,
-      'reply': ''
+      'reply': '',
+      'status': 0
     });
     if(key == 'admin'){
       let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
       await newproduct2.set({
         'send': '',
-        'reply': message
+        'reply': message,
+        'status': 1
       });          
       this.load_messages();
     }else{
       let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
       await newproduct2.set({
         'send': '',
-        'reply': message
+        'reply': message,
+        'status': 1
       });       
     }
+    let arr = {}
+    arr['maindata/'+ key+ '/messages/'+ this.userid] = {
 
+    }
+    // this.ref.database().ref()
     if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
       // console.log("send");
     }else{
@@ -905,6 +947,7 @@ export class AppComponent implements OnInit {
     }
     callbacks("done"); 
   } 
+
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
