@@ -11,8 +11,11 @@ import {
   MyLocation,
   LatLngBounds,
   GeocoderRequest,
+  GeocoderResult,
   VisibleRegion,
-  LatLng, 
+  Geocoder,
+  LatLng,
+  BaseArrayClass, 
 } from '@ionic-native/google-maps';
 
  declare var google;
@@ -74,7 +77,7 @@ export class MapsPage implements OnInit {
     }); 
     this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
       if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
-        self.util.markeralerts(data[1].get("title"),'Do you want to track to your location?',[
+        self.util.markeralerts(data[1].get("title"),'Get direction.',[
           {
             text:  "Yes", 
             cssClass: 'Do you want to track to your location?',
@@ -142,18 +145,29 @@ export class MapsPage implements OnInit {
     }); 
     this.reset();
   } 
-  trackings(start:any,end:any){ 
-    this.directionsService.route({
-      origin: start,
-      destination: end,
-      travelMode: 'DRIVING'
-    }, (response, status) => {
-      if (status === 'OK') {
-        this.directionsDisplay.setDirections(response);
-      } else {
-        window.alert('Directions request failed due to ' + status);
-      }
-    });
+  trackings(start:any,end:any){
+    
+    let options: GeocoderRequest = {
+      position:  {"lat": 37.421655, "lng": -122.085637}
+    };
+    // latitude,longitude -> address
+    Geocoder.geocode(options)
+    .then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
+      mvcArray.one('finish').then(() => {
+        console.log('finish', mvcArray.getArray());
+      });
+    })  
+    // this.directionsService.route({
+    //   origin: start,
+    //   destination: end,
+    //   travelMode: 'DRIVING'
+    // }, (response, status) => {
+    //   if (status === 'OK') {
+    //     this.directionsDisplay.setDirections(response);
+    //   } else {
+    //     window.alert('Directions request failed due to ' + status);
+    //   }
+    // });
   }
   trackingsplace(start,end){ 
     this.directionsService.route({

@@ -32,6 +32,10 @@ const routes: Routes = [
     loadChildren: './messages/messages.module#MessagesPageModule'
   },
   {
+    path: 'review/ratings/:id',
+    loadChildren: './revieweratings/revieweratings.module#RevieweRatingsPageModule'
+  },
+  {
     path: 'message/panel/:id/:child',
     loadChildren: './message_panel/message_panel.module#Messages_panelPageModule'
   },

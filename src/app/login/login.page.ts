@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular'; 
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component'; 
+// import { setFlagsFromString } from 'v8';
 
 @Component({
   selector: 'app-list',
@@ -38,7 +39,7 @@ export class LoginPage implements OnInit {
       if (this.txtusername != "" && this.txtpassword != "") { 
         await this.util.login(this.txtusername,this.txtpassword,function(returns){
           if (returns){
-            self.util.ShowToast('Welcome User!.');
+            self.util.ShowToast('Welcome ' + self.util.drawerTitle + '!.');
             self.count++;
             if(self.util.requirementsdata.status == 0 && self.count == 1 && self.util.userType == "seller"){
               self.util.alerts2("Registration","Please update your requirements to update your registration and all your product's will show.",['Ok']);

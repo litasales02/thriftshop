@@ -22,14 +22,25 @@ import {Md5} from 'ts-md5/dist/md5';
 // import Olgraph from 'openlayers-ext';
 
 // import "node_modules/ol-ext/dist/ol-ext.js";
+// apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+// authDomain: "thrftshp.firebaseapp.com",
+// databaseURL: "https://thrftshp.firebaseio.com",
+// projectId: "thrftshp",
+// storageBucket: "thrftshp.appspot.com",
+// messagingSenderId: "171453440603"
 
-
+// apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
+// authDomain: 'thriffshop.firebaseapp.com',
+// databaseURL: 'https://thriffshop.firebaseio.com',
+// projectId: 'thriffshop',
+// storageBucket: 'thriffshop.appspot.com'
 const configfirebase = {
-  apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
-  authDomain: 'thriffshop.firebaseapp.com',
-  databaseURL: 'https://thriffshop.firebaseio.com',
-  projectId: 'thriffshop',
-  storageBucket: 'thriffshop.appspot.com'
+  apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+  authDomain: "thrftshp.firebaseapp.com",
+  databaseURL: "https://thrftshp.firebaseio.com",
+  projectId: "thrftshp",
+  storageBucket: "thrftshp.appspot.com",
+  messagingSenderId: "171453440603"
 };
 firebase.initializeApp(configfirebase); 
 declare var ol;
@@ -84,6 +95,7 @@ export class AppComponent implements OnInit {
   selecteditem = "";
   selecteduserkey = "";
   messagechange = false;
+  newmessagecount = 0;
 
   // map: OlMap;
   // source: Olsource;
@@ -92,6 +104,7 @@ export class AppComponent implements OnInit {
   // dijkstra: Olgraph;
   constructor(
     // private push: Push,
+    private nativeStorage: NativeStorage,
     public router: Router,
     private platform: Platform,
     private splashScreen: SplashScreen, 
@@ -102,29 +115,31 @@ export class AppComponent implements OnInit {
     private geolocation: Geolocation,
     private fm: FirebaseMessaging,
     public navCtrl: NavController,
-    public menuCtrl: MenuController ) {
-    //  console.log(Md5.hashStr('pikaadmin'));
-
+    public menuCtrl: MenuController ) { 
     var self = this;
+
+    console.log('activating data please wait');
+
+    this.nativeStorage.getItem('maindata')
+    .then(
+      data => {
+        this.storedata = data;
+      },
+      error => console.error(error)
+    );
+
     this.ref.on('value',resp =>{
       this.storedata = [];
-      this.storedata = snapshotToArray(resp);
-      // this.calculateAllDistancesStores();
-      this.splashScreen.hide();
+      this.storedata = snapshotToArray(resp); 
+      console.log('dataloaded');
+      this.nativeStorage.setItem('maindata',this.storedata)
+      .then(
+        () => console.log('Stored item!'),
+        error => console.error('Error storing item', error)
+      );
     });
     
-    // this.push.hasPermission()
-    // .then((res: any) => {
-  
-    //   if (res.isEnabled) {
-    //     console.log('We have permission to send push notifications');
-    //   } else {
-    //     console.log('We do not have permission to send push notifications');
-    //   }
-  
-    // });
-
-    this.initializeApp(); 
+    this.initializeApp();   
     this.geolocation.getCurrentPosition().then((resp) => {
       self.usergeolocationlat = resp.coords.latitude;
       self.usergeolocationlng = resp.coords.longitude;
@@ -167,9 +182,6 @@ export class AppComponent implements OnInit {
           self.geoaccurate = true;
         }
       });
-    //  this.fm.logEvent('page_view', {page: "dashboard"})
-    // .then((res: any) => console.log(res))
-    // .catch((error: any) => console.error(error));
   }
   md5function(str){
     return Md5.hashStr(str);
@@ -364,6 +376,8 @@ export class AppComponent implements OnInit {
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
+              console.log(self.kanoalgosetv2(data.val().feedsseller));
+              
               self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
               self.rates = self.kanoevaluation.total_stars;
               self.updatedataset(data.key,{
@@ -377,7 +391,7 @@ export class AppComponent implements OnInit {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            self.kanoalgo(self.userid);
+            // self.kanoalgo(self.userid);
             self.getmessages();
             self.load_messages();
             callback(true);
@@ -934,6 +948,462 @@ export class AppComponent implements OnInit {
     await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
     // await newproduct.set(value);
   }
+  kanoalgosetv2(feedsseller){
+    var self = this;
+    var users = 0; 
+    var stars = 0; 
+
+    var total_positive_excellent = 0;
+    var total_positive_average = 0;
+    var total_positive_good = 0;
+    var total_positive_bad = 0;
+    var total_positive_poor = 0; 
+
+    
+    var total_negative_excellent = 0;
+    var total_negative_average = 0;
+    var total_negative_good = 0;
+    var total_negative_bad = 0;
+    var total_negative_poor = 0; 
+      
+
+    var si = 0;
+    var di = 0;
+    var asc = 0;
+
+    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+
+    var qualityp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplierp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedbackp = {m:0,a:0,o:0,i:0, r:0,si:0,di:0,asc:0};
+  //   total_excellentp =  m
+  //   total_averagep =  a
+  //   total_goodp =   o
+  //   total_badp =   i
+  //   total_poorp =  r
+
+  // -LXAsHXXhdBTaTXxh3Xp
+  // 1.	It is excellent = e
+  // 2.	It is good = g
+  // 3.	It is average = a
+  // 4.	It is bad = b
+  // 5.	It is poor = p 
+ 
+    if(typeof(feedsseller) != 'undefined'){
+        Object.values(feedsseller).forEach(function(element2,index,arr){   
+            // load tanan user nag rate
+            users++; 
+
+            // questioners positive and negative
+            var positive = ['Q1P1','Q2P1','Q3P1'];
+            var negative = ['Q1P2','Q2P2','Q3P2'];
+
+            positive.forEach(keyelement => {
+              switch(self.kanu_evalletters(element2[keyelement])){
+                case 5:
+                  total_positive_excellent++;
+                  if(keyelement == 'Q1P1'){
+                    quality.m++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.m++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.m++;                    
+                  }
+                  break;
+                case 4:
+                  total_positive_average++;
+                  if(keyelement == 'Q1P1'){
+                    quality.a++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.a++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.a++;                    
+                  }
+                  break;
+                case 3:
+                  total_positive_good++;
+                  if(keyelement == 'Q1P1'){
+                    quality.o++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.o++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.o++;                    
+                  }
+                  break;
+                case 2:
+                  total_positive_bad++;
+                  if(keyelement == 'Q1P1'){
+                    quality.i++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.i++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.i++;                    
+                  }
+                  break;
+                case 1:
+                  total_positive_poor++;
+                  if(keyelement == 'Q1P1'){
+                    quality.r++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.r++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.r++;                    
+                  }
+                  break;
+              }
+            });
+            
+            negative.forEach(keyelement => {
+              switch(self.kanu_evalletters(element2[keyelement])){
+                case 5:
+                  total_negative_excellent++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.m++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.m++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.m++;                    
+                  }
+                  break;
+                case 4:
+                  total_negative_average++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.a++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.a++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.a++;                    
+                  }
+                  break;
+                case 3:
+                  total_negative_good++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.o++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.o++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.o++;                    
+                  }
+                  break;
+                case 2:
+                  total_negative_bad++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.i++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.i++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.i++;                    
+                  }
+                  break;
+                case 1:
+                  total_negative_poor++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.r++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.r++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.r++;                    
+                  }
+                  break;
+              }
+            });
+            
+            if(index == arr.length - 1){ 
+              
+            //   total_excellentp =  m
+            //   total_averagep =  a
+            //   total_goodp =   o
+            //   total_badp =   i
+            //   total_poorp =  r
+
+            //   si = ( a + o ) / ( a + o + m + i);
+            //   di = ( m + o ) / ( a + o + m + i);
+
+              // si = (total_positive_average + total_positive_good) / (total_positive_average + total_positive_good + total_positive_excellent + total_positive_bad) ;
+              
+              // di = (total_negative_excellent + total_negative_good) / (total_negative_average + total_negative_good + total_negative_excellent + total_negative_bad * -1);
+
+              // asc = (si + di) / 2;
+ 
+
+              var excellent = (total_positive_excellent - total_negative_excellent);
+              var average   = (total_positive_average   - total_negative_average);
+              var good      = (total_positive_good      - total_negative_good);
+              var bad       = (total_positive_bad       - total_negative_bad);
+              var poor      = (total_positive_poor      - total_negative_poor);
+
+              stars = 0;
+
+              //   si = ( a + o ) / ( a + o + m + i);
+              //   di = ( m + o ) / ( a + o + m + i);
+              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+              quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
+              quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
+              // quality.asc = (quality.si + quality.di) / 2;
+
+              suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
+              suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
+              // suplier.asc = (suplier.si + suplier.di) / 2;
+              
+              feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
+              feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
+              // feedback.asc = (feedback.si + feedback.di) / 2;
+
+              si = (quality.si + suplier.si + feedback.si);
+              di = (quality.di + suplier.di + feedback.di);
+              asc = (( si + (di)) / 2) * -1;
+
+            }
+        });
+    }
+    return {
+      'total_users':users,
+      'total_stars': stars,
+      'total_excellentn': total_negative_excellent,
+      'total_averagen': total_negative_average,
+      'total_goodn': total_negative_good,
+      'total_badn': total_negative_bad,
+      'total_poorn': total_negative_poor,
+      'total_excellentp': total_positive_excellent,
+      'total_averagep': total_positive_average,
+      'total_goodp': total_positive_good,
+      'total_badp': total_positive_bad,
+      'total_poorp': total_positive_poor,
+      'quality': quality,
+      'suplier': suplier,
+      'feedback': feedback,
+      'si': si,
+      'di': di,
+      'asc': asc
+    }
+  }
+  kanoalgov2(key){
+    var self = this;
+    var users = 0; 
+    var stars = 0; 
+
+    var total_positive_excellent = 0;
+    var total_positive_average = 0;
+    var total_positive_good = 0;
+    var total_positive_bad = 0;
+    var total_positive_poor = 0; 
+
+    
+    var total_negative_excellent = 0;
+    var total_negative_average = 0;
+    var total_negative_good = 0;
+    var total_negative_bad = 0;
+    var total_negative_poor = 0; 
+      
+
+    var si = 0;
+    var di = 0;
+    var asc = 0;
+
+    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+
+    var qualityp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplierp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedbackp = {m:0,a:0,o:0,i:0, r:0,si:0,di:0,asc:0};
+  this.storedata.forEach(function(element ,index1,arr1) {   
+      // console.log(element);
+      if(typeof(element.feedsseller) != 'undefined' && element.key == key){
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){   
+          users++; 
+
+          // questioners positive and negative
+          var positive = ['Q1P1','Q2P1','Q3P1'];
+          var negative = ['Q1P2','Q2P2','Q3P2'];
+
+          positive.forEach(keyelement => {
+            switch(self.kanu_evalletters(element2[keyelement])){
+              case 5:
+                total_positive_excellent++;
+                if(keyelement == 'Q1P1'){
+                  quality.m++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.m++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.m++;                    
+                }
+                break;
+              case 4:
+                total_positive_average++;
+                if(keyelement == 'Q1P1'){
+                  quality.a++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.a++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.a++;                    
+                }
+                break;
+              case 3:
+                total_positive_good++;
+                if(keyelement == 'Q1P1'){
+                  quality.o++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.o++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.o++;                    
+                }
+                break;
+              case 2:
+                total_positive_bad++;
+                if(keyelement == 'Q1P1'){
+                  quality.i++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.i++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.i++;                    
+                }
+                break;
+              case 1:
+                total_positive_poor++;
+                if(keyelement == 'Q1P1'){
+                  quality.r++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.r++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.r++;                    
+                }
+                break;
+            }
+          });
+          
+          negative.forEach(keyelement => {
+            switch(self.kanu_evalletters(element2[keyelement])){
+              case 5:
+                total_negative_excellent++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.m++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.m++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.m++;                    
+                }
+                break;
+              case 4:
+                total_negative_average++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.a++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.a++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.a++;                    
+                }
+                break;
+              case 3:
+                total_negative_good++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.o++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.o++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.o++;                    
+                }
+                break;
+              case 2:
+                total_negative_bad++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.i++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.i++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.i++;                    
+                }
+                break;
+              case 1:
+                total_negative_poor++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.r++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.r++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.r++;                    
+                }
+                break;
+            }
+          });
+          
+
+            if(index == arr.length - 1){ 
+ //   total_excellentp =  m
+            //   total_averagep =  a
+            //   total_goodp =   o
+            //   total_badp =   i
+            //   total_poorp =  r
+
+            //   si = ( a + o ) / ( a + o + m + i);
+            //   di = ( m + o ) / ( a + o + m + i);
+
+              // si = (total_positive_average + total_positive_good) / (total_positive_average + total_positive_good + total_positive_excellent + total_positive_bad) ;
+              
+              // di = (total_negative_excellent + total_negative_good) / (total_negative_average + total_negative_good + total_negative_excellent + total_negative_bad * -1);
+
+              // asc = (si + di) / 2;
+
+              // var total_positive_excellent = 0;
+              // var total_positive_average = 0;
+              // var total_positive_good = 0;
+              // var total_positive_bad = 0;
+              // var total_positive_poor = 0; 
+
+              var excellent = (total_positive_excellent - total_negative_excellent);
+              var average   = (total_positive_average   - total_negative_average);
+              var good      = (total_positive_good      - total_negative_good);
+              var bad       = (total_positive_bad       - total_negative_bad);
+              var poor      = (total_positive_poor      - total_negative_poor);
+
+              stars = 0;
+
+              //   si = ( a + o ) / ( a + o + m + i);
+              //   di = ( m + o ) / ( a + o + m + i);
+              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+              quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
+              quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
+              // quality.asc = (quality.si + quality.di) / 2;
+
+              suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
+              suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
+              // suplier.asc = (suplier.si + suplier.di) / 2;
+              
+              feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
+              feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
+              // feedback.asc = (feedback.si + feedback.di) / 2;
+
+              si = (quality.si + suplier.si + feedback.si);
+              di = (quality.di + suplier.di + feedback.di);
+              asc = (( si + (di)) / 2) * -1;
+            
+            }
+        });
+      } 
+    });
+    return {
+      'total_users':users,
+      'total_stars': stars,
+      'total_excellentn': total_negative_excellent,
+      'total_averagen': total_negative_average,
+      'total_goodn': total_negative_good,
+      'total_badn': total_negative_bad,
+      'total_poorn': total_negative_poor,
+      'total_excellentp': total_positive_excellent,
+      'total_averagep': total_positive_average,
+      'total_goodp': total_positive_good,
+      'total_badp': total_positive_bad,
+      'total_poorp': total_positive_poor,
+      'quality': quality,
+      'suplier': suplier,
+      'feedback': feedback,
+      'si': si,
+      'di': di,
+      'asc': asc
+    }
+  }
   kanoalgoset(feedsseller){
     var self = this;
     var users = 0;
@@ -1282,8 +1752,8 @@ export class AppComponent implements OnInit {
         'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI',
         'API_KEY_FOR_BROWSER_DEBUG': ''
       });
-      this.statusBar.styleDefault();
-      // this.splashScreen.hide();
+      // this.statusBar.styleDefault();
+      this.splashScreen.hide();
     });    
     // firebase.initializeApp(configfirebase);
   }

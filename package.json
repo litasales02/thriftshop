@@ -26,6 +26,7 @@
     "@angular/router": "~7.0.0",
     "@ionic-native/core": "^5.0.0-beta.22",
     "@ionic-native/firebase": "^5.2.0",
+    "@ionic-native/firebase-config": "^5.2.0",
     "@ionic-native/firebase-messaging": "^5.2.0",
     "@ionic-native/geolocation": "^5.1.0",
     "@ionic-native/google-maps": "^5.0.0-beta.25",
@@ -42,6 +43,7 @@
     "cordova-plugin-advanced-http": "2.0.4",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-firebase": "^2.0.5",
+    "cordova-plugin-firebase-config": "1.2.1",
     "cordova-plugin-firebase-messaging": "^1.2.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps",
@@ -94,8 +96,8 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-googlemaps": {
-        "API_KEY_FOR_ANDROID": "AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64",
-        "API_KEY_FOR_IOS": "AIzaSyCVWrE1ZJgH8cK2BznEaY-AMZ9nNVaNy60"
+        "API_KEY_FOR_ANDROID": "AIzaSyCMb14FBZ9LVNiGui2F9d5AgzEmtRBvv1I",
+        "API_KEY_FOR_IOS": "AIzaSyAC8R1XaQ1o5w-dRYXlrVZG8jjQmJLrtVQ"
       },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
@@ -106,7 +108,11 @@
       "cordova-plugin-firebase-messaging": {},
       "cordova-plugin-firebase": {},
       "cordova-plugin-geolocation": {},
-      "cordova-plugin-nativestorage": {}
+      "cordova-plugin-nativestorage": {},
+      "cordova-plugin-firebase-config": {
+        "FIREBASE_CORE_VERSION": "16.0.+",
+        "FIREBASE_CONFIG_VERSION": "16.3.+"
+      }
     },
     "platforms": [
       "browser",
