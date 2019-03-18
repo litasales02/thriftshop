@@ -11,8 +11,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Firebase } from '@ionic-native/firebase/ngx';
+// import { Firebase } from '@ionic-native/firebase/ngx';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+const firebaseCredential = {
+  apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+  authDomain: "thrftshp.firebaseapp.com",
+  databaseURL: "https://thrftshp.firebaseio.com",
+  projectId: "thrftshp",
+  storageBucket: "thrftshp.appspot.com",
+  messagingSenderId: "171453440603"
+};
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -20,12 +30,14 @@ import { Firebase } from '@ionic-native/firebase/ngx';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    CommonModule
+    CommonModule,
+    AngularFireModule.initializeApp(firebaseCredential),
+    AngularFireAuthModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    Firebase,
+    // Firebase,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation
   ],

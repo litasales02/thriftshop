@@ -34,16 +34,17 @@ import {Md5} from 'ts-md5/dist/md5';
 // databaseURL: 'https://thriffshop.firebaseio.com',
 // projectId: 'thriffshop',
 // storageBucket: 'thriffshop.appspot.com'
-const configfirebase = {
-  apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
-  authDomain: "thrftshp.firebaseapp.com",
-  databaseURL: "https://thrftshp.firebaseio.com",
-  projectId: "thrftshp",
-  storageBucket: "thrftshp.appspot.com",
-  messagingSenderId: "171453440603"
-};
-firebase.initializeApp(configfirebase); 
-declare var ol;
+ 
+// const configfirebase = {
+//   apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+//   authDomain: "thrftshp.firebaseapp.com",
+//   databaseURL: "https://thrftshp.firebaseio.com",
+//   projectId: "thrftshp",
+//   storageBucket: "thrftshp.appspot.com",
+//   messagingSenderId: "171453440603"
+// };
+// firebase.initializeApp(configfirebase); 
+declare var ol; 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
