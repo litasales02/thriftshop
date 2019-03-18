@@ -6,22 +6,12 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
+// import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
 
-// import Ol from 'ol';
-// import OlMap from 'ol/Map';
-// import OlXYZ from 'ol/source/XYZ';
-// import Olsource from 'ol/source/Vector';
-// import OlTileLayer from 'ol/layer/Tile';
-// import OlView from 'ol/View';
-// import OlFormat from 'ol/format';
-// import Olgraph from 'openlayers-ext';
-
-// import "node_modules/ol-ext/dist/ol-ext.js";
 // apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
 // authDomain: "thrftshp.firebaseapp.com",
 // databaseURL: "https://thrftshp.firebaseio.com",
@@ -34,6 +24,9 @@ import {Md5} from 'ts-md5/dist/md5';
 // databaseURL: 'https://thriffshop.firebaseio.com',
 // projectId: 'thriffshop',
 // storageBucket: 'thriffshop.appspot.com'
+
+
+
 const configfirebase = {
   apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
   authDomain: "thrftshp.firebaseapp.com",
@@ -85,25 +78,40 @@ export class AppComponent implements OnInit {
   stars = 0;
   rates = 0;
   kanoevaluation = {total_stars:0};
+  kanorating = {
+    total_users:0,
+    total_stars: 0,
+    total_excellentn: 0,
+    total_averagen: 0,
+    total_goodn: 0,
+    total_badn: 0,
+    total_poorn: 0,
+    total_excellentp: 0,
+    total_averagep: 0,
+    total_goodp: 0,
+    total_badp: 0,
+    total_poorp: 0,
+    quality:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    feedback: {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    si: 0,
+    di: 0,
+    asc: 0
+  }
   watch: any;
   usergeolocationlat = 0;
   usergeolocationlng = 0;
   alert: any;
   maxExtent = [125.2524,6.9946,125.6589,7.5885];
-  ref = firebase.database().ref('maindata').orderByChild('userdetails');
+  ref = null;
  
   selecteditem = "";
   selecteduserkey = "";
   messagechange = false;
   newmessagecount = 0;
 
-  // map: OlMap;
-  // source: Olsource;
-  // layer: OlTileLayer;
-  // view: OlView;
-  // dijkstra: Olgraph;
-  constructor(
-    // private push: Push,
+
+  constructor( 
     private nativeStorage: NativeStorage,
     public router: Router,
     private platform: Platform,
@@ -112,14 +120,12 @@ export class AppComponent implements OnInit {
     public alertCtrl: AlertController,
     public toastController: ToastController,
     public loadingController: LoadingController,
-    private geolocation: Geolocation,
-    private fm: FirebaseMessaging,
+    private geolocation: Geolocation, 
     public navCtrl: NavController,
     public menuCtrl: MenuController ) { 
     var self = this;
-
     console.log('activating data please wait');
-
+    this.ref = firebase.database().ref('maindata').orderByChild('userdetails');
     this.nativeStorage.getItem('maindata')
     .then(
       data => {
@@ -376,7 +382,7 @@ export class AppComponent implements OnInit {
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
               self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
-              console.log(self.kanoalgosetv2(data.val().feedsseller));
+              self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
               
               self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
               self.rates = self.kanoevaluation.total_stars;
@@ -794,7 +800,10 @@ export class AppComponent implements OnInit {
                 Object.entries(element2[1]).forEach(msg=>{ 
                   let mgss = msg[1];
                   mgss.key = msg[0];
-                  msges.push(mgss);
+                  msges.push(mgss);                  
+                  if(mgss.status){
+                    self.newmessagecount++;
+                  }
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
@@ -807,7 +816,10 @@ export class AppComponent implements OnInit {
                 Object.entries(element2[1]).forEach(msg=>{ 
                   let mgss = msg[1];
                   mgss.key = msg[0];
-                  msges.push(mgss);
+                  msges.push(mgss);                                   
+                  if(mgss.status){
+                    self.newmessagecount++;
+                  }
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
@@ -1159,24 +1171,24 @@ export class AppComponent implements OnInit {
         });
     }
     return {
-      'total_users':users,
-      'total_stars': stars,
-      'total_excellentn': total_negative_excellent,
-      'total_averagen': total_negative_average,
-      'total_goodn': total_negative_good,
-      'total_badn': total_negative_bad,
-      'total_poorn': total_negative_poor,
-      'total_excellentp': total_positive_excellent,
-      'total_averagep': total_positive_average,
-      'total_goodp': total_positive_good,
-      'total_badp': total_positive_bad,
-      'total_poorp': total_positive_poor,
-      'quality': quality,
-      'suplier': suplier,
-      'feedback': feedback,
-      'si': si,
-      'di': di,
-      'asc': asc
+      total_users:users,
+      total_stars: stars,
+      total_excellentn: total_negative_excellent,
+      total_averagen: total_negative_average,
+      total_goodn: total_negative_good,
+      total_badn: total_negative_bad,
+      total_poorn: total_negative_poor,
+      total_excellentp: total_positive_excellent,
+      total_averagep: total_positive_average,
+      total_goodp: total_positive_good,
+      total_badp: total_positive_bad,
+      total_poorp: total_positive_poor,
+      quality: quality,
+      suplier: suplier,
+      feedback: feedback,
+      si: si,
+      di: di,
+      asc: asc
     }
   }
   kanoalgov2(key){
@@ -1384,24 +1396,24 @@ export class AppComponent implements OnInit {
       } 
     });
     return {
-      'total_users':users,
-      'total_stars': stars,
-      'total_excellentn': total_negative_excellent,
-      'total_averagen': total_negative_average,
-      'total_goodn': total_negative_good,
-      'total_badn': total_negative_bad,
-      'total_poorn': total_negative_poor,
-      'total_excellentp': total_positive_excellent,
-      'total_averagep': total_positive_average,
-      'total_goodp': total_positive_good,
-      'total_badp': total_positive_bad,
-      'total_poorp': total_positive_poor,
-      'quality': quality,
-      'suplier': suplier,
-      'feedback': feedback,
-      'si': si,
-      'di': di,
-      'asc': asc
+      total_users:users,
+      total_stars: stars,
+      total_excellentn: total_negative_excellent,
+      total_averagen: total_negative_average,
+      total_goodn: total_negative_good,
+      total_badn: total_negative_bad,
+      total_poorn: total_negative_poor,
+      total_excellentp: total_positive_excellent,
+      total_averagep: total_positive_average,
+      total_goodp: total_positive_good,
+      total_badp: total_positive_bad,
+      total_poorp: total_positive_poor,
+      quality: quality,
+      suplier: suplier,
+      feedback: feedback,
+      si: si,
+      di: di,
+      asc: asc
     }
   }
   kanoalgoset(feedsseller){

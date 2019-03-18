@@ -21,6 +21,7 @@ export class ProductDetailsPage implements OnInit {
   productimage = '/assets/store.png';
   iamgefile="";
   fav = 0;
+  status = 1;
   routerlingks = "";
   star = '/assets/unhart.png';
   selecteduserkey = "";
@@ -44,17 +45,18 @@ export class ProductDetailsPage implements OnInit {
       this.util.getproductsbyid2(this.id,(element)=>{
         // console.log(element);
         element.forEach(element => {
-          this.productimage = element.itemimg;
-          this.productname = element.productname;
-          this.unittype = element.unittype;
-          this.price = element.price;
-          this.producttype = element.producttype;
+          self.productimage = element.itemimg;
+          self.productname = element.productname;
+          self.unittype = element.unittype;
+          self.price = element.price;
+          self.producttype = element.producttype;
           self.util.selecteduserkey = element.ukey;
           self.selecteduserkey = element.ukey;
           self.util.selecteditem = element.key;
           self.description = element.description;
           self.storename = element.storename;
-          // console.log(self.util.selecteduserkey);
+          self.status = typeof(element.status)!='undefined'?element.status:0;
+          console.log(self.status);
           // console.log(self.util.selecteditem);
           self.routerlingks = "/message/panel/"+self.util.selecteduserkey+"/products_details";
           // console.log(self.routerlingks);

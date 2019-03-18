@@ -29,7 +29,7 @@
             <ion-select-option value="pants">Pants</ion-select-option>
             <ion-select-option value="shortpants">short Pants</ion-select-option>
             <ion-select-option value="longpants">Long Pants</ion-select-option>
-            <ion-select-option value="underwares">Underwares</ion-select-option> 
+            <ion-select-option value="underwears">Underwears</ion-select-option> 
             <ion-select-option value="bags">Bags</ion-select-option> 
             <ion-select-option value="shoes">Shoes</ion-select-option> 
             <ion-select-option value="mentshirt">Men T-Shirt</ion-select-option> 
@@ -69,6 +69,13 @@
         <ion-label  position="floating">Price</ion-label>
         <ion-input required type="number" [(ngModel)]="price" placeholder="Price 0.00"></ion-input>
     </ion-item> 
+    <ion-item> 
+        <ion-label>Product Status</ion-label>
+        <ion-select [(ngModel)]="status" ok-text="Okay" cancel-text="Dismiss">
+            <ion-select-option value="1"  >Available</ion-select-option>
+            <ion-select-option value="0"  >No Available</ion-select-option> 
+        </ion-select>
+    </ion-item>  
     <ion-item> 
         <ion-label  position="floating">Description</ion-label>
         <ion-input required type="text" [(ngModel)]="description" placeholder="Type here"></ion-input>

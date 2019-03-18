@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CommonModule } from '@angular/common';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Firebase } from '@ionic-native/firebase/ngx';
+// import { Firebase } from '@ionic-native/firebase/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,7 +25,7 @@ import { Firebase } from '@ionic-native/firebase/ngx';
   providers: [
     StatusBar,
     SplashScreen,
-    Firebase,
+    // Firebase,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     Geolocation
   ],
