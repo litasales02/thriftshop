@@ -47,11 +47,10 @@ export class MapsPage implements OnInit {
     }
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;  
-    
-    this.directionsDisplay.setMap(this.map);   
+     
   }
   reset(){
-    
+    var marker;
     var self = this;
     self.trackingdata = {
       key: '',
@@ -66,44 +65,73 @@ export class MapsPage implements OnInit {
     }catch(er){
 
     }
-    this.markermyposition = this.map.addMarkerClusterSync({
-      title: 'Your Here!',
-      markers: self.util.sellergeodata,
-      animation: 'DROP',
-      boundsDraw: true,
-      icons: [
-          {min: 2000, max: 100000, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
-      ]
-    }); 
-    this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
-      if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
-        self.util.markeralerts(data[1].get("title"),'Get direction.',[
-          {
-            text:  "Yes", 
-            cssClass: 'Do you want to track to your location?',
-            handler: (blah) => { 
-              // console.log(data[1].get('key'));
-              self.tracking = true;
-              self.trackingdata = {
-                key: data[1].get('key'),
-                title: data[1].get('title'),
-                position: data[1].get('position'),
-              };
-              self.trackinglat = data[0].lat;
-              self.trackinglng = data[0].lng;
-              var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
-              console.log(geodata);
-              this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
-              // self.trackings([0,0] ,[0,0]);
-            }
-          }, {
-            text: 'Cancel'
-          }
 
-        ])       
-      }
-
+    // marker.addListener('click', toggleBounce);
+    // function toggleBounce() {
+    //   if (marker.getAnimation() !== null) {
+    //     marker.setAnimation(null);
+    //   } else {
+    //     marker.setAnimation(google.maps.Animation.BOUNCE);
+    //   }
+    // }
+    var x = 0;
+    self.util.sellergeodata.forEach(element => {
+      console.log(element);      
+      marker = new google.maps.Marker({
+        map: this.map,
+        draggable: false,
+        animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(element.position.lat,element.position.lng)
+      });
+      google.maps.event.addListener(marker, 'click', (function(marker,i) {
+        return function() {
+          // infowindow.setContent(locations[i][0]);
+          // infowindow.open(map, marker);
+          // console.log(locations[i][0])
+          // console.log()
+        }
+      })(marker, element.key));
+      x++;
     });
+
+    // this.markermyposition = this.map.addMarkerClusterSync({
+    //   title: 'Your Here!',
+    //   markers: self.util.sellergeodata,
+    //   animation: 'DROP',
+    //   boundsDraw: true,
+    //   icons: [
+    //       {min: 2000, max: 100000, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
+    //   ]
+    // }); 
+    // this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
+    //   if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
+    //     self.util.markeralerts(data[1].get("title"),'Get direction.',[
+    //       {
+    //         text:  "Yes", 
+    //         cssClass: 'Do you want to track to your location?',
+    //         handler: (blah) => { 
+    //           // console.log(data[1].get('key'));
+    //           self.tracking = true;
+    //           self.trackingdata = {
+    //             key: data[1].get('key'),
+    //             title: data[1].get('title'),
+    //             position: data[1].get('position'),
+    //           };
+    //           self.trackinglat = data[0].lat;
+    //           self.trackinglng = data[0].lng;
+    //           var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
+    //           // console.log(geodata);
+    //           this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
+    //           // self.trackings([0,0] ,[0,0]);
+    //         }
+    //       }, {
+    //         text: 'Cancel'
+    //       }
+
+    //     ])       
+    //   }
+
+    // });
   }
   loadMap() { 
     var davao_bound = {
@@ -122,19 +150,12 @@ export class MapsPage implements OnInit {
     }else{
       console.log("data.coords",2);
     }
-    var self = this; 
-    this.map = GoogleMaps.create('map_canvas', {
-      camera: {
-        target: {
-          lat: this.lat,
-          lng: this.lng
-        },
-        zoom: 12,
-        tilt: 30
-      },
-        maxZoom: 12,
-    });  
- 
+    var self = this;  
+    this.map = new google.maps.Map(document.getElementById('map_canvas'), {
+      zoom: 14,
+      center:  new google.maps.LatLng(this.lat, this.lng),
+      restriction: {latLngBounds:davao_bound}
+    });
     this.util.mapdata({
       title: 'Your Here!',
       icon: 'red', 
@@ -143,33 +164,31 @@ export class MapsPage implements OnInit {
       lng: self.lng
       }
     }); 
+    this.directionsDisplay.setMap(this.map);
     this.reset();
+    // this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
   } 
   trackings(start:any,end:any){
-    
-    let options: GeocoderRequest = {
-      position:  {"lat": 37.421655, "lng": -122.085637}
-    };
-    // latitude,longitude -> address
-    Geocoder.geocode(options)
-    .then((mvcArray: BaseArrayClass<GeocoderResult[]>) => {
-      mvcArray.one('finish').then(() => {
-        console.log('finish', mvcArray.getArray());
-      });
-    })  
-    // this.directionsService.route({
-    //   origin: start,
-    //   destination: end,
-    //   travelMode: 'DRIVING'
-    // }, (response, status) => {
-    //   if (status === 'OK') {
-    //     this.directionsDisplay.setDirections(response);
-    //   } else {
-    //     window.alert('Directions request failed due to ' + status);
-    //   }
-    // });
+    var self = this; 
+    this.directionsService.route({
+      origin: start,
+      destination: end,
+      travelMode: 'DRIVING'
+    }, (response, status) => {
+      if (status === 'OK') {  
+        console.log(response);
+        self.directionsDisplay.setDirections(response);
+        new google.maps.DirectionsRenderer({ 
+          directions : response,
+          suppressMarkers: true
+        });
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
   }
   trackingsplace(start,end){ 
+    var self = this;
     this.directionsService.route({
       origin: start,
       destination: end,
