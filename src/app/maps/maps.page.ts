@@ -157,7 +157,7 @@ export class MapsPage implements OnInit {
     }); 
     
     this.directionsDisplay.setMap(this.map);   
-    this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
+    // this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
  
     this.reset();
   } 
@@ -170,10 +170,10 @@ export class MapsPage implements OnInit {
     }, (response, status) => {
       if (status === 'OK') {  
         console.log(response);
-        self.directionsDisplay.setDirections(response);
+        // self.directionsDisplay.setDirections(response);
         new google.maps.DirectionsRenderer({ 
           directions : response,
-          suppressMarkers: true
+          suppressMarkers: false
         });
       } else {
         window.alert('Directions request failed due to ' + status);
