@@ -22,13 +22,13 @@
         <img [class]="starscss" *ngFor="let userlists of stars" src="/assets/star.png" height="20" width="20" /> 
     </ion-item>
     <ion-item lines="none" style="padding:0px;margin:0px;"> 
-        Quality: <progress-bar [progress]="kanoevaluation.total_excellentp" [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar> ({{kanoevaluation.total_excellent}})
+        Quality: <progress-bar [progress]="kanoevaluation.total_excellentp" [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar>
     </ion-item> 
     <ion-item lines="none" style="padding:0px;margin:0px;">  
-        Supplier Satisfaction : <progress-bar [progress]="kanoevaluation.total_averagep" [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar> ({{kanoevaluation.total_average}})
+        Supplier Satisfaction : <progress-bar [progress]="kanoevaluation.total_averagep" [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar> 
     </ion-item> 
     <ion-item lines="none" style="padding:0px;margin:0px;">  
-        Feedback: <progress-bar [progress]="kanoevaluation.total_goodp " [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar> ({{kanoevaluation.total_good}})
+        Feedback: <progress-bar [progress]="kanoevaluation.total_goodp " [color]="'#b3c3e0'" style="width:100%;margin:0px;"></progress-bar>
     </ion-item>  
     <ion-item> 
         <ion-label type="text" >Store Name</ion-label>

@@ -135,7 +135,7 @@ export class AppComponent implements OnInit {
     // );
       console.log(window.localStorage['maindata']);
       this.storedata = window.localStorage['maindata'];
-    this.ref.on('value',resp =>{
+      this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp); 
       console.log('dataloaded');
@@ -386,8 +386,8 @@ export class AppComponent implements OnInit {
               self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
               self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
               
-              self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
-              self.rates = self.kanoevaluation.total_stars;
+              self.stars = self.kanoevaluation.total_stars;
+              self.rates = self.kanorating.asc;
               self.updatedataset(data.key,{
                 totalStars: self.kanoevaluation.total_stars
               });
@@ -585,15 +585,21 @@ export class AppComponent implements OnInit {
     });
   }
   getmessages(){
+    var self = this;
     let newInfo = firebase.database().ref('maindata/'+this.userid +"/messages").orderByKey();//.child('')
     newInfo.on('child_changed',childSnapshot => {  
       var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
       childSnapshot.forEach(data => { 
+        // console.log(data.val());
         if(total_change <= coun_data ){
           let item = data.val(); 
             for(var x = 0; x < this.usermessage.length;x++){
               if(this.usermessage[x].key == childSnapshot.key){
+                // console.log(childSnapshot);
+                if(item.status == 0){
+                  self.newmessagecount++;
+                }
                 this.usermessage[x].messages.push(item);
               } 
             } 
@@ -654,11 +660,7 @@ export class AppComponent implements OnInit {
   getproductsall(){ 
     var self = this;
     this.productdata = [];
-    this.storedata.forEach(element => {
-      // var d = element.val();  
-      // console.log(element);
-      // console.log(element.rstatus);
-      // console.log(element.usertype);
+    this.storedata.forEach(element => { 
       var totaldistance = 0.0;
       if(typeof(element.geodata) != 'undefined'){ 
         if(element.geodata.lat != 0 && element.geodata.lng != 0){
@@ -669,51 +671,14 @@ export class AppComponent implements OnInit {
         Object.entries(element.product).forEach(function(element2){
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];
-            item['totaldistance'] = totaldistance; 
-            // console.log(item);
+            item['totaldistance'] = totaldistance;  
             self.productdata.push(item);
         });
       }
-
-
-      // element.forEach(childs => {
-      //   var d = childs.val();  
-      //   if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
-      //     childs.forEach(element => {  
-      //       if (element.key == "product") {
-      //         element.forEach(element2 => {
-      //           let item = element2.val();
-      //           item.key = element2.key;  
-      //           this.productdata.push(item);
-      //         });
-      //       }
-      //     });
-      //    }         
-      // });
     })
     self.productdata.sort((a,b)=>{
       return  parseFloat(b.totaldistance) - parseFloat(a.totaldistance); 
-    });
-    // console.log(self.productdata);
-    // this.productdata = [];
-    // let newInfo = firebase.database().ref('maindata').orderByKey();
-    // newInfo.on('value',childSnapshot => {
-    //   childSnapshot.forEach(childs => {
-    //     var d = childs.val();  
-    //     if( d.usertype == 'seller' && typeof(d.requirements.status) != 'undefined' && typeof(d.requirements.govid) != 'undefined' && d.requirements.govid != '' && d.requirements.status == 1){        
-    //       childs.forEach(element => {  
-    //         if (element.key == "product") {
-    //           element.forEach(element2 => {
-    //             let item = element2.val();
-    //             item.key = element2.key;  
-    //             this.productdata.push(item);
-    //           });
-    //         }
-    //       });
-    //      }        
-    //   });
-    // });
-    // console.log(this.productdata);
+    }); 
   }
   getproductsallcant(){ 
     this.productdata = [];
@@ -849,8 +814,10 @@ export class AppComponent implements OnInit {
     Object.entries(self.usermessage).forEach(element => { 
       if(key == element[1].key){
         Object.values(element[1].messages).forEach(function(entries,index,arr){
+          var status  = typeof(entries['status']) == 'undefined'?0:entries['status'];
+          if( status == 0 )
           updatedUserData['maindata/'+ self.userid + '/messages/' + element[1].key + '/' + entries['key']] = {
-            reply: entries['key'],
+            reply: entries['reply'],
             send: entries['send'],
             status: 1
           }
@@ -917,14 +884,14 @@ export class AppComponent implements OnInit {
     await newproduct.set({
       'send': message,
       'reply': '',
-      'status': 0
+      'status': 1
     });
     if(key == 'admin'){
       let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
       await newproduct2.set({
         'send': '',
         'reply': message,
-        'status': 1
+        'status': 0
       });          
       this.load_messages();
     }else{
@@ -932,12 +899,9 @@ export class AppComponent implements OnInit {
       await newproduct2.set({
         'send': '',
         'reply': message,
-        'status': 1
+        'status': 0
       });       
-    }
-    let arr = {}
-    arr['maindata/'+ key+ '/messages/'+ this.userid] = {
-
+      this.load_messages();
     }
     // this.ref.database().ref()
     if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
@@ -949,7 +913,6 @@ export class AppComponent implements OnInit {
     }
     callbacks("done"); 
   } 
-
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);

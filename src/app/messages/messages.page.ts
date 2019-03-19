@@ -19,8 +19,8 @@ export class MessagesPage implements OnInit {
     public popoverController: PopoverController) {
 
   }
-
   ngOnInit() {
+    this.util.load_messages();
   }//routerLink="/message/panel/{{datas.key}}/messages"
   routes(id){
     console.log('click');

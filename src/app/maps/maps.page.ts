@@ -166,12 +166,13 @@ export class MapsPage implements OnInit {
     this.directionsService.route({
       origin: start,
       destination: end,
-      travelMode: 'DRIVING'
+      travelMode: 'WALKING'
     }, (response, status) => {
       if (status === 'OK') {  
         console.log(response);
         // self.directionsDisplay.setDirections(response);
         new google.maps.DirectionsRenderer({ 
+          strokeColor: "#ff3838",
           directions : response,
           suppressMarkers: false
         });
