@@ -87,8 +87,30 @@ export class MapsPage implements OnInit {
         return function() {
           // infowindow.setContent(locations[i][0]);
           // infowindow.open(map, marker);
-          // console.log(locations[i][0])
-          // console.log()
+          console.log(marker);
+          console.log(i);
+        //   self.util.markeralerts(data[1].get("title"),'Get direction.',[ {
+        //     text:  "Yes", 
+        //     cssClass: 'Do you want to track to your location?',
+        //     handler: (blah) => { 
+        //       // console.log(data[1].get('key'));
+        //       self.tracking = true;
+        //       self.trackingdata = {
+        //         key: data[1].get('key'),
+        //         title: data[1].get('title'),
+        //         position: data[1].get('position'),
+        //       };
+        //       self.trackinglat = data[0].lat;
+        //       self.trackinglng = data[0].lng;
+        //       var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
+        //       // console.log(geodata);
+        //       this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
+        //       // self.trackings([0,0] ,[0,0]);
+        //     }
+        //   }, {
+        //     text: 'Cancel'
+        //   }
+        // ])    
         }
       })(marker, element.key));
       x++;
