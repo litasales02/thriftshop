@@ -62,22 +62,16 @@ export class MapsPage implements OnInit {
     }
     try {
       this.map.clear();
-    this.directionsDisplay.setMap(this.map);
+      this.directionsDisplay.setMap(this.map);
     }catch(er){
 
     }
-
-    // marker.addListener('click', toggleBounce);
-    // function toggleBounce() {
-    //   if (marker.getAnimation() !== null) {
-    //     marker.setAnimation(null);
-    //   } else {
-    //     marker.setAnimation(google.maps.Animation.BOUNCE);
-    //   }
-    // }
-    var x = 0;
+    var infowindow = new google.maps.InfoWindow();
+  
     self.util.sellergeodata.forEach(element => {
-      console.log(element);      
+      console.log(element);     
+      console.log(element.key);
+      var keys = typeof(element.key)!='undefined'?element.key:'me'; 
       marker = new google.maps.Marker({
         map: this.map,
         draggable: false,
@@ -88,10 +82,10 @@ export class MapsPage implements OnInit {
         return function() {
           // infowindow.setContent(locations[i][0]);
           // infowindow.open(map, marker);
-          console.log(marker);
+          // console.log(marker);
           console.log(i);
           self.util.sellergeodata.forEach(element => {
-            if(i == element.key){
+            if(i != 'me' && i == element.key){
               self.util.markeralerts(element.title,'Get direction.',[ {
                   text:  "Yes", 
                   cssClass: 'Do you want to track to your location?',
@@ -105,8 +99,8 @@ export class MapsPage implements OnInit {
                     };
                     self.trackinglat = element.position.lat;
                     self.trackinglng = element.position.lng;
-                    // var geodata = [new LatLng(this.lat, this.lng),new LatLng(element.position.lat,  element.position.lng)];
-                    // console.log(geodata);
+                    var geodata = [new google.maps.LatLng(self.lat, self.lng),new google.maps.LatLng(element.position.lat, element.position.lng)];
+                    console.log(geodata);
                     self.trackings(new google.maps.LatLng(self.lat, self.lng),new google.maps.LatLng(element.position.lat, element.position.lng));
                     // self.trackings([0,0] ,[0,0]);
                   }
@@ -114,12 +108,14 @@ export class MapsPage implements OnInit {
                   text: 'Cancel'
                 }
               ])    
+            }else if(i == 'me'){
+              infowindow.setContent(new google.maps.LatLng(element.position.lat, element.position.lng));
+              infowindow.open(self.map, marker);
             }
           });
         
         }
-      })(marker, element.key));
-      x++;
+      })(marker, element.key)); 
     });
 
     // this.markermyposition = this.map.addMarkerClusterSync({
@@ -205,10 +201,10 @@ export class MapsPage implements OnInit {
       if (status === 'OK') {  
         console.log(response);
         self.directionsDisplay.setDirections(response);
-        new google.maps.DirectionsRenderer({ 
-          directions : response,
-          suppressMarkers: true
-        });
+        // new google.maps.DirectionsRenderer({ 
+        //   directions : response,
+        //   suppressMarkers: true
+        // });
       } else {
         window.alert('Directions request failed due to ' + status);
       }
