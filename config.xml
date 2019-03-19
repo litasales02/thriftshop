@@ -94,13 +94,17 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <plugin name="cordova-plugin-googlemaps" spec="https://github.com/mapsplugin/cordova-plugin-googlemaps#multiple_maps">
-        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyCJdLqPHoLpZv4U0mvQ7H1qZodYG0yIC64" />
-        <variable name="API_KEY_FOR_IOS" value="AIzaSyDDL0QPmhItF4hcjL2LUixlk6IKBA  83FAk" />
+        <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBC9ccwE2q98GnREDWDETLul7B-M1hUhv0" />
+        <variable name="API_KEY_FOR_IOS" value="AIzaSyAC8R1XaQ1o5w-dRYXlrVZG8jjQmJLrtVQ" />
     </plugin>
     <plugin name="cordova-plugin-firebase-messaging" spec="1.2.1" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
     <plugin name="cordova-plugin-firebase" spec="^2.0.5" />
     <plugin name="cordova-plugin-nativestorage" spec="2.3.2" />
+    <plugin name="cordova-plugin-firebase-config" spec="1.2.1">
+        <variable name="FIREBASE_CORE_VERSION" value="16.0.+" />
+        <variable name="FIREBASE_CONFIG_VERSION" value="16.3.+" />
+    </plugin>
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
 </widget>

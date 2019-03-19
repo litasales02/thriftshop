@@ -1,35 +1,39 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Platform, NavController, MenuController } from '@ionic/angular';
+// import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Environment } from '@ionic-native/google-maps';
 import { AlertController, ToastController, LoadingController   } from '@ionic/angular';
-import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
+// import { FirebaseMessaging } from '@ionic-native/firebase-messaging/ngx';
 import * as firebase from 'firebase';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import {Md5} from 'ts-md5/dist/md5';
-// import {md5} from 'node_modules'
-// var md5 = require('md5');
-// import "ol";
-// import  "ol-ext";
-// import * as ol from 'ol';
 
-import OlMap from 'ol/Map';
-import OlXYZ from 'ol/source/XYZ';
-import Olsource from 'ol/source/Vector';
-import OlTileLayer from 'ol/layer/Tile';
-import OlView from 'ol/View';
-import Olgraph from 'ol';
+// apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+// authDomain: "thrftshp.firebaseapp.com",
+// databaseURL: "https://thrftshp.firebaseio.com",
+// projectId: "thrftshp",
+// storageBucket: "thrftshp.appspot.com",
+// messagingSenderId: "171453440603"
+
+// apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
+// authDomain: 'thriffshop.firebaseapp.com',
+// databaseURL: 'https://thriffshop.firebaseio.com',
+// projectId: 'thriffshop',
+// storageBucket: 'thriffshop.appspot.com'
+
 
 
 const configfirebase = {
-  apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
-  authDomain: 'thriffshop.firebaseapp.com',
-  databaseURL: 'https://thriffshop.firebaseio.com',
-  projectId: 'thriffshop',
-  storageBucket: 'thriffshop.appspot.com'
+  apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
+  authDomain: "thrftshp.firebaseapp.com",
+  databaseURL: "https://thrftshp.firebaseio.com",
+  projectId: "thrftshp",
+  storageBucket: "thrftshp.appspot.com",
+  messagingSenderId: "171453440603"
 };
 firebase.initializeApp(configfirebase); 
 declare var ol;
@@ -74,23 +78,41 @@ export class AppComponent implements OnInit {
   stars = 0;
   rates = 0;
   kanoevaluation = {total_stars:0};
+  kanorating = {
+    total_users:0,
+    total_stars: 0,
+    total_excellentn: 0,
+    total_averagen: 0,
+    total_goodn: 0,
+    total_badn: 0,
+    total_poorn: 0,
+    total_excellentp: 0,
+    total_averagep: 0,
+    total_goodp: 0,
+    total_badp: 0,
+    total_poorp: 0,
+    quality:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    feedback: {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    si: 0,
+    di: 0,
+    asc: 0
+  }
   watch: any;
   usergeolocationlat = 0;
   usergeolocationlng = 0;
   alert: any;
   maxExtent = [125.2524,6.9946,125.6589,7.5885];
-  ref = firebase.database().ref('maindata').orderByChild('userdetails');
+  ref = null;
  
   selecteditem = "";
   selecteduserkey = "";
   messagechange = false;
+  newmessagecount = 0;
 
-  map: OlMap;
-  source: Olsource;
-  layer: OlTileLayer;
-  view: OlView;
-  // dijkstra: Olgraph;
-  constructor(
+
+  constructor( 
+    private nativeStorage: NativeStorage,
     public router: Router,
     private platform: Platform,
     private splashScreen: SplashScreen, 
@@ -98,23 +120,32 @@ export class AppComponent implements OnInit {
     public alertCtrl: AlertController,
     public toastController: ToastController,
     public loadingController: LoadingController,
-    private geolocation: Geolocation,
-    private fm: FirebaseMessaging,
+    private geolocation: Geolocation, 
     public navCtrl: NavController,
-    public menuCtrl: MenuController ) {
-    //  console.log(Md5.hashStr('pikaadmin'));
-
+    public menuCtrl: MenuController ) { 
     var self = this;
+    console.log('activating data please wait');
+    this.ref = firebase.database().ref('maindata').orderByChild('userdetails');
+    this.nativeStorage.getItem('maindata')
+    .then(
+      data => {
+        this.storedata = data;
+      },
+      error => console.error(error)
+    );
+
     this.ref.on('value',resp =>{
       this.storedata = [];
-      this.storedata = snapshotToArray(resp);
-      // this.calculateAllDistancesStores();
-      this.splashScreen.hide();
+      this.storedata = snapshotToArray(resp); 
+      console.log('dataloaded');
+      this.nativeStorage.setItem('maindata',this.storedata)
+      .then(
+        () => console.log('Stored item!'),
+        error => console.error('Error storing item', error)
+      );
     });
-    // if(!this.loginStatus){
-      
-    // }
-    this.initializeApp(); 
+    
+    this.initializeApp();   
     this.geolocation.getCurrentPosition().then((resp) => {
       self.usergeolocationlat = resp.coords.latitude;
       self.usergeolocationlng = resp.coords.longitude;
@@ -157,9 +188,6 @@ export class AppComponent implements OnInit {
           self.geoaccurate = true;
         }
       });
-    //  this.fm.logEvent('page_view', {page: "dashboard"})
-    // .then((res: any) => console.log(res))
-    // .catch((error: any) => console.error(error));
   }
   md5function(str){
     return Md5.hashStr(str);
@@ -206,21 +234,29 @@ export class AppComponent implements OnInit {
     return deg * (Math.PI/180)
   }
   async dijkstrafunction(start:any,end:any,callback){
-    console.log("dijkstrafunction");
-    this.source = new Olsource({
-      url: '/assets/davao.geojson',
+    console.log("dijkstrafunction"); 
+
+    var graph = new ol.source.Vector({
+      url: 'http://tile.osm.org/{z}/{x}/{y}.png',
       format: new ol.format.GeoJSON()
-    })
-    // let graph = new ol.source.Vector({
-    //   url: '/assets/davao.geojson',
-    //   format: new ol.format.GeoJSON()
-    // });
-    
-    // this.dijkstra = new Olgraph.
-    var dijkstra = new ol.graph.Dijskra({
-      source: this.source
+    });
+     
+    var dijskra = new ol.graph.Dijskra({
+      source: graph
     });
 
+    let listenerKey = graph.on('change', function() {
+      if (graph.getState() == 'ready') {
+        console.log('ready');
+        ol.Observable.unByKey(listenerKey);
+        dijskra.path(start,end);
+      }else {
+        
+        console.log('ready');
+      }
+    });
+    
+    // dijskra.path(start,end);
     // // dijkstra.on('calculating', function(e) {
     // //   // if ($('#path').prop('checked')) {
     // //     var route = dijkstra.getBestWay();
@@ -236,7 +272,9 @@ export class AppComponent implements OnInit {
     //   }
     //   return ol.sphere.getLength(geom)
     // }
-    dijkstra.on('finish', function(e) {
+
+
+    dijskra.on('finish', function(e) {
       // $('#warning').hide();
       // result.clear();
       if (!e.route.length) {
@@ -259,7 +297,6 @@ export class AppComponent implements OnInit {
       // popStart.show(start);
       // popEnd.hide();
     });
-    dijkstra.path(start,end);
 
 
   }
@@ -344,12 +381,14 @@ export class AppComponent implements OnInit {
               };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
-              self.kanoevaluation = self.kanoalgoset(data.val().feedsseller);
+              self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
+              self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
+              
               self.stars = self.kanoevaluation.total_stars;//Array(self.kanoevaluation.total_stars).map((x,i)=>i);
               self.rates = self.kanoevaluation.total_stars;
               self.updatedataset(data.key,{
                 totalStars: self.kanoevaluation.total_stars
-              });            
+              });
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
                 self.requirementsdata = data.val().requirements; 
@@ -358,7 +397,7 @@ export class AppComponent implements OnInit {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            self.kanoalgo(self.userid);
+            // self.kanoalgo(self.userid);
             self.getmessages();
             self.load_messages();
             callback(true);
@@ -546,16 +585,17 @@ export class AppComponent implements OnInit {
   getmessages(){
     let newInfo = firebase.database().ref('maindata/'+this.userid +"/messages").orderByKey();//.child('')
     newInfo.on('child_changed',childSnapshot => {  
-      if(this.messagechange == null){
-        // console.log("load new data");
-      }
       var total_change = childSnapshot.numChildren(); 
       var coun_data = 1;
       childSnapshot.forEach(data => { 
         if(total_change <= coun_data ){
-          this.usermessage[0].messages.push(data.val());
-          this.messagechange = true;
-          console.log(this.usermessage[0]);
+          let item = data.val(); 
+            for(var x = 0; x < this.usermessage.length;x++){
+              if(this.usermessage[x].key == childSnapshot.key){
+                this.usermessage[x].messages.push(item);
+              } 
+            } 
+          this.messagechange = true; 
         }
         coun_data++;
       }); 
@@ -652,7 +692,7 @@ export class AppComponent implements OnInit {
     self.productdata.sort((a,b)=>{
       return  parseFloat(b.totaldistance) - parseFloat(a.totaldistance); 
     });
-    console.log(self.productdata);
+    // console.log(self.productdata);
     // this.productdata = [];
     // let newInfo = firebase.database().ref('maindata').orderByKey();
     // newInfo.on('value',childSnapshot => {
@@ -747,44 +787,85 @@ export class AppComponent implements OnInit {
   load_messages(){// key sa client kong kinsa ang nka contact
     var self = this;
     self.usermessage = [];
+    self.newmessagecount = 0;
     this.storedata.forEach(element => {
       if(element.key == self.userid){
         if(typeof(element.messages) != 'undefined'){  
-          Object.entries(element.messages).forEach(element2 => {            
-            if(element2[0] == 'admin'){
+          Object.entries(element.messages).forEach(element2 => {
+            if(element2[0] == 'admin'){              
+                let messagecount = 0;
                 let msges = [];              
                 let item = {
                   key: 'admin',
-                  messages: []
+                  messages: [],
+                  newmessagecount: 0
                 };
-                Object.entries(element2[1]).forEach(msg=>{ 
+                Object.entries(element2[1]).forEach(msg=>{   
                   let mgss = msg[1];
-                  mgss.key = msg[0];
-                  msges.push(mgss);
+                  mgss.key = msg[0];             
+                  if(typeof(mgss.status)=='undefined' || mgss.status == 0){
+                    self.newmessagecount++; 
+                    messagecount++;
+                    mgss.status = 0;
+                  }
+                  msges.push(mgss);     
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
+                item.newmessagecount = messagecount; 
                 self.usermessage.push(item);
             } else {
-              self.getstorebyid(element2[0],function(rdata){ 
-                // console.log(rdata);
+              self.getstorebyid(element2[0],function(rdata){  
+                let messagecount = 0;
                 let msges = [];              
                 let item = rdata[0];
                 Object.entries(element2[1]).forEach(msg=>{ 
                   let mgss = msg[1];
-                  mgss.key = msg[0];
-                  msges.push(mgss);
+                  mgss.key = msg[0];                      
+                  if(typeof(mgss.status)=='undefined' || mgss.status == 0){
+                    self.newmessagecount++;
+                    messagecount++;
+                    mgss.status = 0;
+                  }
+                  msges.push(mgss);             
                 });
                 item.messages = msges;
                 item.key = element2[0]; 
+                item.newmessagecount = messagecount; 
                 self.usermessage.push(item);
               })
             }
           }); 
         }
       }
-      // console.log(self.usermessage);
+      console.log(self.usermessage);
     }); 
+  }
+  updatemessageitems(key){
+    var self = this;
+    var updatedUserData = {}; 
+    Object.entries(self.usermessage).forEach(element => { 
+      if(key == element[1].key){
+        Object.values(element[1].messages).forEach(function(entries,index,arr){
+          updatedUserData['maindata/'+ self.userid + '/messages/' + element[1].key + '/' + entries['key']] = {
+            reply: entries['key'],
+            send: entries['send'],
+            status: 1
+          }
+          if(index == arr.length - 1){ 
+            firebase.database().ref().update(updatedUserData,function(error){
+              if (error) {
+                console.log("Error updating data:", error);
+              }else{
+                self.load_messages();
+              }
+            })
+          }
+        });        
+      } else {
+        console.log( element[1] );
+      }
+    });
   }
   async load_messages2(callback){ 
     var self = this;
@@ -833,23 +914,30 @@ export class AppComponent implements OnInit {
     let newproduct =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
     await newproduct.set({
       'send': message,
-      'reply': ''
+      'reply': '',
+      'status': 0
     });
     if(key == 'admin'){
       let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
       await newproduct2.set({
         'send': '',
-        'reply': message
+        'reply': message,
+        'status': 1
       });          
       this.load_messages();
     }else{
       let newproduct2 =  firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
       await newproduct2.set({
         'send': '',
-        'reply': message
+        'reply': message,
+        'status': 1
       });       
     }
+    let arr = {}
+    arr['maindata/'+ key+ '/messages/'+ this.userid] = {
 
+    }
+    // this.ref.database().ref()
     if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
       // console.log("send");
     }else{
@@ -859,6 +947,7 @@ export class AppComponent implements OnInit {
     }
     callbacks("done"); 
   } 
+
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
@@ -913,6 +1002,462 @@ export class AppComponent implements OnInit {
     // let newproduct =  
     await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
     // await newproduct.set(value);
+  }
+  kanoalgosetv2(feedsseller){
+    var self = this;
+    var users = 0; 
+    var stars = 0; 
+
+    var total_positive_excellent = 0;
+    var total_positive_average = 0;
+    var total_positive_good = 0;
+    var total_positive_bad = 0;
+    var total_positive_poor = 0; 
+
+    
+    var total_negative_excellent = 0;
+    var total_negative_average = 0;
+    var total_negative_good = 0;
+    var total_negative_bad = 0;
+    var total_negative_poor = 0; 
+      
+
+    var si = 0;
+    var di = 0;
+    var asc = 0;
+
+    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+
+    var qualityp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplierp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedbackp = {m:0,a:0,o:0,i:0, r:0,si:0,di:0,asc:0};
+  //   total_excellentp =  m
+  //   total_averagep =  a
+  //   total_goodp =   o
+  //   total_badp =   i
+  //   total_poorp =  r
+
+  // -LXAsHXXhdBTaTXxh3Xp
+  // 1.	It is excellent = e
+  // 2.	It is good = g
+  // 3.	It is average = a
+  // 4.	It is bad = b
+  // 5.	It is poor = p 
+ 
+    if(typeof(feedsseller) != 'undefined'){
+        Object.values(feedsseller).forEach(function(element2,index,arr){   
+            // load tanan user nag rate
+            users++; 
+
+            // questioners positive and negative
+            var positive = ['Q1P1','Q2P1','Q3P1'];
+            var negative = ['Q1P2','Q2P2','Q3P2'];
+
+            positive.forEach(keyelement => {
+              switch(self.kanu_evalletters(element2[keyelement])){
+                case 5:
+                  total_positive_excellent++;
+                  if(keyelement == 'Q1P1'){
+                    quality.m++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.m++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.m++;                    
+                  }
+                  break;
+                case 4:
+                  total_positive_average++;
+                  if(keyelement == 'Q1P1'){
+                    quality.a++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.a++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.a++;                    
+                  }
+                  break;
+                case 3:
+                  total_positive_good++;
+                  if(keyelement == 'Q1P1'){
+                    quality.o++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.o++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.o++;                    
+                  }
+                  break;
+                case 2:
+                  total_positive_bad++;
+                  if(keyelement == 'Q1P1'){
+                    quality.i++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.i++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.i++;                    
+                  }
+                  break;
+                case 1:
+                  total_positive_poor++;
+                  if(keyelement == 'Q1P1'){
+                    quality.r++;
+                  }else if(keyelement == 'Q2P1'){
+                    suplier.r++;                    
+                  }else if(keyelement == 'Q3P1'){
+                    feedback.r++;                    
+                  }
+                  break;
+              }
+            });
+            
+            negative.forEach(keyelement => {
+              switch(self.kanu_evalletters(element2[keyelement])){
+                case 5:
+                  total_negative_excellent++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.m++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.m++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.m++;                    
+                  }
+                  break;
+                case 4:
+                  total_negative_average++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.a++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.a++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.a++;                    
+                  }
+                  break;
+                case 3:
+                  total_negative_good++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.o++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.o++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.o++;                    
+                  }
+                  break;
+                case 2:
+                  total_negative_bad++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.i++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.i++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.i++;                    
+                  }
+                  break;
+                case 1:
+                  total_negative_poor++;                  
+                  if(keyelement == 'Q1P2'){
+                    qualityp.r++;
+                  }else if(keyelement == 'Q2P2'){
+                    suplierp.r++;                    
+                  }else if(keyelement == 'Q3P2'){
+                    feedbackp.r++;                    
+                  }
+                  break;
+              }
+            });
+            
+            if(index == arr.length - 1){ 
+              
+            //   total_excellentp =  m
+            //   total_averagep =  a
+            //   total_goodp =   o
+            //   total_badp =   i
+            //   total_poorp =  r
+
+            //   si = ( a + o ) / ( a + o + m + i);
+            //   di = ( m + o ) / ( a + o + m + i);
+
+              // si = (total_positive_average + total_positive_good) / (total_positive_average + total_positive_good + total_positive_excellent + total_positive_bad) ;
+              
+              // di = (total_negative_excellent + total_negative_good) / (total_negative_average + total_negative_good + total_negative_excellent + total_negative_bad * -1);
+
+              // asc = (si + di) / 2;
+ 
+
+              var excellent = (total_positive_excellent - total_negative_excellent);
+              var average   = (total_positive_average   - total_negative_average);
+              var good      = (total_positive_good      - total_negative_good);
+              var bad       = (total_positive_bad       - total_negative_bad);
+              var poor      = (total_positive_poor      - total_negative_poor);
+
+              stars = 0;
+
+              //   si = ( a + o ) / ( a + o + m + i);
+              //   di = ( m + o ) / ( a + o + m + i);
+              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+              quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
+              quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
+              // quality.asc = (quality.si + quality.di) / 2;
+
+              suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
+              suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
+              // suplier.asc = (suplier.si + suplier.di) / 2;
+              
+              feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
+              feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
+              // feedback.asc = (feedback.si + feedback.di) / 2;
+
+              si = (quality.si + suplier.si + feedback.si);
+              di = (quality.di + suplier.di + feedback.di);
+              asc = (( si + (di)) / 2) * -1;
+
+            }
+        });
+    }
+    return {
+      total_users:users,
+      total_stars: stars,
+      total_excellentn: total_negative_excellent,
+      total_averagen: total_negative_average,
+      total_goodn: total_negative_good,
+      total_badn: total_negative_bad,
+      total_poorn: total_negative_poor,
+      total_excellentp: total_positive_excellent,
+      total_averagep: total_positive_average,
+      total_goodp: total_positive_good,
+      total_badp: total_positive_bad,
+      total_poorp: total_positive_poor,
+      quality: quality,
+      suplier: suplier,
+      feedback: feedback,
+      si: si,
+      di: di,
+      asc: asc
+    }
+  }
+  kanoalgov2(key){
+    var self = this;
+    var users = 0; 
+    var stars = 0; 
+
+    var total_positive_excellent = 0;
+    var total_positive_average = 0;
+    var total_positive_good = 0;
+    var total_positive_bad = 0;
+    var total_positive_poor = 0; 
+
+    
+    var total_negative_excellent = 0;
+    var total_negative_average = 0;
+    var total_negative_good = 0;
+    var total_negative_bad = 0;
+    var total_negative_poor = 0; 
+      
+
+    var si = 0;
+    var di = 0;
+    var asc = 0;
+
+    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+
+    var qualityp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var suplierp = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var feedbackp = {m:0,a:0,o:0,i:0, r:0,si:0,di:0,asc:0};
+  this.storedata.forEach(function(element ,index1,arr1) {   
+      // console.log(element);
+      if(typeof(element.feedsseller) != 'undefined' && element.key == key){
+        Object.values(element.feedsseller).forEach(function(element2,index,arr){   
+          users++; 
+
+          // questioners positive and negative
+          var positive = ['Q1P1','Q2P1','Q3P1'];
+          var negative = ['Q1P2','Q2P2','Q3P2'];
+
+          positive.forEach(keyelement => {
+            switch(self.kanu_evalletters(element2[keyelement])){
+              case 5:
+                total_positive_excellent++;
+                if(keyelement == 'Q1P1'){
+                  quality.m++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.m++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.m++;                    
+                }
+                break;
+              case 4:
+                total_positive_average++;
+                if(keyelement == 'Q1P1'){
+                  quality.a++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.a++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.a++;                    
+                }
+                break;
+              case 3:
+                total_positive_good++;
+                if(keyelement == 'Q1P1'){
+                  quality.o++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.o++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.o++;                    
+                }
+                break;
+              case 2:
+                total_positive_bad++;
+                if(keyelement == 'Q1P1'){
+                  quality.i++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.i++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.i++;                    
+                }
+                break;
+              case 1:
+                total_positive_poor++;
+                if(keyelement == 'Q1P1'){
+                  quality.r++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.r++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.r++;                    
+                }
+                break;
+            }
+          });
+          
+          negative.forEach(keyelement => {
+            switch(self.kanu_evalletters(element2[keyelement])){
+              case 5:
+                total_negative_excellent++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.m++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.m++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.m++;                    
+                }
+                break;
+              case 4:
+                total_negative_average++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.a++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.a++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.a++;                    
+                }
+                break;
+              case 3:
+                total_negative_good++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.o++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.o++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.o++;                    
+                }
+                break;
+              case 2:
+                total_negative_bad++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.i++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.i++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.i++;                    
+                }
+                break;
+              case 1:
+                total_negative_poor++;                  
+                if(keyelement == 'Q1P2'){
+                  qualityp.r++;
+                }else if(keyelement == 'Q2P2'){
+                  suplierp.r++;                    
+                }else if(keyelement == 'Q3P2'){
+                  feedbackp.r++;                    
+                }
+                break;
+            }
+          });
+          
+
+            if(index == arr.length - 1){ 
+ //   total_excellentp =  m
+            //   total_averagep =  a
+            //   total_goodp =   o
+            //   total_badp =   i
+            //   total_poorp =  r
+
+            //   si = ( a + o ) / ( a + o + m + i);
+            //   di = ( m + o ) / ( a + o + m + i);
+
+              // si = (total_positive_average + total_positive_good) / (total_positive_average + total_positive_good + total_positive_excellent + total_positive_bad) ;
+              
+              // di = (total_negative_excellent + total_negative_good) / (total_negative_average + total_negative_good + total_negative_excellent + total_negative_bad * -1);
+
+              // asc = (si + di) / 2;
+
+              // var total_positive_excellent = 0;
+              // var total_positive_average = 0;
+              // var total_positive_good = 0;
+              // var total_positive_bad = 0;
+              // var total_positive_poor = 0; 
+
+              var excellent = (total_positive_excellent - total_negative_excellent);
+              var average   = (total_positive_average   - total_negative_average);
+              var good      = (total_positive_good      - total_negative_good);
+              var bad       = (total_positive_bad       - total_negative_bad);
+              var poor      = (total_positive_poor      - total_negative_poor);
+
+              stars = 0;
+
+              //   si = ( a + o ) / ( a + o + m + i);
+              //   di = ( m + o ) / ( a + o + m + i);
+              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+              quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
+              quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
+              // quality.asc = (quality.si + quality.di) / 2;
+
+              suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
+              suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
+              // suplier.asc = (suplier.si + suplier.di) / 2;
+              
+              feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
+              feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
+              // feedback.asc = (feedback.si + feedback.di) / 2;
+
+              si = (quality.si + suplier.si + feedback.si);
+              di = (quality.di + suplier.di + feedback.di);
+              asc = (( si + (di)) / 2) * -1;
+            
+            }
+        });
+      } 
+    });
+    return {
+      total_users:users,
+      total_stars: stars,
+      total_excellentn: total_negative_excellent,
+      total_averagen: total_negative_average,
+      total_goodn: total_negative_good,
+      total_badn: total_negative_bad,
+      total_poorn: total_negative_poor,
+      total_excellentp: total_positive_excellent,
+      total_averagep: total_positive_average,
+      total_goodp: total_positive_good,
+      total_badp: total_positive_bad,
+      total_poorp: total_positive_poor,
+      quality: quality,
+      suplier: suplier,
+      feedback: feedback,
+      si: si,
+      di: di,
+      asc: asc
+    }
   }
   kanoalgoset(feedsseller){
     var self = this;
@@ -1262,8 +1807,8 @@ export class AppComponent implements OnInit {
         'API_KEY_FOR_BROWSER_RELEASE': 'AIzaSyAcU-urFFoiWr-YK1wZS43jrPWhSSf1NlI',
         'API_KEY_FOR_BROWSER_DEBUG': ''
       });
-      this.statusBar.styleDefault();
-      // this.splashScreen.hide();
+      // this.statusBar.styleDefault();
+      this.splashScreen.hide();
     });    
     // firebase.initializeApp(configfirebase);
   }

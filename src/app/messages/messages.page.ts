@@ -27,6 +27,8 @@ export class MessagesPage implements OnInit {
     
     this.util.selecteduserkey = id;
     // this.util.selecteditem = element.key;
+    this.util.updatemessageitems(id);
     this.util.menuRouting("/message/panel/" + id + "/messages");
+    
   }
 }

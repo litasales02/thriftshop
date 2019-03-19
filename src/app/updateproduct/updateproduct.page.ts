@@ -16,6 +16,7 @@ export class UpdateProductPage implements OnInit {
   qty:"";
   description: "";
   itemimagess: "";
+  status:1;
   productimage = '/assets/store.png';
   iamgefile="";
   keyprodid = "";
@@ -36,6 +37,7 @@ export class UpdateProductPage implements OnInit {
         self.util.selecteduserkey = element.ukey;
         self.util.selecteditem = element.key;
         self.description = element.description;
+        self.status = element.status;
       });
     });
   }
@@ -55,7 +57,8 @@ export class UpdateProductPage implements OnInit {
           'price': this.price,
           'qty': this.qty,
           'producttype': this.producttype,
-          'description': this.description
+          'description': this.description,
+          'status': this.status
         });
         this.util.alerts("Update Product","Product Added",['Ok']);
         this.util.menuRouting('/home');
