@@ -32,7 +32,14 @@ export class MapsPage implements OnInit {
   markerdata = []
   markermyposition:any;
   tracking = false;
-  trackingdata = {};
+  trackingdata = {
+    key: '',
+    title: '',
+    position: {
+      lat: 0.0,
+      lng: 0.0
+    }
+  };
   trackinglat = 7.148419523108726;
   trackinglng = 125.52915832519531;
   directionsService = new google.maps.DirectionsService;
@@ -62,7 +69,6 @@ export class MapsPage implements OnInit {
     }
     try {
       this.map.clear();
-      this.directionsDisplay.setMap(this.map);
     }catch(er){
 
     }
@@ -115,47 +121,8 @@ export class MapsPage implements OnInit {
           });
         
         }
-      })(marker, element.key)); 
+      })(marker, keys)); 
     });
-
-    // this.markermyposition = this.map.addMarkerClusterSync({
-    //   title: 'Your Here!',
-    //   markers: self.util.sellergeodata,
-    //   animation: 'DROP',
-    //   boundsDraw: true,
-    //   icons: [
-    //       {min: 2000, max: 100000, url: "/assets/pin.png", anchor: {x: 16, y: 16}} 
-    //   ]
-    // }); 
-    // this.markermyposition.on(GoogleMapsEvent.MARKER_CLICK).subscribe((data) => { 
-    //   if(typeof(data[1].get("key") !== 'undefined') && typeof(data[1].get("sellers") !== 'undefined') && data[1].get("sellers") == 1){
-    //     self.util.markeralerts(data[1].get("title"),'Get direction.',[
-    //       {
-    //         text:  "Yes", 
-    //         cssClass: 'Do you want to track to your location?',
-    //         handler: (blah) => { 
-    //           // console.log(data[1].get('key'));
-    //           self.tracking = true;
-    //           self.trackingdata = {
-    //             key: data[1].get('key'),
-    //             title: data[1].get('title'),
-    //             position: data[1].get('position'),
-    //           };
-    //           self.trackinglat = data[0].lat;
-    //           self.trackinglng = data[0].lng;
-    //           var geodata = [new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng)];
-    //           // console.log(geodata);
-    //           this.trackings(new LatLng(this.lat, this.lng),new LatLng(data[0].lat,  data[0].lng));
-    //           // self.trackings([0,0] ,[0,0]);
-    //         }
-    //       }, {
-    //         text: 'Cancel'
-    //       }
-
-    //     ])       
-    //   }
-
-    // });
   }
   loadMap() { 
     var davao_bound = {
@@ -188,8 +155,11 @@ export class MapsPage implements OnInit {
       lng: self.lng
       }
     }); 
-    this.reset();
+    
+    this.directionsDisplay.setMap(this.map);   
     this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
+ 
+    this.reset();
   } 
   trackings(start:any,end:any){
     var self = this; 
