@@ -189,7 +189,7 @@ export class MapsPage implements OnInit {
       }
     }); 
     this.reset();
-    // this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
+    this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
   } 
   trackings(start:any,end:any){
     var self = this; 
@@ -201,10 +201,10 @@ export class MapsPage implements OnInit {
       if (status === 'OK') {  
         console.log(response);
         self.directionsDisplay.setDirections(response);
-        // new google.maps.DirectionsRenderer({ 
-        //   directions : response,
-        //   suppressMarkers: true
-        // });
+        new google.maps.DirectionsRenderer({ 
+          directions : response,
+          suppressMarkers: true
+        });
       } else {
         window.alert('Directions request failed due to ' + status);
       }
