@@ -126,23 +126,25 @@ export class AppComponent implements OnInit {
     var self = this;
     console.log('activating data please wait');
     this.ref = firebase.database().ref('maindata').orderByChild('userdetails');
-    this.nativeStorage.getItem('maindata')
-    .then(
-      data => {
-        this.storedata = data;
-      },
-      error => console.error(error)
-    );
-
+    // this.nativeStorage.getItem('maindata')
+    // .then(
+    //   data => {
+    //     this.storedata = data;
+    //   },
+    //   error => console.error(error)
+    // );
+      console.log(window.localStorage['maindata']);
+      this.storedata = window.localStorage['maindata'];
     this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp); 
       console.log('dataloaded');
-      this.nativeStorage.setItem('maindata',this.storedata)
-      .then(
-        () => console.log('Stored item!'),
-        error => console.error('Error storing item', error)
-      );
+      window.localStorage['maindata'] = this.storedata;
+      // this.nativeStorage.setItem('maindata',{'storedata':this.storedata})
+      // .then(
+      //   () => console.log('Stored item!'),
+      //   error => console.error('Error storing item', error)
+      // );
     });
     
     this.initializeApp();   
@@ -838,7 +840,7 @@ export class AppComponent implements OnInit {
           }); 
         }
       }
-      console.log(self.usermessage);
+      // console.log(self.usermessage);
     }); 
   }
   updatemessageitems(key){
