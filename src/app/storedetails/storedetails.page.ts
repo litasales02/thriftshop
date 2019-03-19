@@ -67,7 +67,7 @@ export class StoreDetailsPage implements OnInit {
         this.img = element.userdetails.profileimg;
         this.kanoevaluation = this.util.kanoalgov2(element.key);
         this.rate = Number(this.kanoevaluation.total_stars.toFixed(1)); 
-        this.stars =  Array(this.kanoevaluation.total_stars | 0).map((x,i)=>i);
+        this.stars =  Array(((100 * this.kanoevaluation.total_stars) / 25) | 0).map((x,i)=>i);
         this.util.updatedataset(element.key,{
           totalStars: this.kanoevaluation.total_stars
         });

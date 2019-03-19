@@ -17,7 +17,7 @@
         <ion-avatar style="margin-left:auto;margin-right:auto;width:200px; height:200px;border-style: solid;border-width: 1px;">
             <img [src]="productimage" class="center_image avatar_logo" />
         </ion-avatar>
-        <div  *ngIf="status==''||status==0" style="text-align: center;width: 100%;height: 40px; display: inline-block; position: absolute;z-index: 10; left: 0px; border: 1px solid #cccccc;background-color: rgba(199, 197, 197, 0.562)">
+        <div  *ngIf="status==''||status==0" style="text-align: center;width: 100%;height: 48px; display: inline-block; position: absolute;z-index: 10; left: 0px; border: 1px solid #cccccc;background-color: rgba(199, 197, 197, 0.788);color: rgb(243, 46, 46)">
             <ion-label>Not Available</ion-label> 
         </div>
         <ion-button  style="width: 50px; position: absolute;left: 85%;top:75%" class="button button-block button-positive button-large" *ngIf="selecteduserkey==util.userid" routerLink="/products/edit/{{id}}" >Edit</ion-button>
@@ -51,8 +51,8 @@
         <ion-label>Favorites</ion-label>        
         <ion-label>{{fav}} Users</ion-label>
     </ion-item> 
-    <ion-button class="button button-block button-positive button-large" (click)="routes();" > Send Message</ion-button> 
-    <ion-button class="button button-block button-positive button-large" (click)="loadmymap();" >
-            <ion-icon slot="start" [name]="'map'"></ion-icon> View Location
+    <ion-button class="button button-block button-positive button-large" *ngIf="selecteduserkey!=util.userid" (click)="routes();" > Send Message</ion-button> 
+    <ion-button class="button button-block button-positive button-large" *ngIf="selecteduserkey!=util.userid" (click)="loadmymap();" >
+        <ion-icon slot="start" [name]="'map'"></ion-icon> View Location
     </ion-button> 
 </ion-content>

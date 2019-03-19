@@ -171,7 +171,7 @@ export class ListProductPage implements OnInit {
       }, {
         text: 'Underwares', 
         handler: () => {
-          self.selected = 'Underwares'; 
+          self.selected = 'Underwears'; 
           self.filterselected = 'underwares';    
           self.util.getproductsbyfilter(self.filterselected,self.searchtext);      
         }

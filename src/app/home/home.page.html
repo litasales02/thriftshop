@@ -33,14 +33,14 @@
           <img [src]="datas.itemimg!=''?datas.itemimg:'../../assets/logo.png'" />
         </ion-avatar>
         <div class="items-details">
-          <ion-item >              
-            <ion-label slot="start" style="width: 90%;">
-              <h1 text-wrap>aaaa{{datas.productname}}</h1> 
+          <ion-item style="display: inline-block;width: 100%;">              
+            <ion-label style="width: 90%;">
+              <h1 text-wrap>{{datas.productname}}</h1> 
               <h3>Type      : {{datas.producttype}}</h3> 
               <h3>Item Per  : {{datas.unittype}}</h3> 
               <h3>Price     : {{datas.price}}</h3>  
             </ion-label>        
-            <ion-buttons slot="end" class="love hide" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
+            <ion-buttons style="width: 50px;height: 50px;right:10px" class="love hide" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
               <img [src]="favoritestar(datas.key)" height="50" width="50" /> 
             </ion-buttons>    
           </ion-item>      
