@@ -106,7 +106,7 @@ export class MapsPage implements OnInit {
                     self.trackinglng = element.position.lng;
                     var geodata = [new LatLng(this.lat, this.lng),new LatLng(element.position.lat,  element.position.lng)];
                     // console.log(geodata);
-                    this.trackings(new LatLng(this.lat, this.lng),new LatLng(element.position.lat, element.position.lng));
+                    self.trackings(new LatLng(this.lat, this.lng),new LatLng(element.position.lat, element.position.lng));
                     // self.trackings([0,0] ,[0,0]);
                   }
                 }, {
