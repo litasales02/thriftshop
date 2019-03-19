@@ -170,12 +170,13 @@ export class MapsPage implements OnInit {
     }, (response, status) => {
       if (status === 'OK') {  
         console.log(response);
-        // self.directionsDisplay.setDirections(response);
-        new google.maps.DirectionsRenderer({ 
-          strokeColor: "#ff3838",
-          directions : response,
-          suppressMarkers: false
-        });
+        self.directionsDisplay.setOptions( { suppressMarkers: true } );
+        self.directionsDisplay.setDirections(response);
+        // new google.maps.DirectionsRenderer({ 
+        //   strokeColor: "#ff3838",
+        //   directions : response,
+        //   suppressMarkers: false
+        // });
       } else {
         window.alert('Directions request failed due to ' + status);
       }
