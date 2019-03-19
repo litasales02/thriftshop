@@ -62,6 +62,7 @@ export class MapsPage implements OnInit {
     }
     try {
       this.map.clear();
+    this.directionsDisplay.setMap(this.map);
     }catch(er){
 
     }
@@ -106,7 +107,7 @@ export class MapsPage implements OnInit {
                     self.trackinglng = element.position.lng;
                     // var geodata = [new LatLng(this.lat, this.lng),new LatLng(element.position.lat,  element.position.lng)];
                     // console.log(geodata);
-                    self.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(element.position.lat, element.position.lng));
+                    self.trackings(new google.maps.LatLng(self.lat, self.lng),new google.maps.LatLng(element.position.lat, element.position.lng));
                     // self.trackings([0,0] ,[0,0]);
                   }
                 }, {
@@ -191,7 +192,6 @@ export class MapsPage implements OnInit {
       lng: self.lng
       }
     }); 
-    this.directionsDisplay.setMap(this.map);
     this.reset();
     // this.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(7.063874176251742, 125.60772923134004));
   } 

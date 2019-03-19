@@ -3,7 +3,7 @@
     <name>ThriftShop</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.1.112:8000" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -105,7 +105,6 @@
         <variable name="FIREBASE_CORE_VERSION" value="16.0.+" />
         <variable name="FIREBASE_CONFIG_VERSION" value="16.3.+" />
     </plugin>
-    <allow-navigation href="http://192.168.1.112:8000" sessionid="92f7fa6c" />
     <engine name="browser" spec="5.0.4" />
     <engine name="android" spec="7.1.4" />
 </widget>
