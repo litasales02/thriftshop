@@ -104,9 +104,9 @@ export class MapsPage implements OnInit {
                     };
                     self.trackinglat = element.position.lat;
                     self.trackinglng = element.position.lng;
-                    var geodata = [new LatLng(this.lat, this.lng),new LatLng(element.position.lat,  element.position.lng)];
+                    // var geodata = [new LatLng(this.lat, this.lng),new LatLng(element.position.lat,  element.position.lng)];
                     // console.log(geodata);
-                    self.trackings(new LatLng(this.lat, this.lng),new LatLng(element.position.lat, element.position.lng));
+                    self.trackings(new google.maps.LatLng(this.lat, this.lng),new google.maps.LatLng(element.position.lat, element.position.lng));
                     // self.trackings([0,0] ,[0,0]);
                   }
                 }, {
