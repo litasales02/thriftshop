@@ -383,13 +383,14 @@ export class AppComponent implements OnInit {
               };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
-              self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
+              // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
               self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
-              
-              self.stars = self.kanoevaluation.total_stars;
+              var stars = self.kanorating.total_stars;
+              stars = (100 * stars) / 25;
+              self.stars = self.kanorating.total_stars;
               self.rates = self.kanorating.asc;
               self.updatedataset(data.key,{
-                totalStars: self.kanoevaluation.total_stars
+                totalStars: stars
               });
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
@@ -1402,7 +1403,7 @@ export class AppComponent implements OnInit {
             }
         });
       } 
-    });
+  });
     return {
       total_users:users,
       total_stars: stars,
