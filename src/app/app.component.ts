@@ -671,13 +671,13 @@ export class AppComponent implements OnInit {
         Object.entries(element.product).forEach(function(element2){
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];
-            item['totaldistance'] = totaldistance;  
+            item['totaldistance'] = totaldistance.toFixed(2);  
             self.productdata.push(item);
         });
       }
     })
     self.productdata.sort((a,b)=>{
-      return  parseFloat(b.totaldistance) - parseFloat(a.totaldistance); 
+      return  parseFloat(a.totaldistance) - parseFloat(b.totaldistance); 
     }); 
   }
   getproductsallcant(){ 
