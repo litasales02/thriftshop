@@ -3,19 +3,19 @@ import { AlertController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AppComponent } from '../app.component' 
 import {
-  GoogleMaps,
+  // GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
-  Marker,
-  GoogleMapsAnimation,
-  MyLocation,
-  LatLngBounds,
-  GeocoderRequest,
-  GeocoderResult,
-  VisibleRegion,
-  Geocoder,
-  LatLng,
-  BaseArrayClass, 
+  // GoogleMapsEvent,
+  // Marker,
+  // GoogleMapsAnimation,
+  // MyLocation,
+  // LatLngBounds,
+  // GeocoderRequest,
+  // GeocoderResult,
+  // VisibleRegion,
+  // Geocoder,
+  // LatLng,
+  // BaseArrayClass, 
 } from '@ionic-native/google-maps';
 
  declare var google;
@@ -45,6 +45,7 @@ export class MapsPage implements OnInit {
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
   searchtxt: "";
+  searchBox:null;
   constructor(
     public router: Router, 
     public alertCtrl: AlertController, 
@@ -54,7 +55,7 @@ export class MapsPage implements OnInit {
     }
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;  
-     
+    this.searchBox = new google.maps.places.SearchBox(this.searchtxt);
   }
   reset(){
     var marker;
@@ -116,6 +117,7 @@ export class MapsPage implements OnInit {
               ])    
             }else if(i == 'me'){
               infowindow.setContent(new google.maps.LatLng(element.position.lat, element.position.lng));
+              infowindow.setContent("Here I'am");
               infowindow.open(self.map, marker);
             }
           });
@@ -199,10 +201,11 @@ export class MapsPage implements OnInit {
       }
     });
   }
-  search(ev){
+  search(ev){    
     // console.log(ev.key);
     if(ev.key == 'Enter' && ev.target.value != ''){
       console.log(ev.target.value);
+      this.mapsearch(ev.target.value);
     }
   }
   mapsearch(search){
@@ -210,12 +213,13 @@ export class MapsPage implements OnInit {
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address': search}, function(results, status) {
       if (status === 'OK') {
-        this.map.setCenter(results[0].geometry.location);
-        self.markermyposition.clear();
-        self.markermyposition = new google.maps.Marker({
-          map: self.map,
-          position: results[0].geometry.location
-        });
+        console.log(results);
+        // this.map.setCenter(results[0].geometry.location);
+        // self.markermyposition.clear();
+        // self.markermyposition = new google.maps.Marker({
+        //   map: self.map,
+        //   position: results[0].geometry.location
+        // });
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }

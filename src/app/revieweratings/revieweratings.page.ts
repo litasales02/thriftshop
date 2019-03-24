@@ -42,6 +42,7 @@ export class RevieweRatingsPage implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnInit() { 
+    this.kanorating = this.util.kanorating;
   }
 }
