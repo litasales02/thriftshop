@@ -154,6 +154,7 @@ export class MapsPage implements OnInit {
       restriction: {latLngBounds:davao_bound}
     });
     this.util.mapdata({
+      Store: '',
       title: 'Your Here!',
       icon: 'red', 
       position: {
@@ -209,21 +210,22 @@ export class MapsPage implements OnInit {
     var self = this;
     // console.log(ev.key);
     if(ev.key == 'Enter' && ev.target.value != ''){
-      let val = ev.target.value;
+      var val = ev.target.value;
       console.log(ev.target.value);
-      console.log(this.storenames);
-      // this.mapsearch(ev.target.value);
-      // this.map.moveCamera()
-      // self.util.getproductsbyfilterc(val)
+      console.log(val.toLowerCase()); 
+      console.log(this.storenames); 
       this.storenamesresult = this.storenames.filter((item) => {
         return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
       });
-      console.log(this.storenamesresult);
+      console.log(this.storenamesresult); 
       this.showList = true;
     }else {
 
       this.showList = false;
     }
+  }
+  getpos(ev){
+    console.log(ev);
   }
   mapsearch(search){
     var self = this;

@@ -177,7 +177,7 @@ export class AppComponent implements OnInit {
 
 
           if(element.geodata.lat != 0 && element.geodata.lng != 0){
-            var totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+            var totaldistance = self.distance2coor( self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
             let item = element.geodata;
             item.position = {"lat": element.geodata.lat,"lng":element.geodata.lng}
             item.key = element.key; 

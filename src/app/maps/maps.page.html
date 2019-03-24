@@ -11,9 +11,11 @@
 
 <ion-content>
   <ion-searchbar autocomplete="off" ([ngModel])="searchtxt"  placeholder="Search Store" (keydown)="search($event)" show-cancel="true" ></ion-searchbar >
-  <ion-list *ngIf="showList">
+  <ion-list *ngIf="showList" style="top:40px;left:10px;">
     <ion-item *ngFor="let item of storenamesresult">
-      {{ item }}
+      <ion-lable (click)="getpos(item)" >
+       {{ item }}
+      </ion-lable>
     </ion-item>
   </ion-list>
   <div id="map_canvas" style="top: 0;left: 0;"> </div> 
