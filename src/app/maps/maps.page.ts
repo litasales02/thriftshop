@@ -40,12 +40,15 @@ export class MapsPage implements OnInit {
       lng: 0.0
     }
   };
+  showList: boolean = false;
   trackinglat = 7.148419523108726;
   trackinglng = 125.52915832519531;
   directionsService = new google.maps.DirectionsService;
   directionsDisplay = new google.maps.DirectionsRenderer;
   searchtxt: "";
   searchBox:null;
+  storenames = [];
+  storenamesresult = [];
   constructor(
     public router: Router, 
     public alertCtrl: AlertController, 
@@ -78,6 +81,7 @@ export class MapsPage implements OnInit {
     self.util.sellergeodata.forEach(element => {
       console.log(element);     
       console.log(element.key);
+      self.storenames.push(element.Store);
       var keys = typeof(element.key)!='undefined'?element.key:'me'; 
       marker = new google.maps.Marker({
         map: this.map,
@@ -205,10 +209,20 @@ export class MapsPage implements OnInit {
     var self = this;
     // console.log(ev.key);
     if(ev.key == 'Enter' && ev.target.value != ''){
+      let val = ev.target.value;
       console.log(ev.target.value);
+      console.log(this.storenames);
       // this.mapsearch(ev.target.value);
       // this.map.moveCamera()
-      self.util.sellergeodata.forEach(element => {});
+      // self.util.getproductsbyfilterc(val)
+      this.storenamesresult = this.storenames.filter((item) => {
+        return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      });
+      console.log(this.storenamesresult);
+      this.showList = true;
+    }else {
+
+      this.showList = false;
     }
   }
   mapsearch(search){
