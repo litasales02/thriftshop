@@ -383,6 +383,7 @@ export class AppComponent implements OnInit {
               self.rates = self.kanorating.asc;
               self.updatedataset(data.key,{
                 totalStars: stars,
+                rates: self.kanorating.asc
               });
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
@@ -781,7 +782,7 @@ export class AppComponent implements OnInit {
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];
             item['totaldistance'] = totaldistance.toFixed(2);  
-            item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
+            // item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
             item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
             self.productdata.push(item);
         });
@@ -808,7 +809,7 @@ export class AppComponent implements OnInit {
               let item = Object.assign({}, element2)[1];
               item['key'] = Object.assign({}, element2)[0];
               item['totaldistance'] = totaldistance.toFixed(2);  
-              item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
+              // item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
               item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
               self.productdata.push(item);
           });
@@ -1055,29 +1056,19 @@ export class AppComponent implements OnInit {
   
   async usersendmsgbysellers(key,message,callbacks){ 
 
-    if(key == 'admin'){
-      let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
-      await newproduct2.set({
-        'send': '',
-        'reply': message,
-        'status': 0
-      });          
-      this.load_messages();
-    }else{      
-      let newproduct =   firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
-      await newproduct.set({
-        'send': '',
-        'reply': message,
-        'status': 1
-      });
-      let newproduct2 =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
-      await newproduct2.set({
-        'send': message,
-        'reply': '',
-        'status': 0
-      });       
-      this.load_messages();
-    }
+    let newproduct =   firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+    await newproduct.set({
+      'send': message,
+      'reply': '',
+      'status': 1
+    });
+    let newproduct2 =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
+    await newproduct2.set({
+      'send': '',
+      'reply': message,
+      'status': 0
+    });       
+    this.load_messages();
     // this.ref.database().ref()
     if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
       // console.log("send");
