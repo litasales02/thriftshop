@@ -25,7 +25,7 @@ import {
   styleUrls: ['maps.page.scss']
 })
 export class MapsPage implements OnInit {
-  map: GoogleMap;
+  map = null;
   loading: any;
   lat = 7.148419523108726;
   lng = 125.52915832519531;
@@ -234,7 +234,8 @@ export class MapsPage implements OnInit {
         // self.map.setCameraZoom(18);
         // self.map.setCameraTarget(new google.maps.LatLng(element.position.lat,element.position.lng));
         try {
-          this.map.setCenter(new google.maps.LatLng(element.position.lat,element.position.lng));
+          self.map.setCenter(new google.maps.LatLng(element.position.lat,element.position.lng));
+          self.map.setZoom(18);
         }catch(er){
 
         }
