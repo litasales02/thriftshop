@@ -55,7 +55,7 @@ export class MapsPage implements OnInit {
     }
     this.lat = this.util.usergeolocationlat;
     this.lng = this.util.usergeolocationlng;  
-    this.searchBox = new google.maps.places.SearchBox(this.searchtxt);
+    // this.searchBox = new google.maps.places.SearchBox(this.searchtxt);
   }
   reset(){
     var marker;

@@ -33,11 +33,13 @@ export class ListProductPage implements OnInit {
         if (this.child == "storedetailshome"){
           child = "list/storedetails/" + this.id + "/home";
           this.list_redirect = "/products/details";
-          this.util.getproducts(this.id);
+          // this.util.getproducts(this.id);
+          this.util.getproductsbyuid(this.id);          
         } else if (this.child == "myproduct"){
           child = "list/storedetails/" + this.id + "/home";
           this.list_redirect = "/products/details";
-          this.util.getproducts(this.id);
+          // this.util.getproducts(this.id);          
+          this.util.getproductsbyuid(this.id);   
         } else {
           child = "home";
           this.list_redirect = "/products/details";
@@ -114,7 +116,8 @@ export class ListProductPage implements OnInit {
         text: 'My Products',
         icon: 'list',
         handler: () => {                  
-          this.util.getproductsallcant();
+          // this.util.getproductsallcant();
+          this.util.getproductsbyuid(self.util.userid);
           if(self.util.registrationstatus == 0 && self.util.loginStatus){
             self.util.alerts('Hi','Your Product will not show on product list until you update and complete the requirements',['ok']);
           }
@@ -172,7 +175,7 @@ export class ListProductPage implements OnInit {
         text: 'Underwares', 
         handler: () => {
           self.selected = 'Underwears'; 
-          self.filterselected = 'underwares';    
+          self.filterselected = 'underwears';    
           self.util.getproductsbyfilter(self.filterselected,self.searchtext);      
         }
       }, {

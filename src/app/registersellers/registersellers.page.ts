@@ -85,7 +85,7 @@ export class RegisterSellersPage implements OnInit {
    
   }
   navigate() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
   }
   fileChange(event){ 
     if(event.target.files && event.target.files[0]){

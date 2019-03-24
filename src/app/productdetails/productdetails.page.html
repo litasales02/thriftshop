@@ -21,7 +21,7 @@
             <ion-label>Not Available</ion-label> 
         </div>
         <ion-button  style="width: 50px; position: absolute;left: 85%;top:75%" class="button button-block button-positive button-large" *ngIf="selecteduserkey==util.userid" routerLink="/products/edit/{{id}}" >Edit</ion-button>
-        <ion-button  *ngIf="selecteduserkey!=util.userid" style="width: 50px; position: absolute;left: 85%;top:75%" class="button button-block button-positive button-large" routerLink="/questioner/' + this.id{{id}}" >Rate</ion-button>
+        <ion-button  *ngIf="selecteduserkey!=util.userid" style="width: 50px; position: absolute;left: 85%;top:75%" class="button button-block button-positive button-large" routerLink="/questioner/' + {{id}}" >Rate</ion-button>
     </ion-item>  
     <ion-item> 
             <ion-label>Product By</ion-label> 
@@ -43,9 +43,11 @@
         <ion-label>Price</ion-label>        
         <ion-label>{{price}}</ion-label>
     </ion-item> 
-    <ion-item> 
-        <ion-label>Description</ion-label>        
-        <ion-label>{{description}}</ion-label>
+    <ion-item  lines="none"> 
+        <ion-label>Description</ion-label>         
+    </ion-item> 
+    <ion-item text-wrap>  
+        <ion-label text-wrap >{{description}}</ion-label>
     </ion-item> 
     <ion-item> 
         <ion-label>Favorites</ion-label>        

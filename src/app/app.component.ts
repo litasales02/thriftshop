@@ -126,27 +126,11 @@ export class AppComponent implements OnInit {
     var self = this;
     console.log('activating data please wait');
     this.ref = firebase.database().ref('maindata').orderByChild('userdetails');
-    // this.nativeStorage.getItem('maindata')
-    // .then(
-    //   data => {
-    //     this.storedata = data;
-    //   },
-    //   error => console.error(error)
-    // );
-      console.log(window.localStorage['maindata']);
-      this.storedata = window.localStorage['maindata'];
-      this.ref.on('value',resp =>{
+    this.ref.on('value',resp =>{
       this.storedata = [];
       this.storedata = snapshotToArray(resp); 
-      console.log('dataloaded');
-      window.localStorage['maindata'] = this.storedata;
-      // this.nativeStorage.setItem('maindata',{'storedata':this.storedata})
-      // .then(
-      //   () => console.log('Stored item!'),
-      //   error => console.error('Error storing item', error)
-      // );
-    });
-    
+     });
+
     this.initializeApp();   
     this.geolocation.getCurrentPosition().then((resp) => {
       self.usergeolocationlat = resp.coords.latitude;
@@ -355,9 +339,16 @@ export class AppComponent implements OnInit {
     this.ShowToast('Logging Out Good Bye!');
   }
   async login(username,password ,callback){
-    return await this.authen(username,password,function(obj){
-      callback(obj);
-    });
+    // if(this.storedata != null){
+    //   return await this.authenoff(username,password,function(obj){
+    //     callback(obj);
+    //   });   
+    // }else{
+      return await this.authen(username,password,function(obj){
+        callback(obj);
+      });    
+    // }
+
   }
   async authen(username,password,callback){
     var self = this;
@@ -385,12 +376,13 @@ export class AppComponent implements OnInit {
               self.starscss = 'drawerrate show';
               // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
               self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
+              console.log(self.kanorating);
               var stars = self.kanorating.total_stars;
               stars = (100 * stars) / 25;
               self.stars = self.kanorating.total_stars;
               self.rates = self.kanorating.asc;
               self.updatedataset(data.key,{
-                totalStars: stars
+                totalStars: stars,
               });
               self.loadfavorite();
               if (typeof(data.val().requirements) != 'undefined'){ 
@@ -414,6 +406,121 @@ export class AppComponent implements OnInit {
         callback(false);
       }
     }); 
+  }
+  async authenoff(username,password,callback){
+    var self = this; 
+    this.storedata.forEach(element => { 
+      // var totaldistance = 0.0;
+      // if(typeof(element.geodata) != 'undefined'){ 
+      //   if(element.geodata.lat != 0 && element.geodata.lng != 0){
+      //     totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+      //   }
+      // }
+      // if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){        
+      //   Object.entries(element.product).forEach(function(element2){
+      //     // console.log(element2[1]);
+      //       let item = Object.assign({}, element2)[1];
+      //       item['key'] = Object.assign({}, element2)[0];
+      //       item['totaldistance'] = totaldistance.toFixed(2);  
+      //       item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
+      //       self.productdata.push(item);
+      //   });
+      // } 
+      if(element.password == Md5.hashStr(password) && element.username == username){ 
+        self.userid = element.key;
+        self.drawerTitle = element.userdetails.firstname;
+        self.loginStatus = true;
+        self.profileimg = element.userdetails.profileimg;
+        self.userType =  element.usertype;
+
+        if(element.usertype == 'seller'){
+          self.drawerTitle = element.storename;
+          self.geodata =  element.geodata.status; 
+          self.requirementsdata = {
+            'status': element.requirements.status,
+            'idtype':element.requirements.idtype,
+            'govid': element.requirements.govid,
+            'storeimg': element.requirements.storeimg
+          };
+          self.registrationstatus = element.requirements.status;
+          self.starscss = 'drawerrate show';
+          // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
+          self.kanorating = self.kanoalgosetv2(element.feedsseller);
+          var stars = self.kanorating.total_stars;
+          stars = (100 * stars) / 25;
+          self.stars = self.kanorating.total_stars;
+          self.rates = self.kanorating.asc;
+          self.updatedataset(element.key,{
+            totalStars: stars
+          });
+          self.loadfavorite();
+          if (typeof(element.requirements) != 'undefined'){ 
+            self.requirementsdata = element.requirements; 
+          }
+        } else {
+          self.registrationstatus = 1; //for buyer
+          self.starscss = 'drawerrate hide';
+        }
+        self.getmessages();
+        self.load_messages();
+        callback(true);
+
+      }
+
+    })
+    
+    // getlogin.once('value',function(childs){
+    //   let data = childs.val();
+    //   if (data) {
+    //     childs.forEach(function(data){
+    //       if ( data.val().password === Md5.hashStr(password)){
+    //         self.userid = data.key;
+    //         self.drawerTitle = data.val().userdetails.firstname;
+    //         self.loginStatus = true;
+    //         self.profileimg = data.val().userdetails.profileimg;
+    //         self.userType =  data.val().usertype;
+    //         if(data.val().usertype == 'seller'){
+    //           self.drawerTitle = data.val().storename;
+    //           self.geodata =  data.val().geodata.status; 
+    //           self.requirementsdata = {
+    //             'status': data.val().requirements.status,
+    //             'idtype':data.val().requirements.idtype,
+    //             'govid': data.val().requirements.govid,
+    //             'storeimg': data.val().requirements.storeimg
+    //           };
+    //           self.registrationstatus = data.val().requirements.status;
+    //           self.starscss = 'drawerrate show';
+    //           // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
+    //           self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
+    //           var stars = self.kanorating.total_stars;
+    //           stars = (100 * stars) / 25;
+    //           self.stars = self.kanorating.total_stars;
+    //           self.rates = self.kanorating.asc;
+    //           self.updatedataset(data.key,{
+    //             totalStars: stars
+    //           });
+    //           self.loadfavorite();
+    //           if (typeof(data.val().requirements) != 'undefined'){ 
+    //             self.requirementsdata = data.val().requirements; 
+    //           }
+    //         } else {
+    //           self.registrationstatus = 1; //for buyer
+    //           self.starscss = 'drawerrate hide';
+    //         }
+    //         // self.kanoalgo(self.userid);
+    //         self.getmessages();
+    //         self.load_messages();
+    //         callback(true);
+    //       } else {
+    //         callback(false);
+    //         self.loginStatus = false;
+    //       }
+    //     });
+    //   } else {
+    //     self.loginStatus = false;
+    //     callback(false);
+    //   }
+    // }); 
   }
   async alerts(title,header,buttons) { 
     const alert = await this.alertCtrl.create({
@@ -670,11 +777,42 @@ export class AppComponent implements OnInit {
       }
       if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){        
         Object.entries(element.product).forEach(function(element2){
+          // console.log(element2[1]);
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];
             item['totaldistance'] = totaldistance.toFixed(2);  
+            item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
+            item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
             self.productdata.push(item);
         });
+      } 
+    })
+    self.productdata.sort((a,b)=>{
+      return  parseFloat(a.totaldistance) - parseFloat(b.totaldistance); 
+    }); 
+  }
+  getproductsbyuid(key){ 
+    var self = this;
+    this.productdata = [];
+    this.storedata.forEach(element => { 
+      var totaldistance = 0.0;
+      if(element.key == key){
+        if(typeof(element.geodata) != 'undefined'){ 
+          if(element.geodata.lat != 0 && element.geodata.lng != 0){
+            totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+          }
+        }
+        if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){        
+          Object.entries(element.product).forEach(function(element2){
+            // console.log(element2[1]);
+              let item = Object.assign({}, element2)[1];
+              item['key'] = Object.assign({}, element2)[0];
+              item['totaldistance'] = totaldistance.toFixed(2);  
+              item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
+              item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
+              self.productdata.push(item);
+          });
+        }         
       }
     })
     self.productdata.sort((a,b)=>{
@@ -914,6 +1052,42 @@ export class AppComponent implements OnInit {
     }
     callbacks("done"); 
   } 
+  
+  async usersendmsgbysellers(key,message,callbacks){ 
+
+    if(key == 'admin'){
+      let newproduct2 =  firebase.database().ref('admindata/messages/'+ this.userid).push();
+      await newproduct2.set({
+        'send': '',
+        'reply': message,
+        'status': 0
+      });          
+      this.load_messages();
+    }else{      
+      let newproduct =   firebase.database().ref('maindata/'+ key+ '/messages/'+ this.userid).push();
+      await newproduct.set({
+        'send': '',
+        'reply': message,
+        'status': 1
+      });
+      let newproduct2 =  firebase.database().ref('maindata/'+ this.userid + '/messages/'+ key).push();
+      await newproduct2.set({
+        'send': message,
+        'reply': '',
+        'status': 0
+      });       
+      this.load_messages();
+    }
+    // this.ref.database().ref()
+    if(this.usermessage != null && this.usermessage[0] != null && typeof(this.usermessage[0]) != 'undefined'){
+      // console.log("send");
+    }else{
+      // console.log("reload message");
+      this.getmessages();
+      this.load_messages();
+    }
+    callbacks("done"); 
+  } 
   async newdata(value){
     let newInfo = firebase.database().ref('maindata').push();
     await newInfo.set(value);
@@ -966,7 +1140,8 @@ export class AppComponent implements OnInit {
   }  
   async updatenewkanodata(id,value){
     // let newproduct =  
-    await firebase.database().ref('maindata/'+ id + '/feedsseller/'+this.userid+"/").update(value);
+    console.log(value);
+    await firebase.database().ref('maindata/' + id + '/feedsseller/' + this.userid).update(value);
     // await newproduct.set(value);
   }
   kanoalgosetv2(feedsseller){
@@ -1022,6 +1197,8 @@ export class AppComponent implements OnInit {
             var negative = ['Q1P2','Q2P2','Q3P2'];
 
             positive.forEach(keyelement => {
+              console.log("positive :",keyelement);
+              console.log("positive :",element2[keyelement]);
               switch(self.kanu_evalletters(element2[keyelement])){
                 case 5:
                   total_positive_excellent++;
@@ -1077,6 +1254,8 @@ export class AppComponent implements OnInit {
             });
             
             negative.forEach(keyelement => {
+              console.log("negative :",keyelement);
+              console.log("negative :",element2[keyelement]); 
               switch(self.kanu_evalletters(element2[keyelement])){
                 case 5:
                   total_negative_excellent++;                  
@@ -1157,24 +1336,35 @@ export class AppComponent implements OnInit {
 
               stars = 0;
 
+              // quality.m 
               //   si = ( a + o ) / ( a + o + m + i);
               //   di = ( m + o ) / ( a + o + m + i);
               // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
               // quality.asc = (quality.si + quality.di) / 2;
+              quality.di = isNaN(quality.di)?0:quality.di;
+              quality.si = isNaN(quality.si)?0:quality.si;
 
               suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
               suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
               // suplier.asc = (suplier.si + suplier.di) / 2;
+              suplier.di = isNaN(suplier.di)?0:suplier.di;
+              suplier.si = isNaN(suplier.si)?0:suplier.si;
               
               feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
               feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
               // feedback.asc = (feedback.si + feedback.di) / 2;
+              feedback.di = isNaN(feedback.di)?0:feedback.di;
+              feedback.si = isNaN(feedback.si)?0:feedback.si;
 
               si = (quality.si + suplier.si + feedback.si);
               di = (quality.di + suplier.di + feedback.di);
               asc = (( si + (di)) / 2) * -1;
+
+              si = isNaN(si)?0:si;
+              di = isNaN(di)?0:di;
+              asc = isNaN(asc)?0:asc;
 
             }
         });
@@ -1387,19 +1577,27 @@ export class AppComponent implements OnInit {
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
               // quality.asc = (quality.si + quality.di) / 2;
+              quality.di = isNaN(quality.di)?0:quality.di;
+              quality.si = isNaN(quality.si)?0:quality.si;
 
               suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
               suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
               // suplier.asc = (suplier.si + suplier.di) / 2;
+              suplier.di = isNaN(suplier.di)?0:suplier.di;
+              suplier.si = isNaN(suplier.si)?0:suplier.si;
               
               feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
               feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
               // feedback.asc = (feedback.si + feedback.di) / 2;
-
+              feedback.di = isNaN(feedback.di)?0:feedback.di;
+              feedback.si = isNaN(feedback.si)?0:feedback.si;
               si = (quality.si + suplier.si + feedback.si);
               di = (quality.di + suplier.di + feedback.di);
               asc = (( si + (di)) / 2) * -1;
-            
+
+              si = isNaN(si)?0:si;
+              di = isNaN(di)?0:di;
+              asc = isNaN(asc)?0:asc;
             }
         });
       } 
@@ -1752,7 +1950,7 @@ export class AppComponent implements OnInit {
       'di': di
     }
   }
-  kanu_evalletters(val){
+    kanu_evalletters(val){
     if (val == 'e'){ // 1.	It is excellent = e
       return 5;
     } else if(val == 'g') { // 2.	It is good = g

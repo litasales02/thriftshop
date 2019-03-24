@@ -58,7 +58,7 @@ export class ProductDetailsPage implements OnInit {
           self.status = typeof(element.status)!='undefined'?element.status:0;
           console.log(self.status);
           // console.log(self.util.selecteditem);
-          self.routerlingks = "/message/panel/"+self.util.selecteduserkey+"/products_details";
+          self.routerlingks = "/message/panel/" + self.util.selecteduserkey + "/products_details";
           // console.log(self.routerlingks);
           this.util.loadfavorite2(element.ukey,function(r){
             self.fav = r;

@@ -32,14 +32,17 @@
         <ion-avatar class="itemsproduct ">
           <img [src]="datas.itemimg!=''?datas.itemimg:'../../assets/logo.png'" />
         </ion-avatar>
+        <div  *ngIf="datas.status==''||datas.status==0" style="padding-top:4%;text-align: center;width: 100%;height: 48px; display: inline-block; position: absolute;z-index: 10;top:20%; left: 0px; border: 1px solid #cccccc;background-color: rgba(199, 197, 197, 0.788);color: rgb(243, 46, 46)">
+            <ion-label >Not Available</ion-label> 
+        </div>
         <div class="items-details">
           <ion-item style="display: inline-block;width: 100%;">              
-            <ion-label style="width: 90%;">
+            <ion-label style="width: 95%;">
               <h1 text-wrap>{{datas.productname}}</h1> 
-              <h3>Type      : {{datas.producttype}}</h3> 
-              <h3>Item Per  : {{datas.unittype}}</h3> 
-              <h3>Price     : {{datas.price}}</h3>  
-              <h3>Distance     : {{datas.totaldistance}} Km</h3>   
+              <h3>Type      : {{datas.producttype}}</h3>  
+              <h3>Price     : &#8369; <strong>{{datas.price}}</strong> /{{datas.unittype}}</h3>  
+              <h3>Rate  : {{datas.kanorate}} </h3>   
+              <h3>Distance  : {{datas.totaldistance}} Km</h3>   
             </ion-label>        
             <ion-buttons style="width: 50px;height: 50px;right:10px" class="love hide" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
               <img [src]="favoritestar(datas.key)" height="50" width="50" /> 

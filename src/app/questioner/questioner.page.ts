@@ -26,14 +26,14 @@ export class QuestionerPage implements OnInit {
 
   }
   submit(){
-    // console.log("part1 ",this.part1);
-    // console.log("part11 ",this.part11);
+    console.log("part1 ",this.part1);
+    console.log("part11 ",this.part11);
 
-    // console.log("part2 ",this.part2);
-    // console.log("part22 ",this.part22);
+    console.log("part2 ",this.part2);
+    console.log("part22 ",this.part22);
     
-    // console.log("part3 ",this.part3);
-    // console.log("part33 ",this.part33); 
+    console.log("part3 ",this.part3);
+    console.log("part33 ",this.part33); 
 
   // 1.	It is excellent = e
   // 2.	It is good = g

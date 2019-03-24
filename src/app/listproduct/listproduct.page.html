@@ -24,15 +24,6 @@
     <ion-label style="margin-left:10px;">
       : {{selected}}
     </ion-label>
-    <div>
-      <strong>Mode of Travel: </strong>
-        <select >
-          <option value="DRIVING">Driving</option>
-          <option value="WALKING">Walking</option>
-          <option value="BICYCLING">Bicycling</option>
-          <option value="TRANSIT">Transit</option>
-        </select>
-    </div>
 </ion-item>
 
   <ion-list *ngFor="let datas of util.productdata">
@@ -45,6 +36,9 @@
         <h3>Type  : {{datas.producttype}}</h3>
         <h3>unit  : {{datas.unittype}}</h3>
         <h3>Price : {{datas.price}}</h3>  
+        <h3>Distance     : {{datas.totaldistance}} Km</h3>  
+        <h3 *ngIf="datas.status==1">Status: Available</h3>  
+        <h3 *ngIf="datas.status==0">Status: Not Available</h3>  
       </ion-label>        
       <ion-buttons slot="end" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
         <img [src]="favoritestar(datas.key)" height="50" width="50" /> 

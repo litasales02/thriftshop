@@ -104,7 +104,7 @@ export class RegisterSellersPageUpdate implements OnInit {
       "profileimg": typeof(self.iamgefile) != 'undefined'?self.iamgefile:'none'
     });
     // self.navigate();
-    self.util.alerts("General","Profle Image is Updated",['Ok']);
+    // self.util.alerts("General","Profle Image is Updated",['Ok']);
   }
 
 }
