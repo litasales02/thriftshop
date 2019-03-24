@@ -13,17 +13,7 @@ export class RevieweRatingsPage implements OnInit {
   id = "";
   kanorating = {
     total_users:0,
-    total_stars: 0,
-    total_excellentn: 0,
-    total_averagen: 0,
-    total_goodn: 0,
-    total_badn: 0,
-    total_poorn: 0,
-    total_excellentp: 0,
-    total_averagep: 0,
-    total_goodp: 0,
-    total_badp: 0,
-    total_poorp: 0,
+    total_stars: 0, 
     quality:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
     suplier:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
     feedback: {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},

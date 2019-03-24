@@ -685,25 +685,25 @@ export class AppComponent implements OnInit {
     });
   }
   getproductsbyfilterc(productname,callbacks){
-    // console.clear();
-    var self = this;
-    var productdata = [];
-    // console.log('filtered')
-    this.storedata.forEach(element => {
-      if(typeof(element.product) != 'undefined'){
-        Object.entries(element.product).forEach(function(element2,index,arr){
-          if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
-            // console.log(element2[1]['productname']);
-            let item = Object.assign({}, element2)[1];
-            item['key'] = Object.assign({}, element2)[0]; 
-            // item.push(element2[1]);
-            // console.log(item);
-            productdata.push(item);
-          }
-        });
-      }
-    });
-    callbacks(productdata);
+    // // console.clear();
+    // var self = this;
+    // var productdata = [];
+    // // console.log('filtered')
+    // this.storedata.forEach(element => {
+    //   if(typeof(element.product) != 'undefined'){
+    //     Object.entries(element.product).forEach(function(element2,index,arr){
+    //       if(element2[1]['producttype'].toLowerCase().indexOf(productname.toLowerCase()) > -1 && element2[1]['producttype'].toLowerCase() == filers.toLowerCase()){
+    //         // console.log(element2[1]['productname']);
+    //         let item = Object.assign({}, element2)[1];
+    //         item['key'] = Object.assign({}, element2)[0]; 
+    //         // item.push(element2[1]);
+    //         // console.log(item);
+    //         productdata.push(item);
+    //       }
+    //     });
+    //   }
+    // });
+    // callbacks(productdata);
   }
   getmessages(){
     var self = this;
