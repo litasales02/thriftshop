@@ -231,8 +231,13 @@ export class MapsPage implements OnInit {
     self.util.sellergeodata.forEach(element => {
       if(ev == element.Store){
         // self.map.moveCamera(new google.maps.LatLng(element.position.lat,element.position.lng));
-        self.map.setCameraZoom(18);
-        self.map.setCameraTarget(new google.maps.LatLng(element.position.lat,element.position.lng));
+        // self.map.setCameraZoom(18);
+        // self.map.setCameraTarget(new google.maps.LatLng(element.position.lat,element.position.lng));
+        try {
+          this.map.setCenter(new google.maps.LatLng(element.position.lat,element.position.lng));
+        }catch(er){
+
+        }
       }
     });
   }
