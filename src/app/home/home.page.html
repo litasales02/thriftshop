@@ -41,7 +41,7 @@
               <h1 text-wrap>{{datas.productname}}</h1> 
               <h3>Type      : {{datas.producttype}}</h3>  
               <h3>Price     : &#8369; <strong>{{datas.price}}</strong> /{{datas.unittype}}</h3>  
-              <h3>Rate  : {{datas.kanorate}} </h3>   
+              <h3>Rate      : {{datas.rates}} </h3>   
               <h3>Distance  : {{datas.totaldistance}} Km</h3>   
             </ion-label>        
             <ion-buttons style="width: 50px;height: 50px;right:10px" class="love hide" color="primary" *ngIf="util.loginStatus" (click)="myfaorite($event,datas.key)"  >
