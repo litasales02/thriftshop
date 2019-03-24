@@ -225,7 +225,15 @@ export class MapsPage implements OnInit {
     }
   }
   getpos(ev){
+    var self = this;
     console.log(ev);
+    this.showList = false;
+    self.util.sellergeodata.forEach(element => {
+      if(ev == element.Store){
+        self.map.moveCamera(new google.maps.LatLng(element.position.lat,element.position.lng));
+        self.map.setCameraZoom(18);
+      }
+    });
   }
   mapsearch(search){
     var self = this;
