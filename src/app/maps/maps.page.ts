@@ -230,8 +230,9 @@ export class MapsPage implements OnInit {
     this.showList = false;
     self.util.sellergeodata.forEach(element => {
       if(ev == element.Store){
-        self.map.moveCamera(new google.maps.LatLng(element.position.lat,element.position.lng));
+        // self.map.moveCamera(new google.maps.LatLng(element.position.lat,element.position.lng));
         self.map.setCameraZoom(18);
+        self.map.setCameraTarget(new google.maps.LatLng(element.position.lat,element.position.lng));
       }
     });
   }
