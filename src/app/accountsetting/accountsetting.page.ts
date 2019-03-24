@@ -37,12 +37,12 @@ export class AccountSettingPage implements OnInit {
         }
         if(this.govid != '' && this.storeimg != ''){
           this.util.updaterequirements({ 
-            'status': 1,
+            'status': 0,
             'idtype': this.idtype,
             'govid': this.govid,
             'storeimg':this.storeimg
           });          
-          this.util.alerts("Update","Store Updated!, Please wait for the comformation of your registration or call us. Thank you!.",['Ok']);
+          this.util.alerts("Update","Store Updated!, Please wait for the conformation of your registration or call us. Thank you!.",['Ok']);
         }
 
         if(this.util.geodata == 1){

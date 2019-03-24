@@ -202,10 +202,13 @@ export class MapsPage implements OnInit {
     });
   }
   search(ev){    
+    var self = this;
     // console.log(ev.key);
     if(ev.key == 'Enter' && ev.target.value != ''){
       console.log(ev.target.value);
-      this.mapsearch(ev.target.value);
+      // this.mapsearch(ev.target.value);
+      // this.map.moveCamera()
+      self.util.sellergeodata.forEach(element => {});
     }
   }
   mapsearch(search){

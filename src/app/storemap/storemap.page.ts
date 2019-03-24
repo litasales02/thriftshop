@@ -5,12 +5,13 @@ import { AppComponent } from '../app.component';
 import {
   GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
-  Marker,
-  GoogleMapsAnimation,
-  MyLocation
+  // GoogleMapsEvent,
+  // Marker,
+  // GoogleMapsAnimation,
+  // MyLocation
 } from '@ionic-native/google-maps';
 
+declare var google;
 @Component({
   templateUrl: 'storemap.page.html',
   styleUrls: ['storemap.page.scss']
@@ -33,30 +34,34 @@ export class StoreMapPage implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id'); 
     this.directlocation = "products/details/" +  this.id + "/home";
   }
-  loadMap() { 
+  loadMap() {     
+    var davao_bound = {
+      north: 7.5858,
+      south: 6.9810,
+      west: 125.2579,
+      east: 125.7056,
+    };
+
+    var marker;
+    var infowindow = new google.maps.InfoWindow();
     var self = this;
     var result = null;
-    this.util.getstoreGeoid(this.id,function(results:any){
-
+    this.util.getstoreGeoid(this.id,function(results:any){ 
       result = Object.values(results)[0];
-      // console.log(result['lat'],result['lng']);
-      self.map = GoogleMaps.create('map_canvas', {
-        camera: {
-          target: {
-            lat: result['lat'],
-            lng: result['lng']
-          },
-          zoom: 18,
-          tilt: 30
-        }
+      this.map = new google.maps.Map(document.getElementById('map_canvas'), {
+        zoom: 18,
+        center:  new google.maps.LatLng( result['lat'], result['lng']),
+        restriction: {latLngBounds:davao_bound}
       });
-
-      self.markermyposition = self.map.addMarkerSync({
-        title: 'Store is here!',
-        icon: 'blue',
-        position: {lat: result['lat'], lng: result['lng']},
-        animation: 'DROP'
-      }); 
+      marker = new google.maps.Marker({
+        map: self.map,
+        draggable: false,
+        animation: google.maps.Animation.DROP,
+        position: new google.maps.LatLng(result['lat'], result['lng'])
+      });
+      infowindow.setContent(new google.maps.LatLng(result['lat'], result['lng']));
+      infowindow.setContent("Here I'am");
+      infowindow.open(self.map, marker);
     });
 
   }

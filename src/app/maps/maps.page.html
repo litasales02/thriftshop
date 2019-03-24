@@ -10,6 +10,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-searchbar ([ngModel])="searchtxt"  placeholder="Search Store" (keyup.enter)="search($event)" show-cancel="true" ></ion-searchbar >
+  <ion-searchbar autocomplete  ([ngModel])="searchtxt"  placeholder="Search Store" (keyup.enter)="search($event)" show-cancel="true" ></ion-searchbar >
   <div id="map_canvas" style="top: 0;left: 0;"> </div> 
 </ion-content>
