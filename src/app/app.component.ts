@@ -371,6 +371,8 @@ export class AppComponent implements OnInit {
               stars = (100 * stars) / 25;
               self.stars = self.kanorating.total_stars;
               self.rates = self.kanorating.asc;
+              console.log(self.stars );
+              console.log(self.rates );
               self.updatedataset(data.key,{
                 totalStars: stars,
                 rates: self.kanorating.asc
@@ -1289,7 +1291,8 @@ export class AppComponent implements OnInit {
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di;
               asc = isNaN(asc)?0:asc;
-              stars = (asc * 100) / 25;
+              var ascs = asc > 1?asc.toFixed(2):asc;
+              stars = (Number(ascs) * 100) / 25;
 
             }
         });
@@ -1418,7 +1421,8 @@ export class AppComponent implements OnInit {
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di;
               asc = isNaN(asc)?0:asc;
-              stars = (asc * 100) / 25;
+              var ascs = asc > 1?asc.toFixed(2):asc;
+              stars = (Number(ascs) * 100) / 25;
           }
         });
       } 
