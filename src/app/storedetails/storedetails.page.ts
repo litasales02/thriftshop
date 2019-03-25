@@ -21,7 +21,7 @@ export class StoreDetailsPage implements OnInit {
   id: string = "";
   child: string = "";
   img: string = "";
-  stars = [];
+  stars = null;
   rate = 0.0;
   kanoevaluation =  {      
     total_users :0,
@@ -55,11 +55,13 @@ export class StoreDetailsPage implements OnInit {
         this.emails = element.userdetails.email;
         this.ownername = firstname.concat(" " + lastname);
         this.img = element.userdetails.profileimg;
-        this.kanoevaluation = this.util.kanoalgov2(element.key);
-        this.rate = Number(this.kanoevaluation.total_stars.toFixed(1)); 
-        this.stars =  Array(((100 * this.kanoevaluation.total_stars) / 25) | 0).map((x,i)=>i);
+        this.kanoevaluation = this.util.kanoalgov2(element.key); 
+
+        this.rate = this.kanoevaluation.asc;
+        this.stars =  this.kanoevaluation.total_stars
         this.util.updatedataset(element.key,{
-          totalStars: this.kanoevaluation.total_stars
+          totalStars: this.kanoevaluation.total_stars,
+          rates: this.kanoevaluation.asc
         });
         //console.log(this.kanoevaluation);
       }

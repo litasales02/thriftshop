@@ -1266,19 +1266,19 @@ export class AppComponent implements OnInit {
               // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
-              // quality.asc = (quality.si + quality.di) / 2;
+              quality.asc = (quality.si + quality.di) / 2;
               quality.di = isNaN(quality.di)?0:quality.di;
               quality.si = isNaN(quality.si)?0:quality.si;
 
               suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
               suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
-              // suplier.asc = (suplier.si + suplier.di) / 2;
+              suplier.asc = (suplier.si + suplier.di) / 2;
               suplier.di = isNaN(suplier.di)?0:suplier.di;
               suplier.si = isNaN(suplier.si)?0:suplier.si;
               
               feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
               feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
-              // feedback.asc = (feedback.si + feedback.di) / 2;
+              feedback.asc = (feedback.si + feedback.di) / 2;
               feedback.di = isNaN(feedback.di)?0:feedback.di;
               feedback.si = isNaN(feedback.si)?0:feedback.si;
 
@@ -1395,19 +1395,19 @@ export class AppComponent implements OnInit {
               // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
-              // quality.asc = (quality.si + quality.di) / 2;
+              quality.asc = (quality.si + quality.di) / 2;
               quality.di = isNaN(quality.di)?0:quality.di;
               quality.si = isNaN(quality.si)?0:quality.si;
 
               suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
               suplier.di = (suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i) * -1;
-              // suplier.asc = (suplier.si + suplier.di) / 2;
+              suplier.asc = (suplier.si + suplier.di) / 2;
               suplier.di = isNaN(suplier.di)?0:suplier.di;
               suplier.si = isNaN(suplier.si)?0:suplier.si;
               
               feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
               feedback.di = (feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i) * -1;
-              // feedback.asc = (feedback.si + feedback.di) / 2;
+              feedback.asc = (feedback.si + feedback.di) / 2;
               feedback.di = isNaN(feedback.di)?0:feedback.di;
               feedback.si = isNaN(feedback.si)?0:feedback.si;
 
