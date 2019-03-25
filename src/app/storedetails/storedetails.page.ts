@@ -32,7 +32,7 @@ export class StoreDetailsPage implements OnInit {
     si: 0,
     di: 0,
     asc: 0
-  };;
+  };
   btndirectrate = '/login';
   star = '/assets/unhart.png'; 
   constructor(

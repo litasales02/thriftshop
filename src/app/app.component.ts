@@ -329,15 +329,9 @@ export class AppComponent implements OnInit {
     this.ShowToast('Logging Out Good Bye!');
   }
   async login(username,password ,callback){
-    // if(this.storedata != null){
-    //   return await this.authenoff(username,password,function(obj){
-    //     callback(obj);
-    //   });   
-    // }else{
-      return await this.authen(username,password,function(obj){
-        callback(obj);
-      });    
-    // }
+    return await this.authen(username,password,function(obj){
+      callback(obj);
+    });    
 
   }
   async authen(username,password,callback){
@@ -364,15 +358,12 @@ export class AppComponent implements OnInit {
               };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
-              // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
               self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
               console.log(self.kanorating);
               var stars = self.kanorating.total_stars;
               stars = (100 * stars) / 25;
               self.stars = self.kanorating.total_stars;
               self.rates = self.kanorating.asc;
-              console.log(self.stars );
-              console.log(self.rates );
               self.updatedataset(data.key,{
                 totalStars: stars,
                 rates: self.kanorating.asc
@@ -385,7 +376,6 @@ export class AppComponent implements OnInit {
               self.registrationstatus = 1; //for buyer
               self.starscss = 'drawerrate hide';
             }
-            // self.kanoalgo(self.userid);
             self.getmessages();
             self.load_messages();
             callback(true);
@@ -400,121 +390,7 @@ export class AppComponent implements OnInit {
       }
     }); 
   }
-  async authenoff(username,password,callback){
-    var self = this; 
-    this.storedata.forEach(element => { 
-      // var totaldistance = 0.0;
-      // if(typeof(element.geodata) != 'undefined'){ 
-      //   if(element.geodata.lat != 0 && element.geodata.lng != 0){
-      //     totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
-      //   }
-      // }
-      // if(element.usertype == 'seller' && element.rstatus == 1 && typeof(element.product) != 'undefined'){        
-      //   Object.entries(element.product).forEach(function(element2){
-      //     // console.log(element2[1]);
-      //       let item = Object.assign({}, element2)[1];
-      //       item['key'] = Object.assign({}, element2)[0];
-      //       item['totaldistance'] = totaldistance.toFixed(2);  
-      //       item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
-      //       self.productdata.push(item);
-      //   });
-      // } 
-      if(element.password == Md5.hashStr(password) && element.username == username){ 
-        self.userid = element.key;
-        self.drawerTitle = element.userdetails.firstname;
-        self.loginStatus = true;
-        self.profileimg = element.userdetails.profileimg;
-        self.userType =  element.usertype;
-
-        if(element.usertype == 'seller'){
-          self.drawerTitle = element.storename;
-          self.geodata =  element.geodata.status; 
-          self.requirementsdata = {
-            'status': element.requirements.status,
-            'idtype':element.requirements.idtype,
-            'govid': element.requirements.govid,
-            'storeimg': element.requirements.storeimg
-          };
-          self.registrationstatus = element.requirements.status;
-          self.starscss = 'drawerrate show';
-          // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
-          self.kanorating = self.kanoalgosetv2(element.feedsseller);
-          var stars = self.kanorating.total_stars;
-          stars = (100 * stars) / 25;
-          self.stars = self.kanorating.total_stars;
-          self.rates = self.kanorating.asc;
-          self.updatedataset(element.key,{
-            totalStars: stars
-          });
-          self.loadfavorite();
-          if (typeof(element.requirements) != 'undefined'){ 
-            self.requirementsdata = element.requirements; 
-          }
-        } else {
-          self.registrationstatus = 1; //for buyer
-          self.starscss = 'drawerrate hide';
-        }
-        self.getmessages();
-        self.load_messages();
-        callback(true);
-
-      }
-
-    })
-    
-    // getlogin.once('value',function(childs){
-    //   let data = childs.val();
-    //   if (data) {
-    //     childs.forEach(function(data){
-    //       if ( data.val().password === Md5.hashStr(password)){
-    //         self.userid = data.key;
-    //         self.drawerTitle = data.val().userdetails.firstname;
-    //         self.loginStatus = true;
-    //         self.profileimg = data.val().userdetails.profileimg;
-    //         self.userType =  data.val().usertype;
-    //         if(data.val().usertype == 'seller'){
-    //           self.drawerTitle = data.val().storename;
-    //           self.geodata =  data.val().geodata.status; 
-    //           self.requirementsdata = {
-    //             'status': data.val().requirements.status,
-    //             'idtype':data.val().requirements.idtype,
-    //             'govid': data.val().requirements.govid,
-    //             'storeimg': data.val().requirements.storeimg
-    //           };
-    //           self.registrationstatus = data.val().requirements.status;
-    //           self.starscss = 'drawerrate show';
-    //           // self.kanoevaluation = self.kanoalgosetv2(data.val().feedsseller);
-    //           self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
-    //           var stars = self.kanorating.total_stars;
-    //           stars = (100 * stars) / 25;
-    //           self.stars = self.kanorating.total_stars;
-    //           self.rates = self.kanorating.asc;
-    //           self.updatedataset(data.key,{
-    //             totalStars: stars
-    //           });
-    //           self.loadfavorite();
-    //           if (typeof(data.val().requirements) != 'undefined'){ 
-    //             self.requirementsdata = data.val().requirements; 
-    //           }
-    //         } else {
-    //           self.registrationstatus = 1; //for buyer
-    //           self.starscss = 'drawerrate hide';
-    //         }
-    //         // self.kanoalgo(self.userid);
-    //         self.getmessages();
-    //         self.load_messages();
-    //         callback(true);
-    //       } else {
-    //         callback(false);
-    //         self.loginStatus = false;
-    //       }
-    //     });
-    //   } else {
-    //     self.loginStatus = false;
-    //     callback(false);
-    //   }
-    // }); 
-  }
+  
   async alerts(title,header,buttons) { 
     const alert = await this.alertCtrl.create({
       header: title,
@@ -781,6 +657,16 @@ export class AppComponent implements OnInit {
     callback(productdata);
   }
   getproductsall(){ 
+    var  kanoevaluation =  {      
+      total_users :0,
+      total_stars: 0,  
+      quality:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+      suplier:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+      feedback: {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+      si: 0,
+      di: 0,
+      asc: 0
+    };
     var self = this;
     this.productdata = [];
     this.storedata.forEach(element => { 
@@ -796,7 +682,8 @@ export class AppComponent implements OnInit {
             let item = Object.assign({}, element2)[1];
             item['key'] = Object.assign({}, element2)[0];
             item['totaldistance'] = totaldistance.toFixed(2);  
-            // item['kanorate'] = self.kanoalgosetv2(element.feedsseller).asc;  
+            kanoevaluation = self.kanoalgosetv2(element.feedsseller); 
+            item['kanorate'] =  kanoevaluation.asc;
             item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
             self.productdata.push(item);
         });
