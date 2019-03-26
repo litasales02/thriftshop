@@ -326,6 +326,7 @@ export class AppComponent implements OnInit {
     this.usermessage = [];
     this.usermessagepanel = [];
     this.router.navigate(['/login']);
+
     this.ShowToast('Logging Out Good Bye!');
   }
   async login(username,password ,callback){
@@ -358,17 +359,20 @@ export class AppComponent implements OnInit {
               };
               self.registrationstatus = data.val().requirements.status;
               self.starscss = 'drawerrate show';
-              self.kanorating = self.kanoalgosetv2(data.val().feedsseller);
-              console.log(self.kanorating);
+              self.kanorating = self.kanoalgosetv2(data.val().feedsseller); 
               var stars = self.kanorating.total_stars;
-              stars = (100 * stars) / 25;
-              self.stars = self.kanorating.total_stars;
-              self.rates = self.kanorating.asc;
+              console.log(self.kanorating);
+              if(Math.sign(stars) === -1){
+                stars = (stars * -1); 
+              }
+              // stars = (100 * stars) / 25;
               self.updatedataset(data.key,{
                 totalStars: stars,
                 rates: self.kanorating.asc
               });
-              self.loadfavorite();
+              self.loadfavorite();              
+              self.stars = stars;
+              self.rates = self.kanorating.asc;
               if (typeof(data.val().requirements) != 'undefined'){ 
                 self.requirementsdata = data.val().requirements; 
               }
@@ -484,6 +488,29 @@ export class AppComponent implements OnInit {
     });
     callback(storedata2);
   }
+  async getstoredata(callback){
+    var self = this;
+    var storedata2 = [];
+    this.storedata.forEach(function(element,index,arr){
+      if(element.usertype == "seller"){
+        var totaldistance = 0;
+        let item = element; 
+        // item.key = element.key; 
+        // item.utype = element.usertype; 
+        // item.storename = element.storename;
+
+        if(typeof(element.geodata) != 'undefined'){ 
+          if(element.geodata.lat != 0 && element.geodata.lng != 0){
+            totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
+          }
+        }
+        item.totaldistance = totaldistance; 
+        console.log(item);
+        storedata2.push(item);        
+      }
+    });
+    callback(storedata2);
+  }
   async getstoreGeoid(key,callback){
 
     var storedata2 = [];
@@ -561,6 +588,10 @@ export class AppComponent implements OnInit {
         });
       }
     });
+    self.productdata.sort((a,b)=>{
+      return  parseFloat(a.totaldistance) - parseFloat(b.totaldistance); 
+    }); 
+    
   }
   getproductsbyfilterc(productname,callbacks){
     // // console.clear();

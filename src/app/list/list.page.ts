@@ -11,14 +11,26 @@ import { AppComponent } from '../app.component'
 export class ListPage implements OnInit {
  
   profileimg = '/assets/store.png';
-  userlist = [];
+  userlistdata = [];
   constructor(public router: Router, public alertCtrl: AlertController,private util: AppComponent){
-    this.userlist = this.util.storedata;
+    var self = this;
+    // this.userlist = this.util.storedata;
     // console.log(this.userlist);
+    this.util.getstoredata(function(data){
+      self.userlistdata = data;
+      console.log(data)
+    });
   }
 
   ngOnInit() {
-    this.userlist = this.util.storedata;
+    // this.userlist = this.util.storedata;
+    var self = this;
+    // // this.userlist = this.util.storedata;
+    // // console.log(this.userlist);
+    // this.util.getstoredata(function(data){
+    //   self.userlist = data;
+    //   console.log(data)
+    // });
   }
  
 }
