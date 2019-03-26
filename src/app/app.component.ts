@@ -184,7 +184,7 @@ export class AppComponent implements OnInit {
             item.sellers = 1; 
             item.totaldistance = totaldistance; 
             item.title = "Store :" + element.storename;
-            item.Store = element.storename;
+            item.  = element.storename;
             // console.log(item);
             sellergeodata.push(item);
           }
@@ -1327,15 +1327,15 @@ export class AppComponent implements OnInit {
   } 
   kanu_evalletters(val){
     if (val == 'e'){ // 1.	It is excellent = e
-      return 4;
+      return 0;
     } else if(val == 'g') { // 2.	It is good = g
-      return 3;
+      return 1;
     } else if(val == 'a') { // 3.	It is average = a
       return 2;
     } else if(val == 'b') { // 4.	It is bad = b
-      return 1;
+      return 3;
     } else if(val == 'p') { // 5.	It is poor = p
-      return 0;
+      return 4;
     }else {
       return 0
     }
