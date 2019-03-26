@@ -48,20 +48,25 @@ export class StoreMapPage implements OnInit {
     var result = null;
     this.util.getstoreGeoid(this.util.selecteduserkey,function(results:any){ 
       console.log(results); 
-      result = Object.values(results)[0];
-      self.map = new google.maps.Map(document.getElementById('map_canvas'), {
-        zoom: 18,
-        center:  new google.maps.LatLng( result['lat'], result['lng']),
-        restriction: {latLngBounds:davao_bound}
-      });
-      marker = new google.maps.Marker({
-        map: self.map,
-        draggable: false,
-        animation: google.maps.Animation.DROP,
-        position: new google.maps.LatLng(result['lat'], result['lng'])
-      }); 
-      infowindow.setContent("Here I'am");
-      infowindow.open(self.map, marker);
+      if(results != null) {
+        result = Object.values(results)[0];
+        self.map = new google.maps.Map(document.getElementById('map_canvas'), {
+          zoom: 18,
+          center:  new google.maps.LatLng( result['lat'], result['lng']),
+          restriction: {latLngBounds:davao_bound}
+        });
+        marker = new google.maps.Marker({
+          map: self.map,
+          draggable: false,
+          animation: google.maps.Animation.DROP,
+          position: new google.maps.LatLng(result['lat'], result['lng'])
+        }); 
+        infowindow.setContent("Here I'am");
+        infowindow.open(self.map, marker);        
+      } else {
+        self.util.ShowToast('Seller is not yet set his mapping.');
+      }
+
     });
 
   }
