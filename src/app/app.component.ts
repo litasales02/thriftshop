@@ -1192,8 +1192,7 @@ export class AppComponent implements OnInit {
               asc = (( si + di) / 2);
 
               si = isNaN(si)?0:si;
-              di = isNaN(di)?0:di;
-              // asc = isNaN(asc)?0:asc;
+              di = isNaN(di)?0:di; 
               var ascs = asc > 1?asc.toFixed(2):asc;
               stars = (Number(ascs) * 100) / 25;
 
