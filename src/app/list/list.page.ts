@@ -24,7 +24,7 @@ export class ListPage implements OnInit {
 
   ngOnInit() {
     // this.userlist = this.util.storedata;
-    var self = this;
+    // var self = this;
     // // this.userlist = this.util.storedata;
     // // console.log(this.userlist);
     // this.util.getstoredata(function(data){

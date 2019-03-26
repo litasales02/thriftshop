@@ -71,7 +71,8 @@ export class RegisterSellersPage implements OnInit {
                 'lng': '0.0'
               }
             });
-            self.navigate();
+            self.navigate();            
+            self.util.alerts("Congrats!","You are now registered. You may login now and please update your requirements to activate your account. Thank you.",['Ok']);
           } else if (typeof(self.sellerpassword) != 'undefined' && typeof(self.sellerrepassword) && (self.sellerrepassword.length < 6 || self.sellerpassword.length < 6 )) {
             self.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);
           }else {

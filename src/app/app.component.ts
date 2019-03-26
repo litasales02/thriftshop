@@ -327,7 +327,7 @@ export class AppComponent implements OnInit {
     this.usermessagepanel = [];
     this.router.navigate(['/login']);
 
-    this.ShowToast('Logging Out Good Bye!');
+    this.ShowToast('Logout');
   }
   async login(username,password ,callback){
     return await this.authen(username,password,function(obj){
@@ -498,7 +498,9 @@ export class AppComponent implements OnInit {
         // item.key = element.key; 
         // item.utype = element.usertype; 
         // item.storename = element.storename;
-
+        if(typeof(item.rates) == 'undefined' || item.rates == '' ){
+          item.rates = 0;
+        }
         if(typeof(element.geodata) != 'undefined'){ 
           if(element.geodata.lat != 0 && element.geodata.lng != 0){
             totaldistance = self.distance2coor(self.usergeolocationlat,self.usergeolocationlng,element.geodata.lat,element.geodata.lng);
@@ -508,6 +510,9 @@ export class AppComponent implements OnInit {
         console.log(item);
         storedata2.push(item);        
       }
+    });
+    storedata2.sort((a,b)=>{
+      return  parseFloat(b.rates) - parseFloat(a.rates); 
     });
     callback(storedata2);
   }

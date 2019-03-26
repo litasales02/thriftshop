@@ -58,6 +58,7 @@ export class RegisterBuyerPage implements OnInit {
               'stores':[]});
               self.navigate();              
               loading.dismiss();
+              self.util.alerts("Congrats!","You are now registered. You may login now. Thank you.",['Ok']);
           } else if (typeof(self.buyerpassword) != 'undefined' && typeof(self.buyerusername) && (self.buyerpassword.length < 6 || self.buyerusername.length < 6 )) {
             loading.dismiss();
             self.util.alerts("Add New","User password must be minimum of 6 character",['Ok']);

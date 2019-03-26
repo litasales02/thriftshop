@@ -58,10 +58,17 @@ export class StoreDetailsPage implements OnInit {
         this.kanoevaluation = this.util.kanoalgov2(element.key); 
 
         this.rate = this.kanoevaluation.asc;
-        this.stars =  this.kanoevaluation.total_stars
+        this.stars =  this.kanoevaluation.total_stars 
+        console.log(this.kanoevaluation);
+        if(Math.sign(this.stars) === -1){
+          this.stars = (this.stars * -1); 
+        }
+        // if(Math.sign(this.rate) === -1){
+        //   this.rate = (this.rate * -1); 
+        // }
         this.util.updatedataset(element.key,{
-          totalStars: this.kanoevaluation.total_stars,
-          rates: this.kanoevaluation.asc
+          totalStars: this.stars,
+          rates: this.rate
         });
         //console.log(this.kanoevaluation);
       }
