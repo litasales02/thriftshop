@@ -77,7 +77,7 @@ export class ProductDetailsPage implements OnInit {
     this.util.menuRouting(this.routerlingks);
   }
   loadmymap(){
-    this.util.menuRouting('storemap/' + this.util.selecteduserkey);    
+    this.util.menuRouting('storemap/' + this.id);    
   }
 
   myfaorite(event,key){

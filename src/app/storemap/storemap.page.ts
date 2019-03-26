@@ -34,7 +34,7 @@ export class StoreMapPage implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id'); 
     this.directlocation = "products/details/" +  this.id + "/home";
   }
-  loadMap() {     
+  loadMap() {    
     var davao_bound = {
       north: 7.5858,
       south: 6.9810,
@@ -46,9 +46,10 @@ export class StoreMapPage implements OnInit {
     var infowindow = new google.maps.InfoWindow();
     var self = this;
     var result = null;
-    this.util.getstoreGeoid(this.id,function(results:any){ 
+    this.util.getstoreGeoid(this.util.selecteduserkey,function(results:any){ 
+      console.log(results); 
       result = Object.values(results)[0];
-      this.map = new google.maps.Map(document.getElementById('map_canvas'), {
+      self.map = new google.maps.Map(document.getElementById('map_canvas'), {
         zoom: 18,
         center:  new google.maps.LatLng( result['lat'], result['lng']),
         restriction: {latLngBounds:davao_bound}
@@ -58,8 +59,7 @@ export class StoreMapPage implements OnInit {
         draggable: false,
         animation: google.maps.Animation.DROP,
         position: new google.maps.LatLng(result['lat'], result['lng'])
-      });
-      infowindow.setContent(new google.maps.LatLng(result['lat'], result['lng']));
+      }); 
       infowindow.setContent("Here I'am");
       infowindow.open(self.map, marker);
     });

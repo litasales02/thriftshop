@@ -70,10 +70,10 @@ export class HomePage {
     try {
       var child = "";
       if (this.child == "storedetailshome"){
-        child = "list/storedetails/" + this.id + "/home";
+        child = "list/storedetails/" + key + "/home";
         this.util.getproducts(this.id);
       } else if (this.child == "myproduct"){
-        child = "list/storedetails/" + this.id + "/home";
+        child = "list/storedetails/" + key + "/home";
         this.util.getproducts(this.id);
       } else {
         child = "home";
