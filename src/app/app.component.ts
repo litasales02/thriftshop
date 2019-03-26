@@ -685,7 +685,7 @@ export class AppComponent implements OnInit {
             kanoevaluation = self.kanoalgosetv2(element.feedsseller); 
             item['kanorate'] =  kanoevaluation.asc;
             item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
-            console.log(item);
+            // console.log(item);
             self.productdata.push(item);
         });
       } 
@@ -1078,7 +1078,7 @@ export class AppComponent implements OnInit {
             var loop = 0;
             positive.forEach(keyelement => {            
               var functionals = self.kanu_evalletters(element2[keyelement]);
-              var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
+              var dysfunctional = self.kanu_evallettersdislike(element2[negative[loop]]);
               var resultsmodel = self.kanotable[functionals][dysfunctional];
               switch(resultsmodel){
                 case "m": 
@@ -1178,7 +1178,7 @@ export class AppComponent implements OnInit {
 
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di;
-              asc = isNaN(asc)?0:asc;
+              // asc = isNaN(asc)?0:asc;
               var ascs = asc > 1?asc.toFixed(2):asc;
               stars = (Number(ascs) * 100) / 25;
 
@@ -1224,7 +1224,7 @@ export class AppComponent implements OnInit {
           var loop = 0;
           positive.forEach(keyelement => {            
             var functionals = self.kanu_evalletters(element2[keyelement]);
-            var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
+            var dysfunctional = self.kanu_evallettersdislike(element2[negative[loop]]);
             var resultsmodel = self.kanotable[functionals][dysfunctional];
             switch(resultsmodel){
               case "m": 
@@ -1308,7 +1308,7 @@ export class AppComponent implements OnInit {
 
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di;
-              asc = isNaN(asc)?0:asc;
+              // asc = asc)?0:asc;
               var ascs = asc > 1?asc.toFixed(2):asc;
               stars = (Number(ascs) * 100) / 25;
           }
@@ -1366,15 +1366,15 @@ export class AppComponent implements OnInit {
   }
   kanu_evallettersdislike(val){
     if (val == 'e'){ // 1.	It is excellent = e
-      return 0;
+      return 4;
     } else if(val == 'g') { // 2.	It is good = g
-      return 1;
+      return 3;
     } else if(val == 'a') { // 3.	It is average = a
       return 2;
     } else if(val == 'b') { // 4.	It is bad = b
-      return 3;
+      return 1;
     } else if(val == 'p') { // 5.	It is poor = p
-      return 5;
+      return 0;
     }else {
       return 0
     }
