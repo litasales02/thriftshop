@@ -1078,14 +1078,14 @@ export class AppComponent implements OnInit {
             var loop = 0;
             positive.forEach(keyelement => {            
               var functionals = self.kanu_evalletters(element2[keyelement]);
-              console.log("functionals: " + functionals  ,element2[keyelement]);
+              // console.log("functionals: " + functionals  ,element2[keyelement]);
               var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
-              console.log("dysfunctional: " + dysfunctional  ,element2[negative[loop]]);
+              // console.log("dysfunctional: " + dysfunctional  ,element2[negative[loop]]);
               var resultsmodel = self.kanotable[functionals][dysfunctional];
-              console.log(functionals,dysfunctional);
-              console.log("user: " +users );
-              console.log("Element:" ,element2);
-              console.log("result mode: " + resultsmodel);
+              // console.log(functionals,dysfunctional);
+              // console.log("user: " +users );
+              // console.log("Element:" ,element2);
+              // console.log("result mode: " + resultsmodel);
               switch(resultsmodel){
                 case "m": 
                   if(keyelement == 'Q1P1'){
@@ -1241,9 +1241,9 @@ export class AppComponent implements OnInit {
             var functionals = self.kanu_evalletters(element2[keyelement]);
             var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
             var resultsmodel = self.kanotable[functionals][dysfunctional];
-            console.log(functionals,dysfunctional);
-            console.log(users,element2, resultsmodel);
-            console.log("user: " + users,"Element:" +element2, "result mode: "+resultsmodel);
+            // console.log(functionals,dysfunctional);
+            // console.log(users,element2, resultsmodel);
+            // console.log("user: " + users,"Element:" +element2, "result mode: "+resultsmodel);
             switch(resultsmodel){
               case "m": 
                 if(keyelement == 'Q1P1'){
