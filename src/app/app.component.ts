@@ -685,6 +685,7 @@ export class AppComponent implements OnInit {
             kanoevaluation = self.kanoalgosetv2(element.feedsseller); 
             item['kanorate'] =  kanoevaluation.asc;
             item['status'] = typeof(item['status'])!='undefined'?item['status']:0;
+            console.log(item);
             self.productdata.push(item);
         });
       } 
@@ -1066,12 +1067,12 @@ export class AppComponent implements OnInit {
         Object.values(feedsseller).forEach(function(element2,index,arr){   
             // load tanan user nag rate
             users++; 
-            var functionals = self.kanu_evalletters(element2['Q1P1']);
-            var dysfunctional = self.kanu_evalletters(element2['Q1P2']);
+              // var functionals = self.kanu_evalletters(element2['Q1P1']);
+              // var dysfunctional = self.kanu_evalletters(element2['Q1P2']);
             // console.log(functionals);
             // console.log(dysfunctional);
             // console.log(self.kanotable[functionals][dysfunctional]);
-            users++;   
+            // users++;   
             var positive = ['Q1P1','Q2P1','Q3P1'];
             var negative = ['Q1P2','Q2P2','Q3P2'];  
             var loop = 0;
@@ -1208,7 +1209,7 @@ export class AppComponent implements OnInit {
     var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
     var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
  
-
+    //     5   4   3   2   1
     // 5 = q , a , a , a , o
     // 4 = r , i , i , i , m
     // 3 = r , i , i , i , m
@@ -1325,6 +1326,29 @@ export class AppComponent implements OnInit {
       asc: asc
     }
   } 
+  // kanotable = [["q","a","a","a","o"],
+  //              ["r","i","i","i","m"], 
+  //              ["r","i","i","i","m"], 
+  //              ["r","i","i","i","m"], 
+  //              ["r","r","r","r","q"]];
+  // total_excellentp =  m
+  // total_averagep =  a
+  // total_goodp =   o
+  // total_badp =   i
+  // total_poorp =  r
+  // like
+  // must-have
+  // nutral
+  // liv with
+  // dislike
+  // var quality = {m:0, a:0, o:0, i:0,r:0,si:0,di:0,asc:0};
+  //       0   1   2   3   4
+  //       5   4   3   2   1
+  // 0 5 = q , a , a , a , o
+  // 1 4 = r , i , i , i , m
+  // 2 3 = r , i , i , i , m
+  // 3 2 = r , i , i , i , m
+  // 4 1 = r , r , r , r , q
   kanu_evalletters(val){
     if (val == 'e'){ // 1.	It is excellent = e
       return 0;
@@ -1336,6 +1360,21 @@ export class AppComponent implements OnInit {
       return 3;
     } else if(val == 'p') { // 5.	It is poor = p
       return 4;
+    }else {
+      return 0
+    }
+  }
+  kanu_evallettersdislike(val){
+    if (val == 'e'){ // 1.	It is excellent = e
+      return 0;
+    } else if(val == 'g') { // 2.	It is good = g
+      return 1;
+    } else if(val == 'a') { // 3.	It is average = a
+      return 2;
+    } else if(val == 'b') { // 4.	It is bad = b
+      return 3;
+    } else if(val == 'p') { // 5.	It is poor = p
+      return 5;
     }else {
       return 0
     }
