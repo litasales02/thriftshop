@@ -184,7 +184,7 @@ export class AppComponent implements OnInit {
             item.sellers = 1; 
             item.totaldistance = totaldistance; 
             item.title = "Store :" + element.storename;
-            item.  = element.storename;
+            item.Store = element.storename;
             // console.log(item);
             sellergeodata.push(item);
           }
