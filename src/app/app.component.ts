@@ -81,9 +81,9 @@ export class AppComponent implements OnInit {
   kanorating = {
     total_users:0,
     total_stars: 0,
-    quality:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
-    suplier:  {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
-    feedback: {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0},
+    quality:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
+    feedback: {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
     si: 0,
     di: 0,
     asc: 0
@@ -1046,9 +1046,9 @@ export class AppComponent implements OnInit {
     var di = 0;
     var asc = 0;
 
-    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
-    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
-    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
+    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
  
   //   total_excellentp =  m
   //   total_averagep =  a
@@ -1078,8 +1078,14 @@ export class AppComponent implements OnInit {
             var loop = 0;
             positive.forEach(keyelement => {            
               var functionals = self.kanu_evalletters(element2[keyelement]);
-              var dysfunctional = self.kanu_evallettersdislike(element2[negative[loop]]);
+              console.log("functionals: " + functionals  ,element2[keyelement]);
+              var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
+              console.log("dysfunctional: " + dysfunctional  ,element2[negative[loop]]);
               var resultsmodel = self.kanotable[functionals][dysfunctional];
+              console.log(functionals,dysfunctional);
+              console.log("user: " +users );
+              console.log("Element:" ,element2);
+              console.log("result mode: " + resultsmodel);
               switch(resultsmodel){
                 case "m": 
                   if(keyelement == 'Q1P1'){
@@ -1126,6 +1132,15 @@ export class AppComponent implements OnInit {
                     feedback.r++;                    
                   }
                   break;
+                case "q": 
+                if(keyelement == 'Q1P1'){
+                  quality.q++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.q++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.q++;                    
+                }
+                break;
               }
               loop++;
             });
@@ -1205,9 +1220,9 @@ export class AppComponent implements OnInit {
     var di = 0;
     var asc = 0;
 
-    var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
-    var suplier = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
-    var feedback = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
+    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
  
     //     5   4   3   2   1
     // 5 = q , a , a , a , o
@@ -1224,8 +1239,11 @@ export class AppComponent implements OnInit {
           var loop = 0;
           positive.forEach(keyelement => {            
             var functionals = self.kanu_evalletters(element2[keyelement]);
-            var dysfunctional = self.kanu_evallettersdislike(element2[negative[loop]]);
+            var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
             var resultsmodel = self.kanotable[functionals][dysfunctional];
+            console.log(functionals,dysfunctional);
+            console.log(users,element2, resultsmodel);
+            console.log("user: " + users,"Element:" +element2, "result mode: "+resultsmodel);
             switch(resultsmodel){
               case "m": 
                 if(keyelement == 'Q1P1'){
@@ -1270,6 +1288,15 @@ export class AppComponent implements OnInit {
                   suplier.r++;                    
                 }else if(keyelement == 'Q3P1'){
                   feedback.r++;                    
+                }
+                break;
+              case "q": 
+                if(keyelement == 'Q1P1'){
+                  quality.q++;
+                }else if(keyelement == 'Q2P1'){
+                  suplier.q++;                    
+                }else if(keyelement == 'Q3P1'){
+                  feedback.q++;                    
                 }
                 break;
             }
@@ -1331,16 +1358,18 @@ export class AppComponent implements OnInit {
   //              ["r","i","i","i","m"], 
   //              ["r","i","i","i","m"], 
   //              ["r","r","r","r","q"]];
-  // total_excellentp =  m
-  // total_averagep =  a
-  // total_goodp =   o
-  // total_badp =   i
-  // total_poorp =  r
+  // excellent =  m 
+  // average =  a
+  // good =   o
+  // bad =   i
+  // poor =  r
+
   // like
   // must-have
   // nutral
-  // liv with
+  // live with
   // dislike
+
   // var quality = {m:0, a:0, o:0, i:0,r:0,si:0,di:0,asc:0};
   //       0   1   2   3   4
   //       5   4   3   2   1
