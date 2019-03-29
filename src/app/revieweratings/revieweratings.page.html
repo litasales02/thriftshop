@@ -13,6 +13,19 @@
     <ion-list >
       <ion-item >  
         <ion-label>
+          <h2>Legend</h2>
+          <p>SI = Satisfaction</p>  
+          <p>DI = Disatisfaction </p>
+          <p>M = Must-be </p>
+          <p>O = One-Dimensional </p>
+          <p>A = Attractive </p>
+          <p>I = Indifferent </p>
+          <p>R = Reverse </p>
+          <p>Q = Questionable </p>
+        </ion-label> 
+      </ion-item>  
+      <ion-item >  
+        <ion-label>
           <h2>Calculation of SI and DI</h2>
           <p>SI = ( A + O ) / ( A + O + M + I )</p>  
           <p>DI = (O + M) / ( A + O + M + I ) </p>
@@ -22,33 +35,36 @@
         <ion-label>
           <h2>Quality</h2>
           <p> M = {{kanorating.quality.m}}, O = {{kanorating.quality.o}}, A = {{kanorating.quality.a}}, I = {{kanorating.quality.i}}, R = {{kanorating.quality.r}}  , Q = {{kanorating.quality.q}}</p>      
-          <h2>Value of SI = {{kanorating.quality.si}}  and DI  {{kanorating.quality.di}}</h2> 
+          <h2>Value of SI = {{kanorating.quality.si.toFixed(2)}}  and DI =  {{kanorating.quality.di.toFixed(2)}}</h2> 
+          <h2>Category :  {{kanorating.quality.category}}</h2> 
         </ion-label>         
       </ion-item> 
       <ion-item >  
         <ion-label>
           <h2>Supplier Satisfaction</h2> 
           <p> M = {{kanorating.suplier.m}}, O = {{kanorating.suplier.o}}, A = {{kanorating.suplier.a}}, I = {{kanorating.suplier.i}}, R = {{kanorating.suplier.r}} , Q = {{kanorating.suplier.q}} </p> 
-          <h2>Value of SI = {{kanorating.suplier.si}}  and DI  {{kanorating.suplier.di}}  </h2> 
+          <h2>Value of SI = {{kanorating.suplier.si.toFixed(2)}}  and DI = {{kanorating.suplier.di.toFixed(2)}} </h2> 
+          <h2>Category :  {{kanorating.suplier.category}}</h2> 
         </ion-label>  
       </ion-item> 
       <ion-item >    
         <ion-label>
           <h2>Customers Feedback</h2>
           <p> M = {{kanorating.feedback.m}}, O = {{kanorating.feedback.o}}, A = {{kanorating.feedback.a}}, I = {{kanorating.feedback.i}}, R = {{kanorating.feedback.r}}  , Q = {{kanorating.feedback.q}}</p>
-          <h2>Value of SI = {{kanorating.feedback.si}}  and DI  {{kanorating.feedback.di}}</h2>   
+          <h2>Value of SI = {{kanorating.feedback.si.toFixed(2)}} and DI = {{kanorating.feedback.di.toFixed(2)}}</h2> 
+          <h2>Category :  {{kanorating.feedback.category}}</h2>   
         </ion-label>       
       </ion-item> 
       <ion-item >   
         <ion-label>
           <h2>Average Satisfaction Coefficient </h2>
           <p>Total Rate = ( SI + DI ) / 2 </p>     
-          <p text-wrap>Total Rate = ( SI : {{kanorating.si}} + DI : {{kanorating.di}} ) / 2 </p>  
+          <p text-wrap>Total Rate = ( SI : {{kanorating.si.toFixed(2)}} + DI : = {{kanorating.di.toFixed(2)}} ) / 2 </p>  
         </ion-label>       
       </ion-item> 
       <ion-item >   
         <ion-label>
-          <h2>Total Rate : {{kanorating.  asc}} </h2> 
+          <h2>Total Rate : {{kanorating.  asc.toFixed(2)}} </h2> 
         </ion-label>       
       </ion-item> 
     </ion-list>

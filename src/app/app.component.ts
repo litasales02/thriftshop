@@ -28,12 +28,11 @@ import {Md5} from 'ts-md5/dist/md5';
 
 
 const configfirebase = {
-  apiKey: "AIzaSyAKTcDsFQf33AmoNOVJbl0RtLtFM-kD6DM",
-  authDomain: "thrftshp.firebaseapp.com",
-  databaseURL: "https://thrftshp.firebaseio.com",
-  projectId: "thrftshp",
-  storageBucket: "thrftshp.appspot.com",
-  messagingSenderId: "171453440603"
+apiKey: 'AIzaSyBjLH-kuTHlEudLkd0QTuO5r8Eu1CoY2As',
+authDomain: 'thriffshop.firebaseapp.com',
+databaseURL: 'https://thriffshop.firebaseio.com',
+projectId: 'thriffshop',
+storageBucket: 'thriffshop.appspot.com'
 };
 firebase.initializeApp(configfirebase); 
 declare var ol;
@@ -81,12 +80,17 @@ export class AppComponent implements OnInit {
   kanorating = {
     total_users:0,
     total_stars: 0,
-    quality:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
-    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
-    feedback: {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
+    quality:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
+    feedback: {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
     si: 0,
     di: 0,
     asc: 0
+  }
+  kanoValByCat = {
+    quality:  {m:0,a:0,o:0,i:0,r:0,q:0},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0},
+    feedback: {m:0,a:0,o:0,i:0,r:0,q:0},  
   }
   watch: any;
   usergeolocationlat = 0;
@@ -524,6 +528,8 @@ export class AppComponent implements OnInit {
         let item = element.geodata;
         item.key = element.key;
         item.utype = element.usertype;
+        item.storename = element.storename;
+        item.address = element.userdetails.address1;
         console.log(item);
         storedata2.push(item);
       }
@@ -1082,46 +1088,22 @@ export class AppComponent implements OnInit {
     var di = 0;
     var asc = 0;
 
-    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
-    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
-    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
+    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
+    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
  
-  //   total_excellentp =  m
-  //   total_averagep =  a
-  //   total_goodp =   o
-  //   total_badp =   i
-  //   total_poorp =  r
-
-  // -LXAsHXXhdBTaTXxh3Xp
-  // 1.	It is excellent = e
-  // 2.	It is good = g
-  // 3.	It is average = a
-  // 4.	It is bad = b
-  // 5.	It is poor = p 
  
     if(typeof(feedsseller) != 'undefined'){
-        Object.values(feedsseller).forEach(function(element2,index,arr){   
-            // load tanan user nag rate
+        Object.values(feedsseller).forEach(function(element2,index,arr){    
             users++; 
-              // var functionals = self.kanu_evalletters(element2['Q1P1']);
-              // var dysfunctional = self.kanu_evalletters(element2['Q1P2']);
-            // console.log(functionals);
-            // console.log(dysfunctional);
-            // console.log(self.kanotable[functionals][dysfunctional]);
-            // users++;   
+ 
             var positive = ['Q1P1','Q2P1','Q3P1'];
             var negative = ['Q1P2','Q2P2','Q3P2'];  
             var loop = 0;
             positive.forEach(keyelement => {            
-              var functionals = self.kanu_evalletters(element2[keyelement]);
-              // console.log("functionals: " + functionals  ,element2[keyelement]);
-              var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
-              // console.log("dysfunctional: " + dysfunctional  ,element2[negative[loop]]);
-              var resultsmodel = self.kanotable[functionals][dysfunctional];
-              // console.log(functionals,dysfunctional);
-              // console.log("user: " +users );
-              // console.log("Element:" ,element2);
-              // console.log("result mode: " + resultsmodel);
+              var functionals = self.kanu_evalletters(element2[keyelement]); 
+              var dysfunctional = self.kanu_evalletters(element2[negative[loop]]); 
+              var resultsmodel = self.kanotable[functionals][dysfunctional]; 
               switch(resultsmodel){
                 case "m": 
                   if(keyelement == 'Q1P1'){
@@ -1181,55 +1163,69 @@ export class AppComponent implements OnInit {
               loop++;
             });
            
-            if(index == arr.length - 1){ 
-              
-            // //   total_excellentp =  m
-            // //   total_averagep =  a
-            // //   total_goodp =   o
-            // //   total_badp =   i
-            // //   total_poorp =  r
-
-            // //   si = ( a + o ) / ( a + o + m + i);
-            // //   di = ( m + o ) / ( a + o + m + i);
-
-            //   // si = (total_positive_average + total_positive_good) / (total_positive_average + total_positive_good + total_positive_excellent + total_positive_bad) ;
-              
-            //   // di = (total_negative_excellent + total_negative_good) / (total_negative_average + total_negative_good + total_negative_excellent + total_negative_bad * -1);
-
-            //   // asc = (si + di) / 2;
-  
-
-              stars = 0;
-
-              // quality.m 
-              //   si = ( a + o ) / ( a + o + m + i);
-              //   di = ( m + o ) / ( a + o + m + i);
-              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+            if(index == arr.length - 1){  
+              // kanoValByCat = {
+              //   quality:  {m:0,a:0,o:0,i:0,r:0,q:0},
+              //   suplier:  {m:0,a:0,o:0,i:0,r:0,q:0},
+              //   feedback: {m:0,a:0,o:0,i:0,r:0,q:0},  
+              // }
+              stars = 0; 
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = ((quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i)) * -1;
               quality.asc = (quality.si + (quality.di)) / 2;
               quality.di = isNaN(quality.di)?0:quality.di;
               quality.si = isNaN(quality.si)?0:quality.si;
+              
+              self.kanoValByCat.quality.m = quality.m;
+              self.kanoValByCat.quality.a = quality.a;
+              self.kanoValByCat.quality.o = quality.o;
+              self.kanoValByCat.quality.i = quality.i;
+              self.kanoValByCat.quality.r = quality.r;
+              self.kanoValByCat.quality.q = quality.q;
+
+              self.getKanoCategories(self.kanoValByCat.quality,(val)=>{
+                quality.category = val;
+              });
+
 
               suplier.si = (suplier.a + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i);
               suplier.di = ((suplier.m + suplier.o) / (suplier.a + suplier.o + suplier.m + suplier.i)) * -1;
               suplier.asc = (suplier.si + (suplier.di)) / 2;
               suplier.di = isNaN(suplier.di)?0:suplier.di;
               suplier.si = isNaN(suplier.si)?0:suplier.si;
+
+              self.kanoValByCat.suplier.m = suplier.m;
+              self.kanoValByCat.suplier.a = suplier.a;
+              self.kanoValByCat.suplier.o = suplier.o;
+              self.kanoValByCat.suplier.i = suplier.i;
+              self.kanoValByCat.suplier.r = suplier.r;
+              self.kanoValByCat.suplier.q = suplier.q;
+              self.getKanoCategories(self.kanoValByCat.suplier,(val)=>{
+                suplier.category = val;
+              });
               
               feedback.si = (feedback.a + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i);
               feedback.di = ((feedback.m + feedback.o) / (feedback.a + feedback.o + feedback.m + feedback.i)) * -1;
               feedback.asc = (feedback.si + (feedback.di)) / 2;
               feedback.di = isNaN(feedback.di)?0:feedback.di;
               feedback.si = isNaN(feedback.si)?0:feedback.si;
-
+              
+              self.kanoValByCat.feedback.m = feedback.m;
+              self.kanoValByCat.feedback.a = feedback.a;
+              self.kanoValByCat.feedback.o = feedback.o;
+              self.kanoValByCat.feedback.i = feedback.i;
+              self.kanoValByCat.feedback.r = feedback.r;
+              self.kanoValByCat.feedback.q = feedback.q;
+              self.getKanoCategories(self.kanoValByCat.feedback,(val)=>{
+                feedback.category = val;
+              });
               si = (quality.si + suplier.si + feedback.si);
               di = (quality.di + suplier.di + feedback.di);
               asc = (( si + di) / 2);
 
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di; 
-              var ascs = asc > 1?asc.toFixed(2):asc;
+              var ascs = asc > 1?asc.toFixed(0):asc;
               stars = (Number(ascs) * 100) / 25;
 
             }
@@ -1243,7 +1239,8 @@ export class AppComponent implements OnInit {
       feedback: feedback,
       si: si,
       di: di,
-      asc: asc
+      asc: asc,
+      category: ""
     }
   }
   kanoalgov2(key){
@@ -1255,16 +1252,10 @@ export class AppComponent implements OnInit {
     var di = 0;
     var asc = 0;
 
-    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
-    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
-    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0};
- 
-    //     5   4   3   2   1
-    // 5 = q , a , a , a , o
-    // 4 = r , i , i , i , m
-    // 3 = r , i , i , i , m
-    // 2 = r , i , i , i , m
-    // 1 = r , r , r , r , q
+    var quality =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
+    var suplier =  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
+    var feedback = {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""};
+  
   this.storedata.forEach(function(element ,index1,arr1) {    
       if(typeof(element.feedsseller) != 'undefined' && element.key == key){
         Object.values(element.feedsseller).forEach(function(element2,index,arr){   
@@ -1275,10 +1266,7 @@ export class AppComponent implements OnInit {
           positive.forEach(keyelement => {            
             var functionals = self.kanu_evalletters(element2[keyelement]);
             var dysfunctional = self.kanu_evalletters(element2[negative[loop]]);
-            var resultsmodel = self.kanotable[functionals][dysfunctional];
-            // console.log(functionals,dysfunctional);
-            // console.log(users,element2, resultsmodel);
-            // console.log("user: " + users,"Element:" +element2, "result mode: "+resultsmodel);
+            var resultsmodel = self.kanotable[functionals][dysfunctional]; 
             switch(resultsmodel){
               case "m": 
                 if(keyelement == 'Q1P1'){
@@ -1339,13 +1327,7 @@ export class AppComponent implements OnInit {
           });
          
           if(index == arr.length - 1){ 
-        
-              stars = 0;
-
-              // quality.m 
-              //   si = ( a + o ) / ( a + o + m + i);
-              //   di = ( m + o ) / ( a + o + m + i);
-              // var quality = {m:0,a:0,o:0,i:0,r:0,si:0,di:0,asc:0};
+              stars = 0; 
               quality.si = (quality.a + quality.o) / (quality.a + quality.o + quality.m + quality.i);
               quality.di = (quality.m + quality.o) / (quality.a + quality.o + quality.m + quality.i) * -1;
               quality.asc = (quality.si + quality.di) / 2;
@@ -1371,7 +1353,7 @@ export class AppComponent implements OnInit {
               si = isNaN(si)?0:si;
               di = isNaN(di)?0:di;
               // asc = asc)?0:asc;
-              var ascs = asc > 1?asc.toFixed(2):asc;
+              var ascs = asc > 1?asc.toFixed(0):asc;
               stars = (Number(ascs) * 100) / 25;
           }
         });
@@ -1385,7 +1367,8 @@ export class AppComponent implements OnInit {
       feedback: feedback,
       si: si,
       di: di,
-      asc: asc
+      asc: asc,
+      category: ""
     }
   } 
   // kanotable = [["q","a","a","a","o"],
@@ -1426,6 +1409,50 @@ export class AppComponent implements OnInit {
       return 4;
     }else {
       return 0
+    }
+  }
+  getKanoCategories(val,callback){
+    var nes =[];
+    var category = "";
+    Object.entries(val).forEach(function(items){
+      nes.push(items);
+    });   
+    nes.sort((a,b)=>{
+      return b[1]-a[1]; 
+    });
+    if(nes.length > 0){
+      var total = 0;
+      var vals = 0;
+      for(var x = 0;x < nes.length;x++){
+        if(vals > 0){
+          if(vals == nes[x][1]){
+            category = category + this.kanoCategories(nes[x][0]) + " ";
+            total++;
+          }
+        } else {          
+          vals=nes[x][1];
+        }
+      }
+    }
+
+    category.replace(' ',', ');
+
+    callback(category);
+  }
+  kanoCategories(val){
+    switch(val){
+      case "m":
+        return "Must-Be"; 
+      case "o":
+        return "One-Dimensional"; 
+      case "a":
+        return 'Attractive';
+      case "i":
+        return 'Indifferent';
+      case 'R':
+        return 'Reverse';
+      case 'q':
+        return 'Questionable'
     }
   }
   kanu_evallettersdislike(val){

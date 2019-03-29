@@ -61,7 +61,7 @@ export class StoreMapPage implements OnInit {
           animation: google.maps.Animation.DROP,
           position: new google.maps.LatLng(result['lat'], result['lng'])
         }); 
-        infowindow.setContent("Here I'am");
+        infowindow.setContent("<strong>" +result['storename'] + "</strong>\nAddress: " +  result['address']);
         infowindow.open(self.map, marker);        
       } else {
         self.util.ShowToast('Seller is not yet set his mapping.');

@@ -14,9 +14,9 @@ export class RevieweRatingsPage implements OnInit {
   kanorating = {
     total_users:0,
     total_stars: 0, 
-    quality:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
-    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
-    feedback: {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0},
+    quality:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
+    suplier:  {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
+    feedback: {m:0,a:0,o:0,i:0,r:0,q:0,si:0,di:0,asc:0,category: ""},
     si: 0,
     di: 0,
     asc: 0
