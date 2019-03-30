@@ -25,6 +25,7 @@ export class LoginPage implements OnInit {
   }
   async submitlogin(){ 
     // console.log(this.util.md5function(this.txtusername));
+    console.log(this.util.countloop);
     var self = this; 
     this.isDisabled = true;
     // this.util.presentLoadingWithOptions();
